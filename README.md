@@ -18,7 +18,7 @@ This project is a comprehensive online grade book system developed as part of an
 
 ### Frontend
 
-- **HTML/CSS/JS**: Standard web technologies for building user interfaces.
+- **HTML/CSS/TS**: Standard web technologies for building user interfaces.
 - **React.js**: A JavaScript library for building user interfaces.
 
 ## Testing
