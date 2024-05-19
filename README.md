@@ -1,6 +1,6 @@
 # Grade Book Project
 
-This project is a comprehensive online grade book system developed as part of an engineering thesis. It provides a web-based platform for schools to manage student grades, facilitate communication between students, teachers, and parents, and generate reports on student performance. The system utilizes various technologies to achieve its functionality.
+This project is a comprehensive online grade book system developed as part of an engineering thesis. It provides a web-based platform writen using React with a REST API created using Spring Boot. System is created for schools to manage student grades, facilitate communication between students, teachers, and parents, and generate reports on student performance. The system utilizes various technologies to achieve its functionality. 
 
 ## Technologies Used
 
@@ -40,13 +40,14 @@ This project is a comprehensive online grade book system developed as part of an
 
 To run the project locally, follow these steps:
 
-1. Clone the repository: `git clone git@github.com:JakJaj/Grade-Book.git`
-2. Navigate to the project directory: `cd grade-book-project`
+1. Clone the repository: `git clone git@github.com:JakJaj/Gradebook.git`
+2. Navigate to the project directory: `cd Gradebook`
 3. Configure the backend:
      - Set up the MySQL database and update application.properties with the database configuration.
      - Ensure Java 17 is installed and set up on your system.
-4. Run the backend: `./mvnw spring-boot:run`
-5. Access the application in your web browser at `http://localhost:3000`.
+4. Run the API: `./mvnw spring-boot:run`
+5. Run the frontend: `npm run dev`
+5. Access the application in your web browser at a web url provided after running `npm run dev`.
 
 ## Contributing
 
