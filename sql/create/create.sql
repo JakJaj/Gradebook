@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS Users;
 
 -- Tworzenie tabeli Users 
 CREATE TABLE Users(
-	user_id BIGINT NOT NULL,
+	user_id BIGINT NOT NULL AUTO_INCREMENT,
     password VARCHAR(255),
     enabled BOOL,
     role VARCHAR(255),
@@ -28,7 +28,7 @@ CREATE TABLE Users(
 
 -- Tworzenie tabeli Teachers
 CREATE TABLE Teachers(
-	teacher_id BIGINT NOT NULL,
+	teacher_id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     date_of_birth DATE,
@@ -42,7 +42,7 @@ CREATE TABLE Teachers(
 
 -- Tworzenie tabeli Parents
 CREATE TABLE Parents(
-	parent_id BIGINT NOT NULL,
+	parent_id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     email VARCHAR(255),
@@ -53,7 +53,7 @@ CREATE TABLE Parents(
 );
 -- Tworzenie tabeli Announcements
 CREATE TABLE Announcements(
-	announcement_id BIGINT NOT NULL,
+	announcement_id BIGINT NOT NULL AUTO_INCREMENT,
     title VARCHAR(255),
     content TEXT,
     date_time DATETIME,
@@ -64,14 +64,14 @@ CREATE TABLE Announcements(
 
 -- Tworzenie tabeli Courses_Types
 CREATE TABLE Course_Types(
-	course_type_id BIGINT NOT NULL,
+	course_type_id BIGINT NOT NULL AUTO_INCREMENT,
     course_name VARCHAR(255),
     PRIMARY KEY(course_type_id)
 );
 -- Tworzenie tabeli Courses
 
 CREATE TABLE Courses(
-	course_id BIGINT NOT NULL,
+	course_id BIGINT NOT NULL AUTO_INCREMENT,
     course_type_id BIGINT NOT NULL,
     teacher_id BIGINT NOT NULL,
     description VARCHAR(255),
@@ -83,7 +83,7 @@ CREATE TABLE Courses(
 
 -- Tworzenie tabeli Classes
 CREATE TABLE Classes(
-	class_id BIGINT NOT NULL,
+	class_id BIGINT NOT NULL AUTO_INCREMENT,
     class_name VARCHAR(255),
     teacher_id BIGINT NOT NULL,
     start_year SMALLINT,
@@ -94,7 +94,7 @@ CREATE TABLE Classes(
 
 -- Tworzenie tabeli Students
 CREATE TABLE Students(
-	student_id BIGINT NOT NULL,
+	student_id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     email VARCHAR(255),
@@ -123,7 +123,7 @@ CREATE TABLE Students_Parents(
 
 -- Tworzenie tabeli Timetables
 CREATE TABLE Timetables(
-	timetable_id BIGINT NOT NULL,
+	timetable_id BIGINT NOT NULL AUTO_INCREMENT,
     course_id BIGINT NOT NULL,
     class_id BIGINT NOT NULL,
     start_time TIME,
@@ -138,7 +138,7 @@ CREATE TABLE Timetables(
 
 -- Tworzenie tabeli Grades
 CREATE TABLE Grades(
-	grade_id BIGINT NOT NULL,
+	grade_id BIGINT NOT NULL AUTO_INCREMENT,
     course_id BIGINT NOT NULL,
     mark INT,
     student_id BIGINT NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE Grades(
 
 -- Tworzenie tabeli Attendance
 CREATE TABLE Attendances(
-	attendance_id BIGINT NOT NULL,
+	attendance_id BIGINT NOT NULL AUTO_INCREMENT,
     date_time DATETIME,
     status VARCHAR(255),
     student_id BIGINT NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE Attendances(
 );
 -- Tworzenie tabeli Notes
 CREATE TABLE Notes(
-	note_id BIGINT NOT NULL,
+	note_id BIGINT NOT NULL AUTO_INCREMENT,
     student_id BIGINT NOT NULL,
     timetable_id BIGINT NOT NULL,
     description text,
@@ -176,7 +176,7 @@ CREATE TABLE Notes(
 );
 -- Tworzenie tabeli Messages
 CREATE TABLE Messages(
-	message_id BIGINT NOT NULL,
+	message_id BIGINT NOT NULL AUTO_INCREMENT,
     sender_id BIGINT NOT NULL,
     receiver_id BIGINT NOT NULL,
     title VARCHAR(255),
