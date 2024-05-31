@@ -9,7 +9,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private int id;
+    private int userId;
 
     @Column(name="password")
     private String password;
@@ -29,19 +29,19 @@ public class User {
         this.role = role;
     }
 
-    public User(int id, String password, boolean enabled, String role) {
-        this.id = id;
+    public User(int userId, String password, boolean enabled, String role) {
+        this.userId = userId;
         this.password = password;
         this.enabled = enabled;
         this.role = role;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -71,7 +71,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", role='" + role + '\'' +
