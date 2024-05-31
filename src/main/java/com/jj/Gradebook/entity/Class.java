@@ -38,4 +38,46 @@ public class Class {
         this.teacherId = teacherId;
         this.start_year = start_year;
     }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public Year getStart_year() {
+        return start_year;
+    }
+
+    public void setStart_year(Year start_year) {
+        this.start_year = start_year;
+    }
+
+    @Override
+    public String toString() {
+        return "Class{" +
+                "classId=" + classId +
+                ", className='" + className + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", start_year=" + start_year +
+                '}';
+    }
 }
