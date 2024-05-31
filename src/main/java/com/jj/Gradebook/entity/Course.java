@@ -27,5 +27,9 @@ public class Course {
     @Column(name = "description")
     private String description;
 
-
+    public Course(int courseTypeId, int teacherId, String description) {
+        this.courseTypeId = courseTypeId;
+        this.teacherId = teacherId;
+        this.description = description;
+    }
 }
