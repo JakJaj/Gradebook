@@ -2,11 +2,17 @@ package com.jj.Gradebook.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Attendances")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Attendance {
 
     @Id
@@ -26,5 +32,10 @@ public class Attendance {
     @Column(name = "timetable_id")
     private int timetableId;
 
-    
+    public Attendance(LocalDateTime dateTime, String status, int studentId, int timetableId) {
+        this.dateTime = dateTime;
+        this.status = status;
+        this.studentId = studentId;
+        this.timetableId = timetableId;
+    }
 }
