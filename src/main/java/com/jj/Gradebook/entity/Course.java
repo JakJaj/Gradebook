@@ -2,9 +2,15 @@ package com.jj.Gradebook.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "Courses")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Course {
 
     @Id
@@ -21,5 +27,5 @@ public class Course {
     @Column(name = "description")
     private String description;
 
-    
+
 }
