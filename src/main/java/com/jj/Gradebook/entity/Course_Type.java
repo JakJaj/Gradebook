@@ -1,9 +1,15 @@
 package com.jj.Gradebook.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "Course_Types")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Course_Type {
 
     @Id
@@ -13,4 +19,8 @@ public class Course_Type {
 
     @Column(name = "course_name")
     private String courseName;
+
+    public Course_Type(String courseName) {
+        this.courseName = courseName;
+    }
 }
