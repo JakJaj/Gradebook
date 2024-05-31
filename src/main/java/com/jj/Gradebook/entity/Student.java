@@ -2,11 +2,17 @@ package com.jj.Gradebook.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "Students")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
     @Id
@@ -43,5 +49,17 @@ public class Student {
 
     @Column(name = "active")
     private boolean active;
-    
+
+    public Student(String firstName, String lastName, String email, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId, boolean active) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.classId = classId;
+        this.userId = userId;
+        this.active = active;
+    }
 }
