@@ -32,5 +32,27 @@ public class Teacher {
     @Column(name="user_id")
     private int userId;
 
+    public Teacher() {
+    }
+
+    public Teacher(int teacherId, String firstName, String lastName, Date dateOfBirth, String email, Date dateOfEmployment, int userId) {
+        this.teacherId = teacherId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.dateOfEmployment = dateOfEmployment;
+        this.userId = userId;
+    }
+
+    public Teacher(String firstName, String lastName, Date dateOfBirth, String email, Date dateOfEmployment, int userId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.dateOfEmployment = dateOfEmployment;
+        this.userId = userId;
+    }
+
     
 }
