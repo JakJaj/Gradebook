@@ -13,3 +13,13 @@ INSERT INTO Classes (class_name, teacher_id, start_year) VALUES("IVD", 1, 2020);
 INSERT INTO Classes (class_name, teacher_id, start_year) VALUES("VE", 2, 2021);
 INSERT INTO Classes (class_name, teacher_id, start_year) VALUES("VIF", 3, 2022);
 
+-- Wstawianie uzytkownikow o roli Student
+INSERT INTO Users (password, enabled, role) VALUES("Test1", 0, "STUDENT");
+INSERT INTO Users (password, enabled, role) VALUES("Test2", 0, "STUDENT");
+INSERT INTO Users (password, enabled, role) VALUES("Test3", 0, "STUDENT");
+
+-- Wstawianie uczniow polaczonych z uzytkownikami o roli student
+INSERT INTO Students (first_name, last_name, email, date_of_birth, city, street, house_number, class_id, user_id, active) VALUES("Test1", "Uczen1", "test1@uczen.com", STR_TO_DATE('01/01/2005', '%d/%m/%Y'), "Bytom", "Katowicka", 1, 1, 4, 0);
+INSERT INTO Students (first_name, last_name, email, date_of_birth, city, street, house_number, class_id, user_id, active) VALUES("Test2", "Uczen2", "test2@uczen.com", STR_TO_DATE('02/02/2006', '%d/%m/%Y'), "Katowice", "Katowicka", 2, 2, 5, 0);
+INSERT INTO Students (first_name, last_name, email, date_of_birth, city, street, house_number, class_id, user_id, active) VALUES("Test3", "Uczen3", "test3@uczen.com", STR_TO_DATE('03/03/2007', '%d/%m/%Y'), "Chorzow", "Katowicka", 3, 3, 6, 0);
+
