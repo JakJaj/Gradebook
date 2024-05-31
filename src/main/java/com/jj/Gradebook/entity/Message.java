@@ -2,11 +2,17 @@ package com.jj.Gradebook.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Messages")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Message {
 
     @Id
@@ -29,5 +35,11 @@ public class Message {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    
+    public Message(int senderId, int receiver_id, String title, String content, LocalDateTime dateTime) {
+        this.senderId = senderId;
+        this.receiver_id = receiver_id;
+        this.title = title;
+        this.content = content;
+        this.dateTime = dateTime;
+    }
 }
