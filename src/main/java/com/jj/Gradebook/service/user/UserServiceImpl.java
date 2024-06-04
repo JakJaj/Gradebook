@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
 
             theUser = result.get();
         }
-        else{
+        else{ //TODO:THINK ABOUT A BETTER APPROACH
             throw new RuntimeException("Did not find user id - " + id);
         }
 
