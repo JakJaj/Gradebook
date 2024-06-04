@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.note;
 
 import com.jj.Gradebook.dao.NoteRepository;
 import com.jj.Gradebook.entity.Note;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +28,20 @@ public class NoteServiceImpl implements NoteService{
         if(result.isPresent()){
             note = result.get();
         }
-        else {
+        else { //TODO: FIND BETTER APPROACH
             throw new RuntimeException("No note with id - " + id);
         }
         return note;
     }
 
     @Override
+    @Transactional
     public Note save(Note note) {
         return noteRepository.save(note);
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
         noteRepository.deleteById(id);
     }

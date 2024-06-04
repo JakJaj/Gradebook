@@ -29,7 +29,7 @@ public class MessengerServiceImpl implements MessageService{
         if(result.isPresent()){
             message = result.get();
         }
-        else {
+        else { //TODO: FIND BETTER APPROACH
             throw new RuntimeException("No message with id - " + id);
         }
         return message;

@@ -28,7 +28,7 @@ public class GradeServiceImpl implements GradeService{
         if (result.isPresent()){
             grade = result.get();
         }
-        else{
+        else{ //TODO: FIND BETTER APPROACH
             throw new RuntimeException("No grade with id - " + id);
         }
 
