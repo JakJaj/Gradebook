@@ -2,13 +2,15 @@ package com.jj.Gradebook.service.parent;
 
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.entity.Parent;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ParentServiceImpl implements ParentService{
 
-    private ParentRepository parentRepository;
+    private final ParentRepository parentRepository;
 
     public ParentServiceImpl(ParentRepository parentRepository){
         this.parentRepository = parentRepository;
