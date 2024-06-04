@@ -3,19 +3,17 @@ package com.jj.Gradebook.service.teacher;
 import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.entity.Teacher;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class TeacherServiceImpl implements TeacherService{
 
     private final TeacherRepository teacherRepository;
-
-    public TeacherServiceImpl(TeacherRepository teacherRepository){
-        this.teacherRepository = teacherRepository;
-    }
 
     @Override
     public List<Teacher> findAll() {

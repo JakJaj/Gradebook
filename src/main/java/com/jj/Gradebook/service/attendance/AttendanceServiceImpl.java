@@ -3,18 +3,16 @@ package com.jj.Gradebook.service.attendance;
 import com.jj.Gradebook.dao.AttendanceRepository;
 import com.jj.Gradebook.entity.Attendance;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService{
     private final AttendanceRepository attendanceRepository;
-
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
-        this.attendanceRepository = attendanceRepository;
-    }
 
     @Override
     public List<Attendance> findAll() {

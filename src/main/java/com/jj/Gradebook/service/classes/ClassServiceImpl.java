@@ -3,19 +3,17 @@ package com.jj.Gradebook.service.classes;
 import com.jj.Gradebook.dao.ClassRepository;
 import com.jj.Gradebook.entity.Class;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ClassServiceImpl implements ClassService{
 
     private ClassRepository classRepository;
-
-    public ClassServiceImpl(ClassRepository classRepository) {
-        this.classRepository = classRepository;
-    }
 
     @Override
     public List<Class> findAll() {
