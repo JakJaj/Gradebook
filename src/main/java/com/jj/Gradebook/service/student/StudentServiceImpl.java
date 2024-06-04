@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.student;
 
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.entity.Student;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +37,13 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
+    @Transactional
     public Student save(Student student) {
         return studentRepository.save(student);
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
         studentRepository.deleteById(id);
     }

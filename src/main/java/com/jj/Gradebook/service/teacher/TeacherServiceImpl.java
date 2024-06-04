@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.teacher;
 
 import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.entity.Teacher;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +37,13 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
+    @Transactional
     public Teacher save(Teacher teacher) {
         return null;
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
 
     }

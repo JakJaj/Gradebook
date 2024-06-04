@@ -30,7 +30,7 @@ public class AnnouncementServiceImpl implements AnnouncementService{
         if(result.isPresent()){
             announcement = result.get();
         }
-        else{
+        else{ //TODO: FIND BETTER APPROACH
             throw new RuntimeException("No announcements with id - " + id);
         }
         return announcement;

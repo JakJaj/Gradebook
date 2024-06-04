@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.parent;
 
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.entity.Parent;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class ParentServiceImpl implements ParentService{
     }
 
     @Override
+    @Transactional
     public List<Parent> findAll() {
         return parentRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Parent findById(int id) {
         Optional<Parent> result = parentRepository.findById(id);
 
