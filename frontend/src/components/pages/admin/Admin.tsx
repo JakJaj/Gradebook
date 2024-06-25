@@ -2,13 +2,21 @@ import React from "react";
 import TopBar from "../../App/base-components/topbar/TopBar";
 import Footer from "../../App/base-components/footer/Footer";
 import ManagementBox from "./components/ManagementBox";
+import textContent from "./content";
+
 function Admin(){
+
+    const renderListOfBoxes = (text) => {
+        return text.map(item => <ManagementBox title={item.title} description={item.description} />)
+    }
 
     return(
         <>
         <TopBar />
-        <ManagementBox title="Teachers" description="Look at a list of teachers. Add more, update or delete existing."/>
-        
+        <div className="flex my-10 flex-wrap gap-10 justify-center" >
+            {renderListOfBoxes(textContent)}
+        </div>
+        <Footer />
         </>
     )
 }
