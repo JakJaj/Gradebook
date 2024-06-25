@@ -9,7 +9,7 @@ const textContent = [
     },
     {
         title: "Parents",
-        description : "Here, you can add, update, or remove parent profiles. You can link parents to their children, update their contact details."
+        description : "Here, you can add, update, or remove parent profiles. You can link parents to their children, update their contact details. So that they will get informations about all their childrens. "
     },
     {
         title: "Courses",
