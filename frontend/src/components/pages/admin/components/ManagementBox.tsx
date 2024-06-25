@@ -10,6 +10,9 @@ function ManagementBox(props){
             <div className="px-6 py-4">
                 <Title text={props.title} />
                 <Description text={props.description} />
+                
+            </div>
+            <div className="flex  justify-center mb-5">
                 <ManageButton />
             </div>
         </div>
