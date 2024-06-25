@@ -19,7 +19,9 @@ DROP TABLE IF EXISTS Users;
 -- Tworzenie tabeli Users 
 CREATE TABLE Users(
 	user_id BIGINT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
+    salt VARCHAR(255),
     enabled BOOL,
     role VARCHAR(255),
     
@@ -32,7 +34,6 @@ CREATE TABLE Teachers(
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     date_of_birth DATE,
-    email VARCHAR(255),
     date_of_employment DATE,
     user_id BIGINT NOT NULL,
     
@@ -45,7 +46,6 @@ CREATE TABLE Parents(
 	parent_id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    email VARCHAR(255),
     user_id BIGINT NOT NULL,
     
     PRIMARY KEY (parent_id),
@@ -97,7 +97,6 @@ CREATE TABLE Students(
 	student_id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    email VARCHAR(255),
     date_of_birth DATE,
     city VARCHAR(255),
     street VARCHAR(255),
