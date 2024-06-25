@@ -11,13 +11,13 @@ function Admin(){
     }
 
     return(
-        <>
+        <div>
         <TopBar buttonNames={textContent}/>
         <div className="flex my-10 flex-wrap gap-10 justify-center" >
             {renderListOfBoxes(textContent)}
         </div>
         <Footer />
-        </>
+        </div>
     )
 }
 
