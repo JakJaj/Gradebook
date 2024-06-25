@@ -14,7 +14,7 @@ function TopBar(props){
 
                         <Login />
                         <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-                            <Navigation />
+                            <Navigation buttonNames={props.buttonNames}/>
                         </div>
                     </div>
                 </nav>
