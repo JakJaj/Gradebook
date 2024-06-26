@@ -1,4 +1,4 @@
-
+import React from "react";
 function InactiveNavigationPage(props:any){
     return(
         <li>
