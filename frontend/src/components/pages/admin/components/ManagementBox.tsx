@@ -1,9 +1,8 @@
-import React from "react";
 import ManageButton from "./ManageButton";
 import Description from "./Description";
 import Title from "./Title";
 
-function ManagementBox(props){
+function ManagementBox(props:any){
 
     return(
         <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
