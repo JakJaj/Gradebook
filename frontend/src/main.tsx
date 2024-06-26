@@ -14,16 +14,35 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element: <Admin />, 
+  },
+  {
+    path: '/admin/teachers/',
     
   },
   {
+    path: '/admin/students/'
+
+  },
+  {
+    path: '/admin/parents/'
+
+  },
+  {
+    path: '/admin/courses/'
+
+  },
+  {
+    path: '/admin/classes/'
+
+  },
+  {
     path: '/student'
+
   },
   {
     path: '/student/:id/grades/'
+
   }
-
-
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
