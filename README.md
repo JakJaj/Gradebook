@@ -18,8 +18,10 @@ This project is a comprehensive online grade book system developed as part of an
 
 ### Frontend
 
-- **HTML/CSS/TS**: Standard web technologies for building user interfaces.
-- **React.js**: A JavaScript library for building user interfaces.
+- **HTML/TilewindCSS/TS**: Standard web technologies for building user interfaces.
+- **React**: A JavaScript library for building user interfaces.
+    - **React Router**: Library for managing and navigating the routing of a React application
+    - **Axios**: Promise-based HTTP client for making asynchronous requests to APIs
 
 ## Testing
 
