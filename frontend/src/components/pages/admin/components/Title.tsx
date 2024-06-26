@@ -1,6 +1,4 @@
-import React from "react";
-
-function Title(props){
+function Title(props:any){
     return(
         <div className="font-bold text-4xl mb-2 text-center">
             {props.text}

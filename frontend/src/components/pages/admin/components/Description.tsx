@@ -1,6 +1,5 @@
-import React from "react";
 
-function Description(props){
+function Description(props:any){
     return(
         <p className="text-gray-700 text-base">
             {props.text}

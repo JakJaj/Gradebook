@@ -7,7 +7,9 @@ function App() {
   return (
     <>
     <BrowserRouter>
-    <Admin />
+      
+      <Admin />
+      
     </BrowserRouter>
     </>
   )
