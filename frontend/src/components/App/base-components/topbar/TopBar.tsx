@@ -1,7 +1,8 @@
 import React from "react";
 import Logo from "./components/Logo";
-import Login from "./components/Login";
+import Login from "./components/buttons/Login";
 import Navigation from "./components/Navigation";
+import Logout from "./components/buttons/LogOut";
 
 function TopBar(props:any){
 
@@ -14,7 +15,7 @@ function TopBar(props:any){
                     <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                         <Logo />
 
-                        <Login />
+                        <Logout />
                         <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                             <Navigation buttonNames={props.buttonNames}/>
                         </div>
