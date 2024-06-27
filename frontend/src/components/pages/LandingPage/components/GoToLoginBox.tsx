@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 function GoToLoginBox(){
 
     return(
-        <div className="flex items-center justify-center h-screen">
-            <div className=" bg-gray-400 rounded p-10 " >
+        <div className="grid justify-self-center row-span-5">
+            <div className="grid grid-col-3 gap-10 grid-row-3 bg-gray-400 rounded p-10 self-center" >
 
-                <div className="">
-                    <p className="text-6xl ">Welcome to Gradebook landing page</p>
-                    <p className="text-3xl self-center">Log in to access your profile</p>
+                <div className="self-center col-span-3 row-span-2">
+                    <p className="text-6xl text-sky-900">Welcome to Gradebook landing page</p>
+                    <p className="text-3xl self-center text-sky-900">Log in to access your profile</p>
                 </div>
                 
-                <Link to='/login' className="bg-sky-900 hover:bg-sky-600 text-white font-bold py-2 px-4  rounded ">Log in</Link>
+                <Link to='/login' className="text-xl bg-sky-900 hover:bg-sky-600 text-white font-bold py-3 px-6 col-start-2 rounded ">Log in</Link>
             </div>
         </div>
     )
