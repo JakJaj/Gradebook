@@ -7,11 +7,14 @@ import GoToLoginBox from "./components/GoToLoginBox";
 function LandingPage(){
     return(
         <>
-        <div className="grid grid-rows-6 h-screen">
+        <div className="grid grid-rows-10 ">
         <TopBar buttonProps={[]} landingPage={true}/>
+        
+        <div className=""></div>
         
         <GoToLoginBox />
         
+        <div className=""></div>
         <Footer />
         </div>
         </>
