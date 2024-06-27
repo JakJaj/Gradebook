@@ -1,17 +1,18 @@
 import TopBar from "../../App/base-components/topbar/TopBar";
 import Footer from "../../App/base-components/footer/Footer";
 import ManagementBox from "./components/ManagementBox";
-import textContent from "./content";
+import textContent from "./adminContent";
 import React from "react";
 interface Box {
     title: string;
     description: string;
+    link: string;
 }
 
 function Admin() {
     const renderListOfBoxes = (text: Box[]) => {
         return text.map((item: Box) => (
-            <ManagementBox title={item.title} description={item.description} />
+            <ManagementBox title={item.title} description={item.description} link={item.link} />
         ));
     };
 

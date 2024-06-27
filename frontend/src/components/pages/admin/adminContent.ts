@@ -1,4 +1,4 @@
-const textContent = [
+const adminContent = [
     {
         title: "Teachers",
         description : "In this section, you can add, update, or remove teacher profiles. You can assign subjects to teachers, and update their contact informations.",
@@ -26,4 +26,4 @@ const textContent = [
     }
 ]
 
-export default textContent;
+export default adminContent;
