@@ -12,7 +12,7 @@ function ManagementBox(props:any){
                 
             </div>
             <div className="flex  justify-center mb-5">
-                <ManageButton />
+                <ManageButton link={props.link}/>
             </div>
         </div>
 

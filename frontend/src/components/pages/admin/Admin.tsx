@@ -6,12 +6,13 @@ import React from "react";
 interface Box {
     title: string;
     description: string;
+    link: string;
 }
 
 function Admin() {
     const renderListOfBoxes = (text: Box[]) => {
         return text.map((item: Box) => (
-            <ManagementBox title={item.title} description={item.description} />
+            <ManagementBox title={item.title} description={item.description} link={item.link} />
         ));
     };
 
