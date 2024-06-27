@@ -1,21 +1,19 @@
+import React from "react";
 import CurrentlyOpenNavigationPage from "./buttons/CurrentlyOpenNavigationPage";
 import InactiveNavigationPage from "./buttons/InactiveNavigationPage";
 
-interface ButtonName {
-    title: string;
-}
 
-function Navigation(props: { buttonNames: ButtonName[] }) {
-    const buttonText = (names: ButtonName[]): JSX.Element[] => {
+function Navigation(props) {
+    const buttonText = (names) => {
         return names.map((buttonText) => (
-            <InactiveNavigationPage text={buttonText.title} />
+            <InactiveNavigationPage text={buttonText.title} link={buttonText.link}/>
         ));
     };
 
     return (
         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
             <CurrentlyOpenNavigationPage text="Home" />
-            {buttonText(props.buttonNames)}
+            {buttonText(props.buttonProps)}
         </ul>
     );
 }

@@ -1,7 +1,7 @@
 import ManageButton from "./ManageButton";
 import Description from "./Description";
 import Title from "./Title";
-
+import React from "react";
 function ManagementBox(props:any){
 
     return(
