@@ -13,7 +13,7 @@ function GoToLoginBox(){
                     <p className="text-3xl self-center">Log in to access your profile</p>
                 </div>
                 
-                <Link to='/admin' className="bg-sky-900 hover:bg-sky-600 text-white font-bold py-2 px-4  rounded ">Log in</Link>
+                <Link to='/login' className="bg-sky-900 hover:bg-sky-600 text-white font-bold py-2 px-4  rounded ">Log in</Link>
             </div>
         </div>
     )
