@@ -5,45 +5,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Admin from './components/pages/admin/Admin'
 import ErrorPage from './components/pages/error/ErrorPage'
 import './components/App/App.css'
+import routes from './routes'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    errorElement: <ErrorPage />
-  },
-  {
-    path: '/admin',
-    element: <Admin />, 
-  },
-  {
-    path: '/admin/teachers/',
-    
-  },
-  {
-    path: '/admin/students/'
-
-  },
-  {
-    path: '/admin/parents/'
-
-  },
-  {
-    path: '/admin/courses/'
-
-  },
-  {
-    path: '/admin/classes/'
-
-  },
-  {
-    path: '/student'
-
-  },
-  {
-    path: '/student/:id/grades/'
-
-  }
-]);
+const router = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
