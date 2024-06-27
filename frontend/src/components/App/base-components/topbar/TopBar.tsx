@@ -6,7 +6,8 @@ import Login from "./components/buttons/Login"
 function TopBar(props:any){
 
     const [landingPage, setLandingPage] = useState(props.landingPage)
-
+    const [currentPage, setCurrentPage] = useState()
+    
     return(
         <>
             <header>

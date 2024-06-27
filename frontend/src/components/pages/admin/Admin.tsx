@@ -1,7 +1,7 @@
 import TopBar from "../../App/base-components/topbar/TopBar";
 import Footer from "../../App/base-components/footer/Footer";
 import ManagementBox from "./components/ManagementBox";
-import textContent from "./content";
+import textContent from "./adminContent";
 import React from "react";
 interface Box {
     title: string;
