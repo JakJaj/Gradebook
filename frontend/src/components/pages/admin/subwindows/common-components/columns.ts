@@ -1,12 +1,91 @@
+import axios from "axios"
 
-const teacherColumns = ["ID", "Fist Name", "Last Name", "Email", "Birth Date", "Employment date", "Status", "Actions"]
-const studentColumns = ["ID", "First Name", "Last Name", "Email", "Birth Date", "Adress", "Class", "Status", "Actions"]
-const parentsColumn = ["ID", "First Name", "Last Name", "Email", "Students", "Actions"]
-const classesColumns = ["ID", "Class Name", "Tutor", "Year", "List of students", "Timetable", "Status", "Actions"]
-const coursesColumn = ["ID", "Course","Teachers", "Description", "Actions"]
+const teacherColumns = [
+    { id: 1, text: "ID" }, 
+    { id:2, text: "Fist Name"},
+    { id:3, text:"Last Name"},
+    { id:4, text: "Email"},
+    { id:5, text: "Birth Date"}, 
+    { id:6, text: "Employment date"}, 
+    { id:7, text: "Status"},
+    { id:8,text: "Actions"}
+]
+const studentColumns = [
+    { id: 1, text: "ID" },
+    { id: 2, text: "First Name" },
+    { id: 3, text: "Last Name" },
+    { id: 4, text: "Email" },
+    { id: 5, text: "Birth Date" },
+    { id: 6, text: "Address" },
+    { id: 7, text: "Class" },
+    { id: 8, text: "Status" },
+    { id: 9, text: "Actions" }
+]
+const parentsColumn = [
+    { id: 1, text: "ID" },
+    { id: 2, text: "First Name" },
+    { id: 3, text: "Last Name" },
+    { id: 4, text: "Email" },
+    { id: 5, text: "Students" },
+    { id: 6, text: "Actions" }
+]
+const classesColumns = [
+    { id: 1, text: "ID" },
+    { id: 2, text: "Class Name" },
+    { id: 3, text: "Tutor" },
+    { id: 4, text: "Year" },
+    { id: 5, text: "List of students" },
+    { id: 6, text: "Timetable" },
+    { id: 7, text: "Status" },
+    { id: 8, text: "Actions" }
+]
+const coursesColumn = [
+    { id: 1, text: "ID" },
+    { id: 2, text: "Course" },
+    { id: 3, text: "Teachers" },
+    { id: 4, text: "Description" },
+    { id: 5, text: "Actions" }
+]
 
-function getListData(typeCode:Number){
-
+function getListData(typeCode:String){
+    switch(typeCode){
+        case "Teachers": 
+            axios.get("http://127.0.0.1:8080/api/teachers")
+                .then(function(response){
+                    console.log(response.data)
+                    return response.data
+            })
+            break
+        case "Students":
+            axios.get("http://127.0.0.1:8080/api/students")
+                .then(function(response){
+                    console.log(response.data)
+                    return response.data
+            })
+            break
+        case "Parents":
+            axios.get("http://127.0.0.1:8080/api/parents")
+                .then(function(response){
+                    console.log(response.data)
+                    return response.data
+            })
+            break
+        case "Classes":
+            axios.get("http://127.0.0.1:8080/api/classes")
+                .then(function(response){
+                    console.log(response.data)
+                    return response.data
+            })
+            break
+        case "Courses":
+            axios.get("http://127.0.0.1:8080/api/courses")
+                .then(function(response){
+                    console.log(response.data)
+                    return response.data
+            })
+            break
+    
+    }
 }
 
 function getColumns(typeCode:String){
