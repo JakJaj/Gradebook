@@ -18,6 +18,7 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
+    @CrossOrigin
     @GetMapping("/teachers")
     public List<Teacher> findAll(){
         return teacherService.findAll();

@@ -20,6 +20,7 @@ public class ParentController {
         this.parentService = parentService;
     }
 
+    @CrossOrigin
     @GetMapping("/parents")
     public List<Parent> findAll(){
         return parentService.findAll();
