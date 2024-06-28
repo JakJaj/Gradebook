@@ -6,7 +6,7 @@ import InactiveNavigationPage from "./buttons/InactiveNavigationPage";
 function Navigation(props) {
     const buttonText = (names) => {
         return names.map((buttonText) => (
-            <InactiveNavigationPage text={buttonText.title} link={buttonText.link}/>
+            <InactiveNavigationPage text={buttonText.title} link={buttonText.link} key={buttonText.id}/>
         ));
     };
 

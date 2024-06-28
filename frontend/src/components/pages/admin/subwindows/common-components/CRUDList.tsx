@@ -9,7 +9,7 @@ function CRUDList(props){
 
     const renderColumns = (columns):any => (
         columns.map((column) => (
-            <td className="border border-slate-600 hover:bg-gray-300 p-4">{column}</td>
+            <td className="border border-slate-600 hover:bg-gray-300 p-4" key={column.id}> {column.text}</td>
     )))
 
     
@@ -18,9 +18,11 @@ function CRUDList(props){
             <strong className="text-gray-700 fonr-medium">{props.type} List</strong>
             <div className="mt-3">
                 <table className="table-auto text-center border-sepparate bg-gray-200">
-                    <tr>
-                        {renderColumns(columns)}
-                    </tr>
+                    <thead>
+                        <tr>
+                            {renderColumns(columns)}
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <td>1</td>
