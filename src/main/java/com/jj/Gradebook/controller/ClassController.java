@@ -17,6 +17,7 @@ public class ClassController {
         this.classService = classService;
     }
 
+    @CrossOrigin
     @GetMapping("/classes")
     public List<Class> findAll(){
         return classService.findAll();
