@@ -5,5 +5,25 @@ const parentsColumn = ["ID", "First Name", "Last Name", "Email", "Students", "Ac
 const classesColumns = ["ID", "Class Name", "Tutor", "Year", "List of students", "Timetable", "Status", "Actions"]
 const coursesColumn = ["ID", "Course","Teachers", "Description", "Actions"]
 
+function getListData(typeCode:Number){
 
-export {teacherColumns, studentColumns, parentsColumn, classesColumns, coursesColumn}
+}
+
+function getColumns(typeCode:String){
+    switch(typeCode){
+        case "Teachers": 
+            return teacherColumns
+        case "Students":
+            return studentColumns
+        case "Parents":
+            return parentsColumn
+        case "Classes":
+            return classesColumns
+        case "Courses":
+            return coursesColumn
+        default:
+            return ["Wrong columns code selected"]
+    }
+}
+
+export {getColumns, getListData}
