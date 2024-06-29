@@ -48,43 +48,44 @@ const coursesColumn = [
 ]
 
 function getListData(typeCode:String){
+    const url = "http://127.0.0.1:8080"
+    
     switch(typeCode){
         case "Teachers": 
-            axios.get("http://127.0.0.1:8080/api/teachers")
+            axios.get(url + "/api/teachers")
                 .then(function(response){
                     console.log(response.data)
                     return response.data
             })
             break
         case "Students":
-            axios.get("http://127.0.0.1:8080/api/students")
+            axios.get(url + "/api/students")
                 .then(function(response){
                     console.log(response.data)
                     return response.data
             })
             break
         case "Parents":
-            axios.get("http://127.0.0.1:8080/api/parents")
+            axios.get(url + "/api/parents")
                 .then(function(response){
                     console.log(response.data)
                     return response.data
             })
             break
         case "Classes":
-            axios.get("http://127.0.0.1:8080/api/classes")
+            axios.get(url + "/api/classes")
                 .then(function(response){
                     console.log(response.data)
                     return response.data
             })
             break
         case "Courses":
-            axios.get("http://127.0.0.1:8080/api/courses")
+            axios.get(url + "/api/courses")
                 .then(function(response){
                     console.log(response.data)
                     return response.data
             })
-            break
-    
+            break    
     }
 }
 
