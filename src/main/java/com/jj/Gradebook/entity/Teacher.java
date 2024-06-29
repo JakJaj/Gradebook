@@ -32,15 +32,16 @@ public class Teacher {
     @Column(name="date_of_employment")
     private Date dateOfEmployment;
 
-    @Column(name="user_id")
-    private int userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
+    private User user;
 
-    public Teacher(String firstName, String lastName, Date dateOfBirth, Date dateOfEmployment, int userId) {
+    public Teacher(String firstName, String lastName, Date dateOfBirth, Date dateOfEmployment, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.dateOfEmployment = dateOfEmployment;
-        this.userId = userId;
+        this.user = user;
     }
 
 }

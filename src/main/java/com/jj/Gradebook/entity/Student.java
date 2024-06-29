@@ -44,10 +44,7 @@ public class Student {
     @Column(name = "user_id")
     private int userId;
 
-    @Column(name = "active")
-    private boolean active;
-
-    public Student(String firstName, String lastName, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId, boolean active) {
+    public Student(String firstName, String lastName, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -56,6 +53,5 @@ public class Student {
         this.houseNumber = houseNumber;
         this.classId = classId;
         this.userId = userId;
-        this.active = active;
     }
 }

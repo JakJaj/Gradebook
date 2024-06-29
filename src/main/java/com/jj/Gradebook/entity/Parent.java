@@ -25,13 +25,14 @@ public class Parent {
     private String lastName;
 
 
-    @Column(name="user_id")
-    private String userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
+    private User user;
 
-    public Parent(String firstName, String lastName, String userId) {
+    public Parent(String firstName, String lastName, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userId = userId;
+        this.user = user;
     }
 
 }
