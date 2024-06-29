@@ -17,8 +17,17 @@ public class User {
     @Column(name="user_id")
     private int userId;
 
+    @Column(name="email")
+    private String email;
+
     @Column(name="password")
     private String password;
+
+    @Column(name = "salt")
+    private String salt;
+
+    @Column(name = "token")
+    private String token;
 
     @Column(name="enabled")
     private boolean enabled;
@@ -26,7 +35,7 @@ public class User {
     @Column(name="role")
     private String role;
 
-    public User(String password, boolean enabled, String role) {
+    public User(String password, String email, String salt, String token, boolean enabled, String role) {
         this.password = password;
         this.enabled = enabled;
         this.role = role;

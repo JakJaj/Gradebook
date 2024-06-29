@@ -26,9 +26,6 @@ public class Student {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
@@ -50,10 +47,9 @@ public class Student {
     @Column(name = "active")
     private boolean active;
 
-    public Student(String firstName, String lastName, String email, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId, boolean active) {
+    public Student(String firstName, String lastName, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.street = street;

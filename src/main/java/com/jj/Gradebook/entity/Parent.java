@@ -24,16 +24,13 @@ public class Parent {
     @Column(name="last_name")
     private String lastName;
 
-    @Column(name = "email")
-    private String email;
 
     @Column(name="user_id")
     private String userId;
 
-    public Parent(String firstName, String lastName, String email, String userId) {
+    public Parent(String firstName, String lastName, String userId) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.userId = userId;
     }
 
