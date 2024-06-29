@@ -1,16 +1,18 @@
 package com.jj.Gradebook.entity.Student_Parent;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.io.Serializable;
 
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
+@Getter
+@Setter
+@Embeddable
 public class StudentParentId implements Serializable {
 
-    private int studentId;
-    private int parentId;
+    private Long studentId;
+    private Long parentId;
 }

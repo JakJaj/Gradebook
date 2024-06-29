@@ -1,12 +1,13 @@
 package com.jj.Gradebook.entity.Student_Parent;
 
 
+import com.jj.Gradebook.entity.Parent;
+import com.jj.Gradebook.entity.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "Students_Parents")
-@IdClass(StudentParentId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,11 +15,17 @@ import lombok.*;
 @ToString
 public class StudentParent {
 
-    @Id
-    @Column(name = "student_id")
-    private int studentId;
+    @EmbeddedId
+    private StudentParentId id;
 
-    @Id
-    @Column(name = "parent_id")
-    private int parentId;
+    @ManyToOne()
+    @MapsId("studentId")
+    @JoinColumn(name = "student_id")
+    private Student student;
+
+
+    @ManyToOne()
+    @MapsId("parentId")
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
 }

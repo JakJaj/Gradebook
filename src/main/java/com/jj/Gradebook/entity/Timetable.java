@@ -18,13 +18,7 @@ public class Timetable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timetable_id")
-    private int timetableId;
-
-    @Column(name = "course_id")
-    private int courseId;
-
-    @Column(name = "class_id")
-    private int classId;
+    private Long timetableId;
 
     @Column(name = "start_time")
     private LocalTime startTime;
@@ -38,9 +32,17 @@ public class Timetable {
     @Column(name = "day_of_week")
     private int dayOfWeek;
 
-    public Timetable(int courseId, int classId, LocalTime startTime, LocalTime endTime, String classroomNumber, int dayOfWeek) {
-        this.courseId = courseId;
-        this.classId = classId;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Class clas;
+
+    public Timetable(Course course, Class clas, LocalTime startTime, LocalTime endTime, String classroomNumber, int dayOfWeek) {
+        this.course = course;
+        this.clas = clas;
         this.startTime = startTime;
         this.endTime = endTime;
         this.classroomNumber = classroomNumber;

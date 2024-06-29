@@ -18,7 +18,7 @@ public class Announcements {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "announcement_id")
-    private int announcementId;
+    private Long announcementId;
 
     @Column(name = "title")
     private String title;
@@ -29,14 +29,15 @@ public class Announcements {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    @Column(name = "teacher_id")
-    private int teacher_id;
+    @ManyToOne()
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 
-    public Announcements(String title, String content, LocalDateTime dateTime, int teacher_id) {
+    public Announcements(String title, String content, LocalDateTime dateTime, Teacher teacher) {
         this.title = title;
         this.content = content;
         this.dateTime = dateTime;
-        this.teacher_id = teacher_id;
+        this.teacher = teacher;
     }
 
 }

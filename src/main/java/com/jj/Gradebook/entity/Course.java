@@ -16,20 +16,21 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    private int courseId;
+    private Long courseId;
 
-    @Column(name = "course_type_id")
-    private int courseTypeId;
-
-    @Column(name = "teacher_id")
-    private int teacherId;
+    @Column(name = "course_type")
+    private String courseType;
 
     @Column(name = "description")
     private String description;
 
-    public Course(int courseTypeId, int teacherId, String description) {
-        this.courseTypeId = courseTypeId;
-        this.teacherId = teacherId;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
+
+    public Course(String courseType, Teacher teacher, String description) {
+        this.courseType = courseType;
+        this.teacher = teacher;
         this.description = description;
     }
 }
