@@ -5,13 +5,44 @@ function CRUDList(props){
 
     let columns = getColumns(props.type)
     
-    let content = getListData(props.type)
+    let rows = getListData(props.type)
 
     const renderColumns = (columns):any => (
         columns.map((column) => (
             <td className="border border-slate-600 hover:bg-gray-300 p-4" key={column.id}> {column.text}</td>
     )))
 
+    const renderRows = (rows, type):any => {
+
+        switch(type){
+            case "Teachers":
+                rows.map((row) => (
+                    <td></td>
+                ))
+                break;
+            case "Students":
+                rows.map((row) => (
+                    <td></td>
+                ))
+                break;
+            case "Parents":
+                rows.map((row) => (
+                    <td></td>
+                ))
+                break;
+            case "Classes":
+                rows.map((row) => (
+                    <td></td>
+                ))
+                break;
+            case "Courses":
+                rows.map((row) => (
+                    <td></td>
+                ))
+                break;
+        }
+        
+    }
     
     return(
         <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1 w-5/6">
