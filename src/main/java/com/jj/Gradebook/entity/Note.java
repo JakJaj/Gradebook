@@ -18,13 +18,15 @@ public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "note_id")
-    private int noteId;
+    private Long noteId;
 
-    @Column(name = "student_id")
-    private int studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    @Column(name = "timetable_id")
-    private int timetableId;
+    @ManyToOne
+    @JoinColumn(name = "timetable_id")
+    private Timetable timetable;
 
     @Column(name = "description")
     private String description;
@@ -32,9 +34,9 @@ public class Note {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    public Note(int studentId, int timetableId, String description, LocalDateTime dateTime) {
-        this.studentId = studentId;
-        this.timetableId = timetableId;
+    public Note(Student student, Timetable timetable, String description, LocalDateTime dateTime) {
+        this.timetable = timetable;
+        this.student = student;
         this.description = description;
         this.dateTime = dateTime;
     }

@@ -18,13 +18,15 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
-    private int messageId;
+    private Long messageId;
 
-    @Column(name = "sender_id")
-    private int senderId;
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
-    @Column(name = "receiver_id")
-    private int receiver_id;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
     @Column(name = "title")
     private String title;
@@ -35,9 +37,9 @@ public class Message {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
-    public Message(int senderId, int receiver_id, String title, String content, LocalDateTime dateTime) {
-        this.senderId = senderId;
-        this.receiver_id = receiver_id;
+    public Message(User sender, User receiver, String title, String content, LocalDateTime dateTime) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.title = title;
         this.content = content;
         this.dateTime = dateTime;

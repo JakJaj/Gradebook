@@ -13,7 +13,6 @@ DROP TABLE IF EXISTS Courses;
 DROP TABLE IF EXISTS Announcements;
 DROP TABLE IF EXISTS Parents;
 DROP TABLE IF EXISTS Teachers;
-DROP TABLE IF EXISTS Course_Types;
 DROP TABLE IF EXISTS Users;
 
 -- Tworzenie tabeli Users 
@@ -22,6 +21,7 @@ CREATE TABLE Users(
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     salt VARCHAR(255),
+    token VARCHAR(255),
     enabled BOOL,
     role VARCHAR(255),
     
@@ -51,6 +51,7 @@ CREATE TABLE Parents(
     PRIMARY KEY (parent_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
+
 -- Tworzenie tabeli Announcements
 CREATE TABLE Announcements(
 	announcement_id BIGINT NOT NULL AUTO_INCREMENT,
@@ -62,22 +63,14 @@ CREATE TABLE Announcements(
     FOREIGN KEY (teacher_id) REFERENCES Teachers(teacher_id)
 );
 
--- Tworzenie tabeli Courses_Types
-CREATE TABLE Course_Types(
-	course_type_id BIGINT NOT NULL AUTO_INCREMENT,
-    course_name VARCHAR(255),
-    PRIMARY KEY(course_type_id)
-);
 -- Tworzenie tabeli Courses
-
 CREATE TABLE Courses(
 	course_id BIGINT NOT NULL AUTO_INCREMENT,
-    course_type_id BIGINT NOT NULL,
+    course_type VARCHAR(255),
     teacher_id BIGINT NOT NULL,
     description VARCHAR(255),
     
     PRIMARY KEY(course_id),
-    FOREIGN KEY(course_type_id) REFERENCES Course_Types(course_type_id),
     FOREIGN KEY(teacher_id) REFERENCES Teachers(teacher_id)
 );
 
@@ -161,6 +154,7 @@ CREATE TABLE Attendances(
     FOREIGN KEY(student_id) REFERENCES Students(student_id),
     FOREIGN KEY(timetable_id) REFERENCES Timetables(timetable_id)
 );
+
 -- Tworzenie tabeli Notes
 CREATE TABLE Notes(
 	note_id BIGINT NOT NULL AUTO_INCREMENT,
@@ -173,6 +167,7 @@ CREATE TABLE Notes(
     FOREIGN KEY(student_id) REFERENCES Students(student_id),
     FOREIGN KEY(timetable_id) REFERENCES Timetables(timetable_id)
 );
+
 -- Tworzenie tabeli Messages
 CREATE TABLE Messages(
 	message_id BIGINT NOT NULL AUTO_INCREMENT,

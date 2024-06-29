@@ -3,6 +3,7 @@ package com.jj.Gradebook.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.engine.internal.CascadePoint;
 
 import java.util.Date;
 
@@ -18,16 +19,13 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
-    private int studentId;
+    private Long studentId;
 
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "email")
-    private String email;
 
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
@@ -41,25 +39,22 @@ public class Student {
     @Column(name = "house_number")
     private int houseNumber;
 
-    @Column(name = "class_id")
-    private int classId;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Class studentClass;
 
-    @Column(name = "user_id")
-    private int userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "active")
-    private boolean active;
-
-    public Student(String firstName, String lastName, String email, Date dateOfBirth, String city, String street, int houseNumber, int classId, int userId, boolean active) {
+    public Student(String firstName, String lastName, Date dateOfBirth, String city, String street, int houseNumber, Class studentClass, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.street = street;
         this.houseNumber = houseNumber;
-        this.classId = classId;
-        this.userId = userId;
-        this.active = active;
+        this.studentClass = studentClass;
+        this.user = user;
     }
 }

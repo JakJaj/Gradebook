@@ -18,7 +18,7 @@ public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attendance_id")
-    private int attendanceId;
+    private Long attendanceId;
 
     @Column(name = "date_time")
     private LocalDateTime dateTime;
@@ -26,16 +26,18 @@ public class Attendance {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "student_id")
-    private int studentId;
+    @ManyToOne()
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    @Column(name = "timetable_id")
-    private int timetableId;
+    @ManyToOne
+    @JoinColumn(name = "timetable_id")
+    private Timetable timetable;
 
-    public Attendance(LocalDateTime dateTime, String status, int studentId, int timetableId) {
+    public Attendance(LocalDateTime dateTime, String status, Student student, Timetable timetable) {
         this.dateTime = dateTime;
         this.status = status;
-        this.studentId = studentId;
-        this.timetableId = timetableId;
+        this.timetable = timetable;
+        this.student = student;
     }
 }
