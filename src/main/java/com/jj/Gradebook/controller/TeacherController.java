@@ -37,7 +37,6 @@ public class TeacherController {
             row.put("Status", teacher.getUser().isEnabled());
             output.add(row);
         }
-
         return output;
     }
 

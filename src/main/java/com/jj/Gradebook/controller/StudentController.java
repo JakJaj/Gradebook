@@ -2,9 +2,11 @@ package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.service.student.StudentService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,8 +22,23 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students")
-    public List<Student> findAll(){
-        return studentService.findAll();
+    public List<JSONObject> findAll(){
+        List<Student> students = studentService.findAll();
+        List<JSONObject> output = new ArrayList<>();
+
+        for (Student student: students){
+            JSONObject row = new JSONObject();
+            row.put("ID", student.getStudentId());
+            row.put("FirstName", student.getFirstName());
+            row.put("LastName", student.getLastName());
+            row.put("Email", student.getUser().getEmail());
+            row.put("BirthDate", student.getDateOfBirth());
+            row.put("Adress", student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber());
+            row.put("Class", student.getClass().getName());
+            row.put("Status", student.getUser().isEnabled());
+            output.add(row);
+        }
+        return output;
     }
 
     @CrossOrigin
