@@ -3,10 +3,13 @@ package com.jj.Gradebook.controller;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.service.parent.ParentService;
+import netscape.javascript.JSObject;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,8 +25,19 @@ public class ParentController {
 
     @CrossOrigin
     @GetMapping("/parents")
-    public List<Parent> findAll(){
-        return parentService.findAll();
+    public List<JSONObject> findAll(){
+        List<Parent> parents = parentService.findAll();
+        List<JSONObject> output = new ArrayList<>();
+
+        for (Parent parent: parents){
+            JSONObject row = new JSONObject();
+            row.put("ID", parent.getParentId());
+            row.put("FirstName", parent.getFirstName());
+            row.put("LastName", parent.getLastName());
+            row.put("Email", parent.getUser().getEmail());
+            output.add(row);
+        }
+        return output;
     }
 
     @GetMapping("/parents/{id}")
