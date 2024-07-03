@@ -47,63 +47,50 @@ const coursesColumn = [
     { id: 5, text: "Actions" }
 ]
 
-function getListData(typeCode:String){
-    const url = "http://127.0.0.1:8080"
-    
-    switch(typeCode){
-        case "Teachers": 
-            axios.get(url + "/api/teachers")
-                .then(function(response){
-                    console.log(response.data)
-                    return response.data
-            })
-            break
-        case "Students":
-            axios.get(url + "/api/students")
-                .then(function(response){
-                    console.log(response.data)
-                    return response.data
-            })
-            break
-        case "Parents":
-            axios.get(url + "/api/parents")
-                .then(function(response){
-                    console.log(response.data)
-                    return response.data
-            })
-            break
-        case "Classes":
-            axios.get(url + "/api/classes")
-                .then(function(response){
-                    console.log(response.data)
-                    return response.data
-            })
-            break
-        case "Courses":
-            axios.get(url + "/api/courses")
-                .then(function(response){
-                    console.log(response.data)
-                    return response.data
-            })
-            break    
+async function getListData(typeCode) {
+    const url = "http://127.0.0.1:8080";
+
+    try {
+        switch (typeCode) {
+            case "Teachers":
+                const teachersResponse = await axios.get(url + "/api/teachers");
+                return teachersResponse.data;
+            case "Students":
+                const studentsResponse = await axios.get(url + "/api/students");
+                return studentsResponse.data;
+            case "Parents":
+                const parentsResponse = await axios.get(url + "/api/parents");
+                return parentsResponse.data;
+            case "Classes":
+                const classesResponse = await axios.get(url + "/api/classes");
+                return classesResponse.data;
+            case "Courses":
+                const coursesResponse = await axios.get(url + "/api/courses");
+                return coursesResponse.data;
+            default:
+                throw new Error("Invalid type");
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
     }
 }
 
-function getColumns(typeCode:String){
-    switch(typeCode){
-        case "Teachers": 
-            return teacherColumns
+function getColumns(typeCode) {
+    switch (typeCode) {
+        case "Teachers":
+            return teacherColumns;
         case "Students":
-            return studentColumns
+            return studentColumns;
         case "Parents":
-            return parentsColumn
+            return parentsColumn;
         case "Classes":
-            return classesColumns
+            return classesColumns;
         case "Courses":
-            return coursesColumn
+            return coursesColumn;
         default:
-            return ["Wrong columns code selected"]
+            return [];
     }
 }
 
-export {getColumns, getListData}
+export { getColumns, getListData };
