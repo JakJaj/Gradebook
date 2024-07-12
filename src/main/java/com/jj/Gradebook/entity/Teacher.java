@@ -4,6 +4,7 @@ package com.jj.Gradebook.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -27,16 +28,16 @@ public class Teacher {
     private String lastName;
 
     @Column(name="date_of_birth")
-    private Date dateOfBirth;
+    private Calendar dateOfBirth;
 
     @Column(name="date_of_employment")
-    private Date dateOfEmployment;
+    private Calendar dateOfEmployment;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
 
-    public Teacher(String firstName, String lastName, Date dateOfBirth, Date dateOfEmployment, User user) {
+    public Teacher(String firstName, String lastName, Calendar dateOfBirth, Calendar dateOfEmployment, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;

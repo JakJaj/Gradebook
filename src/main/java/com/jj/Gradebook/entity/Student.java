@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.engine.internal.CascadePoint;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -28,7 +29,7 @@ public class Student {
     private String lastName;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private Calendar dateOfBirth;
 
     @Column(name = "city")
     private String city;
@@ -47,7 +48,7 @@ public class Student {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Student(String firstName, String lastName, Date dateOfBirth, String city, String street, int houseNumber, Class studentClass, User user) {
+    public Student(String firstName, String lastName, Calendar dateOfBirth, String city, String street, int houseNumber, Class studentClass, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
