@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -32,9 +33,9 @@ public class StudentController {
             row.put("FirstName", student.getFirstName());
             row.put("LastName", student.getLastName());
             row.put("Email", student.getUser().getEmail());
-            row.put("BirthDate", student.getDateOfBirth());
+            row.put("BirthDate", student.getDateOfBirth().get(Calendar.DATE) + "-" + (student.getDateOfBirth().get(Calendar.MONTH) + 1 ) + "-" + student.getDateOfBirth().get(Calendar.YEAR));
             row.put("Adress", student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber());
-            row.put("Class", student.getClass().getName());
+            row.put("Class", student.getStudentClass().getClassName());
             row.put("Status", student.getUser().isEnabled());
             output.add(row);
         }
@@ -49,7 +50,7 @@ public class StudentController {
 
     @CrossOrigin
     @PostMapping("/students")
-    public Student save(@PathVariable Student student){
+    public Student save(@RequestBody Student student){
         return studentService.save(student);
     }
 

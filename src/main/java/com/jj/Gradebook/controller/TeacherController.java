@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -32,8 +33,8 @@ public class TeacherController {
             row.put("FirstName", teacher.getFirstName());
             row.put("LastName", teacher.getLastName());
             row.put("Email", teacher.getUser().getEmail());
-            row.put("BirthDate", teacher.getDateOfBirth());
-            row.put("EmploymentDate", teacher.getDateOfEmployment());
+            row.put("BirthDate", teacher.getDateOfBirth().get(Calendar.DATE) + "-" + (teacher.getDateOfBirth().get(Calendar.MONTH) + 1 ) + "-" + teacher.getDateOfBirth().get(Calendar.YEAR));
+            row.put("EmploymentDate", teacher.getDateOfEmployment().get(Calendar.DATE) + "-" + (teacher.getDateOfEmployment().get(Calendar.MONTH) + 1 ) + "-" + teacher.getDateOfEmployment().get(Calendar.YEAR));
             row.put("Status", teacher.getUser().isEnabled());
             output.add(row);
         }
@@ -45,12 +46,12 @@ public class TeacherController {
         return teacherService.findById(id);
     }
 
-    @PostMapping("/teacher")
-    public Teacher save(@PathVariable Teacher teacher){
+    @PostMapping("/teachers")
+    public Teacher save(@RequestBody Teacher teacher){
         return teacherService.save(teacher);
     }
 
-    @DeleteMapping("/teacher/{id}")
+    @DeleteMapping("/teachers/{id}")
     private void deleteById(@PathVariable int id){
         teacherService.deleteById(id);
     }

@@ -46,7 +46,7 @@ public class ParentController {
     }
 
     @PostMapping("/parents")
-    public Parent save(@PathVariable Parent parent){
+    public Parent save(@RequestBody Parent parent){
         return parentService.save(parent);
     }
 

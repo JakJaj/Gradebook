@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/users") //TODO:TEST HOW TO INSERT USERS
-    public User save(@PathVariable User user){
+    public User save(@RequestBody User user){
         return userService.save(user);
     }
 

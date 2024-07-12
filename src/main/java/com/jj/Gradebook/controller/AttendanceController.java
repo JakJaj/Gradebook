@@ -29,7 +29,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/attendances")
-    public Attendance save(@PathVariable Attendance attendance){
+    public Attendance save(@RequestBody Attendance attendance){
         return attendanceService.save(attendance);
     }
 

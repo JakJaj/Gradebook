@@ -28,7 +28,7 @@ public class AnnouncementController {
     }
 
     @PostMapping("/announcements")
-    public Announcements save(@PathVariable Announcements announcements){
+    public Announcements save(@RequestBody Announcements announcements){
         return announcementService.save(announcements);
     }
 

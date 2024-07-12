@@ -29,7 +29,7 @@ public class NoteController {
     }
 
     @PostMapping("/notes")
-    public Note save(@PathVariable Note note){
+    public Note save(@RequestBody Note note){
         return noteService.save(note);
     }
 
