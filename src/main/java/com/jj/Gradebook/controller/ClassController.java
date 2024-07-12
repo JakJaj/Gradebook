@@ -45,7 +45,7 @@ public class ClassController {
     }
 
     @PostMapping("/classes")
-    public Class save(@PathVariable Class theClass){
+    public Class save(@RequestBody Class theClass){
         return classService.save(theClass);
     }
 

@@ -29,7 +29,7 @@ public class GradeController {
     }
 
     @PostMapping("/grades")
-    public Grade save(@PathVariable Grade grade){
+    public Grade save(@RequestBody Grade grade){
         return gradeService.save(grade);
     }
 

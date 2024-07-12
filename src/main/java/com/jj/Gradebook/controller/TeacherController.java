@@ -46,12 +46,12 @@ public class TeacherController {
         return teacherService.findById(id);
     }
 
-    @PostMapping("/teacher")
-    public Teacher save(@PathVariable Teacher teacher){
+    @PostMapping("/teachers")
+    public Teacher save(@RequestBody Teacher teacher){
         return teacherService.save(teacher);
     }
 
-    @DeleteMapping("/teacher/{id}")
+    @DeleteMapping("/teachers/{id}")
     private void deleteById(@PathVariable int id){
         teacherService.deleteById(id);
     }

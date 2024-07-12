@@ -28,7 +28,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages")
-    public Message save(@PathVariable Message message){
+    public Message save(@RequestBody Message message){
         return messageService.save(message);
     }
 

@@ -50,7 +50,7 @@ public class StudentController {
 
     @CrossOrigin
     @PostMapping("/students")
-    public Student save(@PathVariable Student student){
+    public Student save(@RequestBody Student student){
         return studentService.save(student);
     }
 

@@ -28,7 +28,7 @@ public class TimetableController {
     }
 
     @PostMapping("/timetables")
-    public Timetable save(@PathVariable Timetable timetable){
+    public Timetable save(@RequestBody Timetable timetable){
         return timetableService.save(timetable);
     }
 
