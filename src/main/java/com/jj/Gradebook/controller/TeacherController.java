@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -33,8 +34,8 @@ public class TeacherController {
             row.put("FirstName", teacher.getFirstName());
             row.put("LastName", teacher.getLastName());
             row.put("Email", teacher.getUser().getEmail());
-            row.put("BirthDate", teacher.getDateOfBirth().get(Calendar.DATE) + "-" + (teacher.getDateOfBirth().get(Calendar.MONTH) + 1 ) + "-" + teacher.getDateOfBirth().get(Calendar.YEAR));
-            row.put("EmploymentDate", teacher.getDateOfEmployment().get(Calendar.DATE) + "-" + (teacher.getDateOfEmployment().get(Calendar.MONTH) + 1 ) + "-" + teacher.getDateOfEmployment().get(Calendar.YEAR));
+            row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()));
+            row.put("EmploymentDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()));
             row.put("Status", teacher.getUser().isEnabled());
             output.add(row);
         }

@@ -30,10 +30,14 @@ public class Class {
     @Column(name = "start_year")
     private Year start_year;
 
-    public Class(String className, Teacher teacher, Year start_year) {
+    @Column(name = "enabled")
+    private boolean status;
+
+    public Class(String className, Teacher teacher, Year start_year, boolean status) {
         this.className = className;
         this.teacher = teacher;
         this.start_year = start_year;
+        this.status = status;
     }
 
 }

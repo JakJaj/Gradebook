@@ -27,14 +27,14 @@ public class CoursesController {
     @CrossOrigin
     @GetMapping("/courses")
     public List<JSONObject> findAll(){
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses = courseService.findAll();
         List<JSONObject> output = new ArrayList<>();
 
         for(Course course: courses){
             JSONObject row = new JSONObject();
             row.put("ID", course.getCourseId());
             row.put("Course", course.getCourseType());
-            row.put("Teacher", course.getTeacher());
+            row.put("Teacher", course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName());
             row.put("Description", course.getDescription());
             output.add(row);
         }
