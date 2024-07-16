@@ -73,7 +73,7 @@ function CRUDList(props) {
                             <td>{row.Year}</td>
                             <td>{row.Students}</td>
                             <td>{row.Timetable}</td>
-                            <td>{row.Status}</td>
+                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
                             <td>{/* Actions */}</td>
                         </tr>
                     );
@@ -82,7 +82,7 @@ function CRUDList(props) {
                         <tr key={row.ID}>
                             <td>{row.ID}</td>
                             <td>{row.Course}</td>
-                            <td>{row.Teachers}</td>
+                            <td>{row.Teacher}</td>
                             <td>{row.Description}</td>
                             <td>{/* Actions */}</td>
                         </tr>
@@ -94,9 +94,12 @@ function CRUDList(props) {
     };
 
     return (
-        <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1 w-5/6">
-            <strong className="text-gray-700 font-medium">{props.type} List</strong>
-            <div className="mt-3">
+        <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
+            <div className="flex justify-evenly">
+                <strong className="text-gray-700 font-medium">{props.type} List</strong>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add item</button>
+            </div>
+            <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
                     <thead>
                         <tr>

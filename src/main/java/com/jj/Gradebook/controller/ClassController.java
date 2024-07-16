@@ -24,7 +24,8 @@ public class ClassController {
     @CrossOrigin
     @GetMapping("/classes")
     public List<JSONObject> findAll(){
-        List<Class> classes = new ArrayList<>();
+        List<Class> classes = classService.findAll();
+
         List<JSONObject> output = new ArrayList<>();
 
         for(Class clas: classes){
@@ -33,9 +34,10 @@ public class ClassController {
             row.put("ClassName", clas.getClassName());
             row.put("Tutor", clas.getTeacher().getFirstName() + " " + clas.getTeacher().getLastName());
             row.put("Year", clas.getStart_year());
-            row.put("Status", LocalDate.now().getYear() == clas.getStart_year().getValue());
+            row.put("Status", clas.isStatus());
             output.add(row);
         }
+
         return output;
     }
 
