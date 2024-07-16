@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getListData, getColumns } from "./columns";
+import AddPopup from "./AddItemPopup";
 
 function CRUDList(props) {
     const [columns, setColumns] = useState([]);
@@ -107,7 +108,8 @@ function CRUDList(props) {
         <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
             <div className="flex justify-evenly my-5">
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Add item</button>
+                
+                <AddPopup/>
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
