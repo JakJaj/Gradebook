@@ -109,7 +109,7 @@ function CRUDList(props) {
             <div className="flex justify-evenly my-5">
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
                 
-                <AddPopup/>
+                
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
