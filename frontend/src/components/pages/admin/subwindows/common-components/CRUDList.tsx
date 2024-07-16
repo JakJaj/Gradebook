@@ -108,7 +108,7 @@ function CRUDList(props) {
         <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
             <div className="flex justify-evenly my-5">
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
-                
+                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Add item</button>
                 
             </div>
             <div className="mt-3 flex justify-center">
