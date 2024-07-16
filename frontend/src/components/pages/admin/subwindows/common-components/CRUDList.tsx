@@ -19,7 +19,7 @@ function CRUDList(props) {
 
     const renderColumns = (columns) => (
         columns.map((column) => (
-            <td className="border border-slate-600 hover:bg-gray-300 p-4" key={column.id}>{column.text}</td>
+            <td className="border-b-2 border-slate-600 bg-gray-800 hover:bg-gray-700 p-4" key={column.id}>{column.text}</td>
         ))
     );
 
@@ -28,62 +28,72 @@ function CRUDList(props) {
             switch (type) {
                 case "Teachers":
                     return (
+                        
                         <tr key={row.ID}>
-                            <td>{row.ID}</td>
-                            <td>{row.FirstName}</td>
-                            <td>{row.LastName}</td>
-                            <td>{row.Email}</td>
-                            <td>{row.BirthDate}</td>
-                            <td>{row.EmploymentDate}</td>
-                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
+                            <ListItem text={row.ID}/>
+                            <ListItem text={row.FirstName}/>
+                            <ListItem text={row.LastName}/>
+                            <ListItem text={row.Email}/>
+                            <ListItem text={row.BirthDate}/>
+                            <ListItem text={row.EmploymentDate}/>
+                            <ListItem text={row.Status === true ? "Active" : "Inactive"}/>
+
                             <td>{/* Actions */}</td>
                         </tr>
                     );
                 case "Students":
                     return (
+                        //DODAJ PRZYCISKI DO AKCJI
                         <tr key={row.ID}>
-                            <td>{row.ID}</td>
-                            <td>{row.FirstName}</td>
-                            <td>{row.LastName}</td>
-                            <td>{row.Email}</td>
-                            <td>{row.BirthDate}</td>
-                            <td>{row.Address}</td>
-                            <td>{row.Class}</td>
-                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
+                            <ListItem text={row.ID}/>
+                            <ListItem text={row.FirstName}/>
+                            <ListItem text={row.LastName}/>
+                            <ListItem text={row.Email}/>
+                            <ListItem text={row.BirthDate}/>
+                            <ListItem text={row.Address}/>
+                            <ListItem text={row.Class}/>
+                            <ListItem text={row.Status === true ? "Active" : "Inactive"}/>
+                            
                             <td>{/* Actions */}</td>
                         </tr>
                     );
                 case "Parents":
                     return (
                         <tr key={row.ID}>
-                            <td>{row.ID}</td>
-                            <td>{row.FirstName}</td>
-                            <td>{row.LastName}</td>
-                            <td>{row.Email}</td>
-                            <td>{row.Students}</td>
+                            <ListItem text={row.ID}/>
+                            <ListItem text={row.FirstName}/>
+                            <ListItem text={row.LastName}/>
+                            <ListItem text={row.Email}/>
+                            
+                            
+                            <ListItem text={row.Students}/>
                             <td>{/* Actions */}</td>
                         </tr>
                     );
                 case "Classes":
+                    //DODAJ PRZYCISKI DO AKCJI
                     return (
                         <tr key={row.ID}>
-                            <td>{row.ID}</td>
-                            <td>{row.ClassName}</td>
-                            <td>{row.Tutor}</td>
-                            <td>{row.Year}</td>
-                            <td>{row.Students}</td>
-                            <td>{row.Timetable}</td>
-                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
+                            <ListItem text={row.ID} />
+                            <ListItem text={row.ClassName} />
+                            <ListItem text={row.Tutor} />
+                            <ListItem text={row.Year}/>
+                            <ListItem text={row.Students} />
+                            <ListItem text={row.Timetable}/>
+                            <ListItem text={row.Status === true ? "Active" : "Inactive"} />
+                            
                             <td>{/* Actions */}</td>
                         </tr>
                     );
                 case "Courses":
+                    //DODAJ PRZYCISKI DO AKCJI
                     return (
                         <tr key={row.ID}>
-                            <td>{row.ID}</td>
-                            <td>{row.Course}</td>
-                            <td>{row.Teacher}</td>
-                            <td>{row.Description}</td>
+                            <ListItem text={row.ID}/>
+                            <ListItem text={row.Course} />
+                            <ListItem text={row.Teacher} />
+                            <ListItem text={row.Description} />
+                            
                             <td>{/* Actions */}</td>
                         </tr>
                     );
@@ -95,9 +105,9 @@ function CRUDList(props) {
 
     return (
         <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
-            <div className="flex justify-evenly">
-                <strong className="text-gray-700 font-medium">{props.type} List</strong>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add item</button>
+            <div className="flex justify-evenly my-5">
+                <strong className="text-gray-700 text-3xl">{props.type} List</strong>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Add item</button>
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
@@ -113,6 +123,13 @@ function CRUDList(props) {
             </div>
         </div>
     );
+}
+
+
+function ListItem(props){
+    return(
+        <td className=" hover:bg-gray-300 p-6">{props.text}</td>
+    )
 }
 
 export default CRUDList;
