@@ -35,7 +35,7 @@ function CRUDList(props) {
                             <td>{row.Email}</td>
                             <td>{row.BirthDate}</td>
                             <td>{row.EmploymentDate}</td>
-                            <td>{row.Status}</td>
+                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
                             <td>{/* Actions */}</td>
                         </tr>
                     );
@@ -49,7 +49,7 @@ function CRUDList(props) {
                             <td>{row.BirthDate}</td>
                             <td>{row.Address}</td>
                             <td>{row.Class}</td>
-                            <td>{row.Status}</td>
+                            <td>{row.Status === true ? "aktywny" : "nieaktywny"}</td>
                             <td>{/* Actions */}</td>
                         </tr>
                     );
