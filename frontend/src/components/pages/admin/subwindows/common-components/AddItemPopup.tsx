@@ -4,10 +4,10 @@ import React from "react";
 export function AddTeacherPopup(props){
     return(props.trigger) ? (
     <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="relative p-12 h-5/6 w-full max-w-screen-sm bg-white">
+        <div className="relative p-12 h-5/6 w-full max-w-screen-sm bg-white border-none rounded-3xl">
             <button 
             onClick={() => props.setTrigger(false)}
-            className="absolute top-12 right-12 bg-blue-500 rounded px-4 py-2 text-white">X</button>
+            className="absolute top-12 right-12 bg-blue-500 rounded-xl px-4 py-2 text-white">X</button>
             
             <div className="pt-2">
                 <p className="text-3xl">Add new teacher</p>

@@ -105,8 +105,8 @@ function CRUDList(props) {
     };
 
     return (
-        <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
-            <div className="flex justify-evenly my-5">
+        <div className="bg-white px-4 pt-3 pb-14 rounded-sm border border-gray-200 flex-1">
+            <div className="flex justify-evenly mt-5 mb-8">
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
                 
                 <button 
@@ -114,7 +114,7 @@ function CRUDList(props) {
                     onClick={() => setButtonPopup(true)}>
                             Add item
                 </button>
-                
+
                 <AddTeacherPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>        
             
             </div>
