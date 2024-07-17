@@ -1,6 +1,6 @@
 # Grade Book Project
 
-This project is a comprehensive online grade book system developed as part of an engineering thesis. It provides a web-based platform writen using React with a REST API created using Spring Boot. System is created for schools to manage student grades, facilitate communication between students, teachers, and parents, and generate reports on student performance. The system utilizes various technologies to achieve its functionality. 
+This project is a comprehensive online grade book system developed as part of a final year project. It provides a web-based platform writen using React with a REST API created using Spring Boot. System is created for schools to manage student grades, facilitate communication between students, teachers, and parents, and generate reports on student performance. The system utilizes various technologies to achieve its functionality. 
 
 ## Technologies Used
 
