@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getListData, getColumns } from "./columns";
+import {AddTeacherPopup, AddStudentPopup, AddParentPopup, AddClassPopup, AddCoursePopup} from "./AddItemPopup";
 
 function CRUDList(props) {
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
-
+    const [buttonPopup, setButtonPopup] = useState(false);
     useEffect(() => {
         setColumns(getColumns(props.type));
         
@@ -19,7 +20,7 @@ function CRUDList(props) {
 
     const renderColumns = (columns) => (
         columns.map((column) => (
-            <td className="border-b-2 border-slate-600 bg-gray-800 hover:bg-gray-700 p-4" key={column.id}>{column.text}</td>
+            <td className="border-b-2 border-slate-600 bg-gray-800 text-white hover:bg-gray-700 p-4" key={column.id}>{column.text}</td>
         ))
     );
 
@@ -65,7 +66,6 @@ function CRUDList(props) {
                             <ListItem text={row.LastName}/>
                             <ListItem text={row.Email}/>
                             
-                            
                             <ListItem text={row.Students}/>
                             <td>{/* Actions */}</td>
                         </tr>
@@ -103,11 +103,34 @@ function CRUDList(props) {
         });
     };
 
+    const renderAddItemsPopupButtons = (type) =>{
+        switch(type){
+            case "Teachers":
+                return(<AddTeacherPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>)
+            case "Students":
+                return(<AddStudentPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>)
+            case "Parents":
+                return(<AddParentPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>)
+            case "Classes":
+                return(<AddClassPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>)
+            case "Courses":
+                return(<AddCoursePopup trigger={buttonPopup} setTrigger={setButtonPopup}/>)
+        }
+    }
+
+
     return (
-        <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
-            <div className="flex justify-evenly my-5">
+        <div className="bg-white px-4 pt-3 pb-14 rounded-sm border border-gray-200 flex-1">
+            <div className="flex justify-evenly mt-5 mb-8">
+                
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Add item</button>
+                <button 
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+                            onClick={() => setButtonPopup(true)}>
+                                Add item
+                        </button>
+                {renderAddItemsPopupButtons(props.type)}
+            
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">

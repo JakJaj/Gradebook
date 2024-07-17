@@ -31,4 +31,7 @@ const adminContent = [
     }
 ]
 
+
+
 export default adminContent;
+export const adminHomePage = "/admin/"

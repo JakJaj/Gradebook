@@ -12,7 +12,7 @@ function Navigation(props) {
 
     return (
         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-            <CurrentlyOpenNavigationPage text="Home" />
+            <CurrentlyOpenNavigationPage text="Home" link={props.homeProps}/>
             {buttonText(props.buttonProps)}
         </ul>
     );
