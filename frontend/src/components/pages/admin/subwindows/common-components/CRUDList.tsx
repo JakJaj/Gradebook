@@ -115,9 +115,8 @@ function CRUDList(props) {
                             Add item
                 </button>
                 
-                <AddTeacherPopup trigger={buttonPopup} setTrigger={setButtonPopup}>
-                    <h3>Test</h3>
-                </AddTeacherPopup>
+                <AddTeacherPopup trigger={buttonPopup} setTrigger={setButtonPopup}/>        
+            
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
