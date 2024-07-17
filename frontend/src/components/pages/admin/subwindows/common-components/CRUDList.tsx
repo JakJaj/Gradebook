@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getListData, getColumns } from "./columns";
-import AddPopup from "./AddItemPopup";
+import {AddTeacherPopup} from "./AddItemPopup";
 
 function CRUDList(props) {
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
-
+    const [buttonPopup, setButtonPopup] = useState(false);
     useEffect(() => {
         setColumns(getColumns(props.type));
         
@@ -20,7 +20,7 @@ function CRUDList(props) {
 
     const renderColumns = (columns) => (
         columns.map((column) => (
-            <td className="border-b-2 border-slate-600 bg-gray-800 hover:bg-gray-700 p-4" key={column.id}>{column.text}</td>
+            <td className="border-b-2 border-slate-600 bg-gray-800 text-white hover:bg-gray-700 p-4" key={column.id}>{column.text}</td>
         ))
     );
 
@@ -108,8 +108,16 @@ function CRUDList(props) {
         <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
             <div className="flex justify-evenly my-5">
                 <strong className="text-gray-700 text-3xl">{props.type} List</strong>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Add item</button>
                 
+                <button 
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+                    onClick={() => setButtonPopup(true)}>
+                            Add item
+                </button>
+                
+                <AddTeacherPopup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <h3>Test</h3>
+                </AddTeacherPopup>
             </div>
             <div className="mt-3 flex justify-center">
                 <table className="table-auto text-center border-separate bg-gray-200">
