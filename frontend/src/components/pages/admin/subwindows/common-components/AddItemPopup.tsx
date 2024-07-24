@@ -96,15 +96,14 @@ export function AddParentPopup(props){
                 </div>
     
                 <div className="fixed pt-20">
-                    <p>First name:</p>
-                    <input type="text" placeholder="asdf"></input>
+                    
+                    <InputField label="First Name:" placeholder="Joe" />
     
-                    <p>Last name:</p>
-                    <input type="text" placeholder="asdf"></input>
+                    <InputField label="Last Name:" placeholder="Doe" />
     
-                    <p>Email:</p>
-                    <input type="text" placeholder="asdf"></input>
-    
+                    <InputField label="Email: " placeholder="example@domain.com"/>
+
+                    <Select label="Students"/>
                     
                 </div>
     
