@@ -102,8 +102,6 @@ export function AddParentPopup(props){
                     <InputField label="Last Name:" placeholder="Doe" />
     
                     <InputField label="Email: " placeholder="example@domain.com"/>
-
-                    <Select label="Students"/>
                     
                 </div>
     
@@ -125,7 +123,7 @@ export function AddParentPopup(props){
 export function AddCoursePopup(props){
     return(props.trigger) ? (
         <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="relative p-12 h-5/6 w-full max-w-screen-sm bg-white border-none rounded-3xl">
+            <div className="relative p-12 h-2/3 w-full max-w-screen-sm bg-white border-none rounded-3xl">
                 <button 
                 onClick={() => props.setTrigger(false)}
                 className="absolute top-12 right-12 bg-blue-500 rounded-xl px-4 py-2 text-white">X</button>
@@ -134,12 +132,13 @@ export function AddCoursePopup(props){
                     <p className="text-3xl">Add new course</p>
                 </div>
     
-                <div className="fixed pt-20">
-                    <p>First name:</p>
-                    <input type="text" placeholder="asdf"></input>
+                <div className="fixed pt-5">
+                    
+                    <InputField label="Course Name:" placeholder="Math"/>
     
-                    <p>Last name:</p>
-                    <input type="text" placeholder="asdf"></input>
+                    <Select label="Tutor:" />
+
+                    <TextArea />
     
                     
                 </div>
@@ -162,7 +161,7 @@ export function AddCoursePopup(props){
 export function AddClassPopup(props){
     return(props.trigger) ? (
         <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="relative p-12 h-5/6 w-full max-w-screen-sm bg-white border-none rounded-3xl">
+            <div className="relative p-12 h-2/3 w-full max-w-screen-sm bg-white border-none rounded-3xl">
                 <button 
                 onClick={() => props.setTrigger(false)}
                 className="absolute top-12 right-12 bg-blue-500 rounded-xl px-4 py-2 text-white">X</button>
@@ -171,10 +170,18 @@ export function AddClassPopup(props){
                     <p className="text-3xl">Add new class</p>
                 </div>
     
-                <div className="fixed pt-20">
-                    <p>First name:</p>
-                    <input type="text" placeholder="asdf"></input>
-    
+                <div className="fixed pt-10">
+                    
+                    <InputField label="Class Name:" placeholder="IVA"/>
+
+                    <Select label="Tutor: " />
+                    
+                    <div>
+                        <label className="block uppercase tracking-wide text-gray-700 text-m font-bold my-2">Year</label> 
+                    </div>
+                    <DateYearField />
+
+                    <ActiveToggle />
                 </div>
     
                 <div className="absolute bottom-12 right-24">
@@ -289,6 +296,19 @@ function Select(props){
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
             </div>
+        </div>
+    )
+}
+
+function TextArea(){
+    return(
+        <div className="w-96">
+            <div>
+                <label className="block uppercase tracking-wide text-gray-700 text-m font-bold my-2">
+                    Description:
+                </label> 
+            </div>
+            <textarea id="message" rows={5} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write course description..."></textarea>
         </div>
     )
 }
