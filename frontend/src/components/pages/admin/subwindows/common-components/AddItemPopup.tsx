@@ -10,24 +10,23 @@ export function AddTeacherPopup(props){
             className="absolute top-12 right-12 bg-blue-500 rounded-xl px-4 py-2 text-white">X</button>
             
             <div className="pt-2">
-                <p className="text-3xl">Add new teacher</p>
+                <p className="text-3xl tracking-wide">Add new teacher</p>
             </div>
 
-            <div className="fixed pt-20">
-                <p>First name:</p>
-                <input type="text" placeholder="asdf"></input>
+            <div className="fixed pt-10">
 
-                <p>Last name:</p>
-                <input type="text" placeholder="asdf"></input>
+                <InputField label="First Name: " placeholder="Joe"/>
 
-                <p>Email:</p>
-                <input type="text" placeholder="asdf"></input>
+                <InputField label="Second Name: " placeholder="Doe"/>
 
-                <p>Birth Date:</p>
-                <input type="text" placeholder="asdf"></input>
 
-                <p>Employment date:</p>
-                <input type="text" placeholder="asdf"></input>
+                <InputField label="Email: " placeholder="example@domain.com" />
+
+                
+                <Date label="Birth"/>
+
+                <Date label="Employment"/>
+                
             </div>
 
             <div className="absolute bottom-12 right-24">
@@ -197,4 +196,67 @@ export function AddClassPopup(props){
             
         </div>
         ): "";
+}
+
+
+
+function InputField(props){
+    return(
+        <>
+            <label className="block uppercase tracking-wide text-gray-700 text-m font-bold my-2">
+                {props.label}
+            </label> 
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder={props.placeholder}></input>
+        </>
+    )
+}
+
+
+function DateYearField(props){
+    return(
+        <div className="inline-block relative w-24 mr-2">
+            <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option>2022</option>
+                <option>2021</option>
+                <option>2020</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+        </div>
+    )
+}
+
+function DateField(props){
+    return(
+
+        <div className="inline-block relative w-20 mr-2">
+            <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+        </div>
+    )
+}
+
+function Date(props){
+    return(
+        <div>
+
+            <div>
+            <label className="block uppercase tracking-wide text-gray-700 text-m font-bold my-2">
+                {props.label} Date:
+            </label> 
+            </div>
+            <div>
+                <DateField />
+                <DateField />
+                <DateYearField />
+            </div>
+        </div>
+    )
 }
