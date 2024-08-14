@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -26,16 +27,22 @@ public class ParentController {
     @CrossOrigin
     @GetMapping("/parents")
     public List<JSONObject> findAll(){
-        List<Parent> parents = parentService.findAll();
         List<JSONObject> output = new ArrayList<>();
 
-        for (Parent parent: parents){
-            JSONObject row = new JSONObject();
-            row.put("ID", parent.getParentId());
-            row.put("FirstName", parent.getFirstName());
-            row.put("LastName", parent.getLastName());
-            row.put("Email", parent.getUser().getEmail());
-            output.add(row);
+        Optional<List<Parent>> parents = Optional.ofNullable(parentService.findAll());
+
+        if (parents.isPresent()) {
+            for (Parent parent : parents.get()) {
+                JSONObject row = new JSONObject();
+                row.put("ID", parent.getParentId());
+                row.put("FirstName", parent.getFirstName());
+                row.put("LastName", parent.getLastName());
+                row.put("Email", parent.getUser().getEmail());
+                output.add(row);
+            }
+        }
+        else {
+            output.add(new JSONObject());
         }
         return output;
     }
