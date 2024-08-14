@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -27,16 +28,22 @@ public class CoursesController {
     @CrossOrigin
     @GetMapping("/courses")
     public List<JSONObject> findAll(){
-        List<Course> courses = courseService.findAll();
-        List<JSONObject> output = new ArrayList<>();
 
-        for(Course course: courses){
-            JSONObject row = new JSONObject();
-            row.put("ID", course.getCourseId());
-            row.put("Course", course.getCourseType());
-            row.put("Teacher", course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName());
-            row.put("Description", course.getDescription());
-            output.add(row);
+        List<JSONObject> output = new ArrayList<>();
+        Optional<List<Course>> courses = Optional.ofNullable(courseService.findAll());
+
+        if(courses.isPresent()) {
+            for (Course course : courses.get()) {
+                JSONObject row = new JSONObject();
+                row.put("ID", course.getCourseId());
+                row.put("Course", course.getCourseType());
+                row.put("Teacher", course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName());
+                row.put("Description", course.getDescription());
+                output.add(row);
+            }
+        }
+        else {
+            output.add(new JSONObject());
         }
         return  output;
     }

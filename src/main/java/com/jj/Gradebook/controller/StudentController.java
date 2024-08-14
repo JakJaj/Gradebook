@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,20 +26,26 @@ public class StudentController {
     @CrossOrigin
     @GetMapping("/students")
     public List<JSONObject> findAll(){
-        List<Student> students = studentService.findAll();
         List<JSONObject> output = new ArrayList<>();
 
-        for (Student student: students){
-            JSONObject row = new JSONObject();
-            row.put("ID", student.getStudentId());
-            row.put("FirstName", student.getFirstName());
-            row.put("LastName", student.getLastName());
-            row.put("Email", student.getUser().getEmail());
-            row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()));
-            row.put("Address", student.getCity() + ", " + student.getStreet() + " " + student.getHouseNumber());
-            row.put("Class", student.getStudentClass().getClassName());
-            row.put("Status", student.getUser().isEnabled());
-            output.add(row);
+        Optional<List<Student>> students = Optional.ofNullable(studentService.findAll());
+
+        if(students.isPresent()) {
+            for (Student student : students.get()) {
+                JSONObject row = new JSONObject();
+                row.put("ID", student.getStudentId());
+                row.put("FirstName", student.getFirstName());
+                row.put("LastName", student.getLastName());
+                row.put("Email", student.getUser().getEmail());
+                row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()));
+                row.put("Address", student.getCity() + ", " + student.getStreet() + " " + student.getHouseNumber());
+                row.put("Class", student.getStudentClass().getClassName());
+                row.put("Status", student.getUser().isEnabled());
+                output.add(row);
+            }
+        }
+        else {
+            output.add(new JSONObject());
         }
         return output;
     }

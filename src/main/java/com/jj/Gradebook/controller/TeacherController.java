@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,20 +26,29 @@ public class TeacherController {
     @CrossOrigin
     @GetMapping("/teachers")
     public List<JSONObject> findAll(){
-        List<Teacher> teachers = teacherService.findAll();
         List<JSONObject> output = new ArrayList<>();
 
-        for (Teacher teacher: teachers){
-            JSONObject row = new JSONObject();
-            row.put("ID", teacher.getTeacherId());
-            row.put("FirstName", teacher.getFirstName());
-            row.put("LastName", teacher.getLastName());
-            row.put("Email", teacher.getUser().getEmail());
-            row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()));
-            row.put("EmploymentDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()));
-            row.put("Status", teacher.getUser().isEnabled());
-            output.add(row);
+
+        Optional<List<Teacher>> teachers = Optional.ofNullable(teacherService.findAll());
+        if(teachers.isPresent()){
+
+
+            for (Teacher teacher: teachers.get()){
+                JSONObject row = new JSONObject();
+                row.put("ID", teacher.getTeacherId());
+                row.put("FirstName", teacher.getFirstName());
+                row.put("LastName", teacher.getLastName());
+                row.put("Email", teacher.getUser().getEmail());
+                row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()));
+                row.put("EmploymentDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()));
+                row.put("Status", teacher.getUser().isEnabled());
+                output.add(row);
+            }
         }
+        else{
+            output.add(new JSONObject());
+        }
+
         return output;
     }
 
