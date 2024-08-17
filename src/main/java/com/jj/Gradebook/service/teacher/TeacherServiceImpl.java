@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.teacher;
 
 import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -25,27 +26,39 @@ public class TeacherServiceImpl implements TeacherService{
     public Teacher findById(int id) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findById(id);
 
-        Teacher teacher = null;
         if(result.isPresent()){
-            teacher = result.get();
+            return  result.get();
         }
         else{
             throw new EntityNotFoundException("No teacher with id - " + id);
         }
-        return teacher;
+
     }
 
     @Override
-    public Teacher findByPesel(String pesel) {
-        return teacherRepository.findTeacherByUserPesel(pesel);
+    public Teacher findByPesel(String pesel) throws EntityNotFoundException {
+        Optional<Teacher> result = Optional.ofNullable(teacherRepository.findTeacherByUserPesel(pesel));
+        if(result.isPresent()){
+            return result.get();
+        }
+        else {
+            throw new EntityNotFoundException("No teacher with pesel - " + pesel);
+        }
     }
 
 
     @Override
     @Transactional
-    public Teacher save(Teacher teacher) {
+    public Teacher save(Teacher teacher) throws EntityAlreadyExistException {
+        Optional<Teacher> existingTeacher = Optional.ofNullable(teacherRepository.findTeacherByUserPesel(teacher.getUser().getPesel()));
 
-        return teacherRepository.save(teacher);
+        if (existingTeacher.isEmpty()){
+            return teacherRepository.save(teacher);
+        }
+        else {
+            throw new EntityAlreadyExistException("Teacher already exist");
+        }
+
     }
 
     @Override

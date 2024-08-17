@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.teacher.TeacherService;
 import org.json.simple.JSONObject;
@@ -39,10 +40,9 @@ public class TeacherController {
     }
 
     @PostMapping("/teachers")
-    public Teacher save(@RequestBody Teacher teacher){
-        Optional<Teacher> teacherToSave = Optional.ofNullable(teacherService.findByPesel(teacher.getUser().getPesel()));
-
-        return teacherService.save(teacher);
+    public ResponseEntity<Teacher> save(@RequestBody Teacher teacher) throws EntityAlreadyExistException {
+        Teacher teacherToSave = teacherService.save(teacher);
+        return ResponseEntity.ok(teacherToSave);
     }
 
     @DeleteMapping("/teachers/{id}")
