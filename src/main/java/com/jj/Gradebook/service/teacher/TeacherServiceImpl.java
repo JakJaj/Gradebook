@@ -66,7 +66,7 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public TeacherDTO findByPesel(String pesel) throws EntityNotFoundException {
-        Optional<Teacher> result = Optional.ofNullable(teacherRepository.findTeacherByUserPesel(pesel));
+        Optional<Teacher> result = teacherRepository.findTeacherByUserPesel(pesel);
         if(result.isPresent()){
             Teacher teacher = result.get();
             return new TeacherDTO(
@@ -88,7 +88,7 @@ public class TeacherServiceImpl implements TeacherService{
     @Override
     @Transactional
     public TeacherDTO save(Teacher teacher) throws EntityAlreadyExistException {
-        Optional<Teacher> existingTeacher = Optional.ofNullable(teacherRepository.findTeacherByUserPesel(teacher.getUser().getPesel()));
+        Optional<Teacher> existingTeacher = teacherRepository.findTeacherByUserPesel(teacher.getUser().getPesel());
 
         if (existingTeacher.isEmpty()){
             Teacher savedTeacher = teacherRepository.save(teacher);

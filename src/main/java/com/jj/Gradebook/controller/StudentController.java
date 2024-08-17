@@ -1,9 +1,12 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.entity.Student;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.student.StudentService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -25,46 +28,29 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
-
-        Optional<List<Student>> students = Optional.ofNullable(studentService.findAll());
-
-        if(students.isPresent()) {
-            for (Student student : students.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", student.getStudentId());
-                row.put("FirstName", student.getFirstName());
-                row.put("LastName", student.getLastName());
-                row.put("Email", student.getUser().getEmail());
-                row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()));
-                row.put("Address", student.getCity() + ", " + student.getStreet() + " " + student.getHouseNumber());
-                row.put("Class", student.getStudentClass().getClassName());
-                row.put("Status", student.getUser().isEnabled());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
-        return output;
+    public ResponseEntity<List<Student>> findAll(){
+        List<Student> students = studentService.findAll();
+        return ResponseEntity.ok(students);
     }
 
     @CrossOrigin
     @GetMapping("/students/{id}")
-    public Student findById(@PathVariable int id){
-        return studentService.findById(id);
+    public ResponseEntity<Student> findById(@PathVariable int id) throws EntityNotFoundException {
+        Student student = studentService.findById(id);
+        return ResponseEntity.ok(student);
     }
 
     @CrossOrigin
     @PostMapping("/students")
-    public Student save(@RequestBody Student student){
-        return studentService.save(student);
+    public ResponseEntity<Student> save(@RequestBody Student student) throws EntityAlreadyExistException {
+        Student savedStudent = studentService.save(student);
+        return ResponseEntity.ok(savedStudent);
     }
 
     @CrossOrigin
     @DeleteMapping("/students/{id}")
-    public void deleteById(@PathVariable int id){
+    public ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
         studentService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }
