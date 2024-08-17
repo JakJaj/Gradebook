@@ -25,31 +25,8 @@ public class TeacherController {
 
     @CrossOrigin
     @GetMapping("/teachers")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
-
-
-        Optional<List<Teacher>> teachers = Optional.ofNullable(teacherService.findAll());
-        if(teachers.isPresent()){
-
-
-            for (Teacher teacher: teachers.get()){
-                JSONObject row = new JSONObject();
-                row.put("ID", teacher.getTeacherId());
-                row.put("FirstName", teacher.getFirstName());
-                row.put("LastName", teacher.getLastName());
-                row.put("Email", teacher.getUser().getEmail());
-                row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()));
-                row.put("EmploymentDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()));
-                row.put("Status", teacher.getUser().isEnabled());
-                output.add(row);
-            }
-        }
-        else{
-            output.add(new JSONObject());
-        }
-
-        return output;
+    public List<Teacher> findAll(){
+        return teacherService.findAll();
     }
 
     @GetMapping("/teachers/{id}")

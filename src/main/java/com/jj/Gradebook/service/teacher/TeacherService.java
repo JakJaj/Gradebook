@@ -8,6 +8,7 @@ import java.util.List;
 public interface TeacherService {
     List<Teacher> findAll();
     Teacher findById(int id);
+    Teacher findByPesel(String pesel);
     Teacher save(Teacher teacher);
     void deleteById(int id);
 }

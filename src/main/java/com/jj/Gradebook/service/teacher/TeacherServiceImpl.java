@@ -35,6 +35,12 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
+    public Teacher findByPesel(String pesel) {
+        return teacherRepository.findTeacherByUserPesel(pesel);
+    }
+
+
+    @Override
     @Transactional
     public Teacher save(Teacher teacher) {
         return null;
