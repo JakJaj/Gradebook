@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
@@ -28,25 +29,26 @@ public class TeacherController {
 
     @CrossOrigin
     @GetMapping("/teachers")
-    public ResponseEntity<List<Teacher>> findAll(){
-        List<Teacher> teacherList = teacherService.findAll();
+    public ResponseEntity<List<TeacherDTO>> findAll(){
+        List<TeacherDTO> teacherList = teacherService.findAll();
         return  ResponseEntity.ok(teacherList);
     }
 
     @GetMapping("/teachers/{id}")
-    public ResponseEntity<Teacher> findById(@PathVariable int id) throws EntityNotFoundException {
-            Teacher teacher = teacherService.findById(id);
+    public ResponseEntity<TeacherDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+            TeacherDTO teacher = teacherService.findById(id);
             return ResponseEntity.ok(teacher);
     }
 
     @PostMapping("/teachers")
-    public ResponseEntity<Teacher> save(@RequestBody Teacher teacher) throws EntityAlreadyExistException {
-        Teacher teacherToSave = teacherService.save(teacher);
+    public ResponseEntity<TeacherDTO> save(@RequestBody Teacher teacher) throws EntityAlreadyExistException {
+        TeacherDTO teacherToSave = teacherService.save(teacher);
         return ResponseEntity.ok(teacherToSave);
     }
 
     @DeleteMapping("/teachers/{id}")
-    private void deleteById(@PathVariable int id){
+    private ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
         teacherService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }
