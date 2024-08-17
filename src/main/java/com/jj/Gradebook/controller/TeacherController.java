@@ -1,9 +1,11 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.teacher.TeacherService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -25,17 +27,21 @@ public class TeacherController {
 
     @CrossOrigin
     @GetMapping("/teachers")
-    public List<Teacher> findAll(){
-        return teacherService.findAll();
+    public ResponseEntity<List<Teacher>> findAll(){
+        List<Teacher> teacherList = teacherService.findAll();
+        return  ResponseEntity.ok(teacherList);
     }
 
     @GetMapping("/teachers/{id}")
-    public Teacher findById(@PathVariable int id){
-        return teacherService.findById(id);
+    public ResponseEntity<Teacher> findById(@PathVariable int id) throws EntityNotFoundException {
+            Teacher teacher = teacherService.findById(id);
+            return ResponseEntity.ok(teacher);
     }
 
     @PostMapping("/teachers")
     public Teacher save(@RequestBody Teacher teacher){
+        Optional<Teacher> teacherToSave = Optional.ofNullable(teacherService.findByPesel(teacher.getUser().getPesel()));
+
         return teacherService.save(teacher);
     }
 

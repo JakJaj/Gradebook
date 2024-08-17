@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.teacher;
 
 import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,15 +22,15 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public Teacher findById(int id) {
+    public Teacher findById(int id) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findById(id);
 
         Teacher teacher = null;
         if(result.isPresent()){
             teacher = result.get();
         }
-        else{ //TODO:THINK ABOUT A BETTER APPROACH
-            throw new RuntimeException("No teacher with id - " + id);
+        else{
+            throw new EntityNotFoundException("No teacher with id - " + id);
         }
         return teacher;
     }
@@ -43,12 +44,13 @@ public class TeacherServiceImpl implements TeacherService{
     @Override
     @Transactional
     public Teacher save(Teacher teacher) {
-        return null;
+
+        return teacherRepository.save(teacher);
     }
 
     @Override
     @Transactional
     public void deleteById(int id) {
-
+        teacherRepository.deleteById(id);
     }
 }
