@@ -1,9 +1,13 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.teacher.TeacherService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -25,45 +29,26 @@ public class TeacherController {
 
     @CrossOrigin
     @GetMapping("/teachers")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
-
-
-        Optional<List<Teacher>> teachers = Optional.ofNullable(teacherService.findAll());
-        if(teachers.isPresent()){
-
-
-            for (Teacher teacher: teachers.get()){
-                JSONObject row = new JSONObject();
-                row.put("ID", teacher.getTeacherId());
-                row.put("FirstName", teacher.getFirstName());
-                row.put("LastName", teacher.getLastName());
-                row.put("Email", teacher.getUser().getEmail());
-                row.put("BirthDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()));
-                row.put("EmploymentDate", new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()));
-                row.put("Status", teacher.getUser().isEnabled());
-                output.add(row);
-            }
-        }
-        else{
-            output.add(new JSONObject());
-        }
-
-        return output;
+    public ResponseEntity<List<TeacherDTO>> findAll(){
+        List<TeacherDTO> teacherList = teacherService.findAll();
+        return  ResponseEntity.ok(teacherList);
     }
 
     @GetMapping("/teachers/{id}")
-    public Teacher findById(@PathVariable int id){
-        return teacherService.findById(id);
+    public ResponseEntity<TeacherDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+            TeacherDTO teacher = teacherService.findById(id);
+            return ResponseEntity.ok(teacher);
     }
 
     @PostMapping("/teachers")
-    public Teacher save(@RequestBody Teacher teacher){
-        return teacherService.save(teacher);
+    public ResponseEntity<TeacherDTO> save(@RequestBody Teacher teacher) throws EntityAlreadyExistException {
+        TeacherDTO teacherToSave = teacherService.save(teacher);
+        return ResponseEntity.ok(teacherToSave);
     }
 
     @DeleteMapping("/teachers/{id}")
-    private void deleteById(@PathVariable int id){
+    private ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
         teacherService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }
