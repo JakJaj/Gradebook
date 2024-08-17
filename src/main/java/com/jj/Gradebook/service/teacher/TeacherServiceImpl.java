@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class TeacherServiceImpl implements TeacherService{
+public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
 
@@ -25,7 +25,7 @@ public class TeacherServiceImpl implements TeacherService{
         List<TeacherDTO> result = new ArrayList<>();
         List<Teacher> data = teacherRepository.findAll();
 
-        for (Teacher teacher: data){
+        for (Teacher teacher : data) {
             result.add(
                     new TeacherDTO(
                             teacher.getTeacherId(),
@@ -34,7 +34,8 @@ public class TeacherServiceImpl implements TeacherService{
                             teacher.getUser().getPesel(),
                             teacher.getUser().getEmail(),
                             new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                            new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime())
+                            new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
+                            (teacher.getUser().isEnabled() ? "Active" : "Inactive")
                     )
             );
         }
@@ -46,7 +47,7 @@ public class TeacherServiceImpl implements TeacherService{
     public TeacherDTO findById(int id) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findById(id);
 
-        if(result.isPresent()){
+        if (result.isPresent()) {
             Teacher teacher = result.get();
             return new TeacherDTO(
                     teacher.getTeacherId(),
@@ -55,10 +56,10 @@ public class TeacherServiceImpl implements TeacherService{
                     teacher.getUser().getPesel(),
                     teacher.getUser().getEmail(),
                     new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime())
+                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
+                    (teacher.getUser().isEnabled() ? "Active" : "Inactive")
             );
-        }
-        else{
+        } else {
             throw new EntityNotFoundException("No teacher with id - " + id);
         }
 
@@ -67,7 +68,7 @@ public class TeacherServiceImpl implements TeacherService{
     @Override
     public TeacherDTO findByPesel(String pesel) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findTeacherByUserPesel(pesel);
-        if(result.isPresent()){
+        if (result.isPresent()) {
             Teacher teacher = result.get();
             return new TeacherDTO(
                     teacher.getTeacherId(),
@@ -76,10 +77,10 @@ public class TeacherServiceImpl implements TeacherService{
                     teacher.getUser().getPesel(),
                     teacher.getUser().getEmail(),
                     new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime())
+                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
+                    (teacher.getUser().isEnabled() ? "Active" : "Inactive")
             );
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("No teacher with pesel - " + pesel);
         }
     }
@@ -90,19 +91,19 @@ public class TeacherServiceImpl implements TeacherService{
     public TeacherDTO save(Teacher teacher) throws EntityAlreadyExistException {
         Optional<Teacher> existingTeacher = teacherRepository.findTeacherByUserPesel(teacher.getUser().getPesel());
 
-        if (existingTeacher.isEmpty()){
+        if (existingTeacher.isEmpty()) {
             Teacher savedTeacher = teacherRepository.save(teacher);
             return new TeacherDTO(
-                    teacher.getTeacherId(),
-                    teacher.getFirstName(),
-                    teacher.getLastName(),
-                    teacher.getUser().getPesel(),
-                    teacher.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime())
+                    savedTeacher.getTeacherId(),
+                    savedTeacher.getFirstName(),
+                    savedTeacher.getLastName(),
+                    savedTeacher.getUser().getPesel(),
+                    savedTeacher.getUser().getEmail(),
+                    new SimpleDateFormat("dd.MM.yyyy").format(savedTeacher.getDateOfBirth().getTime()),
+                    new SimpleDateFormat("dd.MM.yyyy").format(savedTeacher.getDateOfEmployment().getTime()),
+                    (savedTeacher.getUser().isEnabled() ? "Active" : "Inactive")
             );
-        }
-        else {
+        } else {
             throw new EntityAlreadyExistException("Teacher with this pesel already exists");
         }
 
@@ -112,10 +113,9 @@ public class TeacherServiceImpl implements TeacherService{
     @Transactional
     public void deleteById(int id) throws EntityNotFoundException {
         Optional<Teacher> existingTeacher = teacherRepository.findById(id);
-        if (existingTeacher.isPresent()){
+        if (existingTeacher.isPresent()) {
             teacherRepository.deleteById(id);
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("No teacher with id - " + id);
         }
     }

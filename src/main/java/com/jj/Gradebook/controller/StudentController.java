@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
@@ -28,22 +29,22 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> findAll(){
-        List<Student> students = studentService.findAll();
+    public ResponseEntity<List<StudentDTO>> findAll(){
+        List<StudentDTO> students = studentService.findAll();
         return ResponseEntity.ok(students);
     }
 
     @CrossOrigin
     @GetMapping("/students/{id}")
-    public ResponseEntity<Student> findById(@PathVariable int id) throws EntityNotFoundException {
-        Student student = studentService.findById(id);
+    public ResponseEntity<StudentDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+        StudentDTO student = studentService.findById(id);
         return ResponseEntity.ok(student);
     }
 
     @CrossOrigin
     @PostMapping("/students")
-    public ResponseEntity<Student> save(@RequestBody Student student) throws EntityAlreadyExistException {
-        Student savedStudent = studentService.save(student);
+    public ResponseEntity<StudentDTO> save(@RequestBody Student student) throws EntityAlreadyExistException {
+        StudentDTO savedStudent = studentService.save(student);
         return ResponseEntity.ok(savedStudent);
     }
 
