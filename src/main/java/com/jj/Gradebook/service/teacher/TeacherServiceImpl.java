@@ -15,12 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Class that is an implementation of a service that is being used to get / set / delete a teachers data from a teachers database table
+ */
 @Service
 @AllArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
 
+    /**
+     * Business logic used for getting all of existing teachers from a database
+     * @return list of all instances of TeacherDTOs that exists in a database
+     * @throws EntityListEmptyException exception that will be thrown when a database table is empty
+     */
     @Override
     public List<TeacherDTO> findAll() throws EntityListEmptyException {
         List<TeacherDTO> result = new ArrayList<>();
@@ -37,6 +45,12 @@ public class TeacherServiceImpl implements TeacherService {
         return result;
     }
 
+    /**
+     *  Business logic used for finding a specific teacher by provided teacher id
+     * @param id id of a teacher that will be used to get a teacher from a database
+     * @return instance of TeacherDTO that was received from a database
+     * @throws EntityNotFoundException exception that will be thrown when provided id won't match any id in database
+     */
     @Override
     public TeacherDTO findById(Long id) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findById(id);
@@ -50,6 +64,12 @@ public class TeacherServiceImpl implements TeacherService {
 
     }
 
+    /**
+     * Business logic used to find a specific teacher by provided pesel number
+     * @param pesel pesel of a teacher that will be used to get a teacher from a database
+     * @return instance of TeacherDTO that was received from database
+     * @throws EntityNotFoundException exception that will be thrown when provided id won't match any id in database
+     */
     @Override
     public TeacherDTO findByPesel(String pesel) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findTeacherByUser_Pesel(pesel);
@@ -61,6 +81,12 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
 
+    /**
+     * Business logic used for creating a new parent in the database
+     * @param teacher parent data that needs to be placed in a database
+     * @return data of a created parent instance
+     * @throws EntityAlreadyExistException exception that will be thrown when a provided parent's pesel already exists in a database
+     */
     @Override
     @Transactional
     public TeacherDTO save(Teacher teacher) throws EntityAlreadyExistException {
@@ -75,6 +101,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     }
 
+    /**
+     * Business logic used for deleting a parent from a database by provided id
+     * @param id id of a parent that is meant to be deleted from a database
+     * @throws EntityNotFoundException exception that will be thrown when provided id won't match any id in database
+     **/
     @Override
     @Transactional
     public void deleteById(Long id) throws EntityNotFoundException {
