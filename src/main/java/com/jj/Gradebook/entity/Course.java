@@ -18,8 +18,8 @@ public class Course {
     @Column(name = "course_id")
     private Long courseId;
 
-    @Column(name = "course_type")
-    private String courseType;
+    @Column(name = "course_name")
+    private String courseName;
 
     @Column(name = "description")
     private String description;
@@ -28,8 +28,8 @@ public class Course {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    public Course(String courseType, Teacher teacher, String description) {
-        this.courseType = courseType;
+    public Course(String courseName, Teacher teacher, String description) {
+        this.courseName = courseName;
         this.teacher = teacher;
         this.description = description;
     }
