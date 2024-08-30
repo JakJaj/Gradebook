@@ -1,11 +1,15 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.User;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.parent.ParentService;
 import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,24 +30,27 @@ public class ParentController {
 
     @CrossOrigin
     @GetMapping("/parents")
-    public List<Parent> findAll(){
-        List<Parent> output = parentService.findAll();
+    public ResponseEntity<List<ParentDTO>> findAll(){
+        List<ParentDTO> output = parentService.findAll();
 
-        return output;
+        return ResponseEntity.ok(output);
     }
 
     @GetMapping("/parents/{id}")
-    public Parent findById(@PathVariable Long id){
-        return parentService.findById(id);
+    public ResponseEntity<ParentDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
+        ParentDTO output = parentService.findById(id);
+        return ResponseEntity.ok(output);
     }
 
     @PostMapping("/parents")
-    public Parent save(@RequestBody Parent parent){
-        return parentService.save(parent);
+    public ResponseEntity<ParentDTO> save(@RequestBody Parent parent) throws EntityAlreadyExistException {
+        ParentDTO output = parentService.save(parent);
+        return ResponseEntity.ok(output);
     }
 
     @DeleteMapping("/parents/{id}")
-    public void deleteById(@PathVariable Long id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         parentService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }
