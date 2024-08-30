@@ -1,6 +1,8 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.entity.Class;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.classes.ClassService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,41 +26,24 @@ public class ClassController {
 
     @CrossOrigin
     @GetMapping("/classes")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
-
-        Optional<List<Class>> classes = Optional.ofNullable(classService.findAll());
-
-        if(classes.isPresent()) {
-            for (Class clas : classes.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", clas.getClassId());
-                row.put("ClassName", clas.getClassName());
-                row.put("Tutor", clas.getTeacher().getFirstName() + " " + clas.getTeacher().getLastName());
-                row.put("Year", clas.getStart_year());
-                row.put("Status", clas.isStatus());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
+    public List<Class> findAll(){
+        List<Class> output = classService.findAll();
 
         return output;
     }
 
     @GetMapping("/classes/{id}")
-    public Class findById(@PathVariable int id){
+    public Class findById(@PathVariable int id) throws EntityNotFoundException {
         return classService.findById(id);
     }
 
     @PostMapping("/classes")
-    public Class save(@RequestBody Class theClass){
+    public Class save(@RequestBody Class theClass) throws EntityAlreadyExistException {
         return classService.save(theClass);
     }
 
     @DeleteMapping("/classes/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable int id) throws EntityNotFoundException {
         classService.deleteById(id);
     }
 }

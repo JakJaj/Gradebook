@@ -28,15 +28,15 @@ public class Class {
     private Teacher teacher;
 
     @Column(name = "start_year")
-    private Year start_year;
+    private Year startYear;
 
     @Column(name = "enabled")
     private boolean status;
 
-    public Class(String className, Teacher teacher, Year start_year, boolean status) {
+    public Class(String className, Teacher teacher, Year startYear, boolean status) {
         this.className = className;
         this.teacher = teacher;
-        this.start_year = start_year;
+        this.startYear = startYear;
         this.status = status;
     }
 
