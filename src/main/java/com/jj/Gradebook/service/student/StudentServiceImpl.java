@@ -31,19 +31,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         for (Student student : data) {
-            result.add(
-                    new StudentDTO(
-                            student.getStudentId(),
-                            student.getFirstName(),
-                            student.getLastName(),
-                            student.getUser().getPesel(),
-                            student.getUser().getEmail(),
-                            new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()),
-                            student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber(),
-                            student.getStudentClass().getClassName(),
-                            (student.getUser().isEnabled() ? "Active" : "Inactive")
-                    ));
-
+            result.add(getStudentDTO(student));
         }
         return result;
     }
@@ -51,20 +39,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDTO findById(Long id) throws EntityNotFoundException {
         Optional<Student> result = studentRepository.findById(id);
-        Student student;
+
         if (result.isPresent()) {
-            student = result.get();
-            return new StudentDTO(
-                    student.getStudentId(),
-                    student.getFirstName(),
-                    student.getLastName(),
-                    student.getUser().getPesel(),
-                    student.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()),
-                    student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber(),
-                    student.getStudentClass().getClassName(),
-                    (student.getUser().isEnabled() ? "Active" : "Inactive")
-            );
+            return getStudentDTO(result.get());
         } else {
             throw new EntityNotFoundException("No student with id - " + id);
         }
@@ -75,18 +52,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO findByPesel(String pesel) throws EntityNotFoundException {
         Optional<Student> result = studentRepository.findStudentByUser_Pesel(pesel);
         if (result.isPresent()) {
-            Student student = result.get();
-            return new StudentDTO(
-                    student.getStudentId(),
-                    student.getFirstName(),
-                    student.getLastName(),
-                    student.getUser().getPesel(),
-                    student.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()),
-                    student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber(),
-                    student.getStudentClass().getClassName(),
-                    (student.getUser().isEnabled() ? "Active" : "Inactive")
-            );
+            return getStudentDTO(result.get());
         } else {
             throw new EntityNotFoundException("No student with pesel - " + pesel);
         }
@@ -98,17 +64,7 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> existingStudent = studentRepository.findStudentByUser_Pesel(student.getUser().getPesel());
         if (existingStudent.isEmpty()) {
             Student savedStudent = studentRepository.save(student);
-            return new StudentDTO(
-                    savedStudent.getStudentId(),
-                    savedStudent.getFirstName(),
-                    savedStudent.getLastName(),
-                    savedStudent.getUser().getPesel(),
-                    savedStudent.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(savedStudent.getDateOfBirth().getTime()),
-                    savedStudent.getCity() + " " + savedStudent.getStreet() + " " + savedStudent.getHouseNumber(),
-                    savedStudent.getStudentClass().getClassName(),
-                    (savedStudent.getUser().isEnabled() ? "Active" : "Inactive")
-            );
+            return getStudentDTO(savedStudent);
         } else {
             throw new EntityAlreadyExistException("Student already exists!");
         }
@@ -123,5 +79,19 @@ public class StudentServiceImpl implements StudentService {
         } else {
             throw new EntityNotFoundException("No student with id - " + id);
         }
+    }
+
+    private StudentDTO getStudentDTO(Student student) {
+        return new StudentDTO(
+                student.getStudentId(),
+                student.getFirstName(),
+                student.getLastName(),
+                student.getUser().getPesel(),
+                student.getUser().getEmail(),
+                new SimpleDateFormat("dd.MM.yyyy").format(student.getDateOfBirth().getTime()),
+                student.getCity() + " " + student.getStreet() + " " + student.getHouseNumber(),
+                student.getStudentClass().getClassName(),
+                (student.getUser().isEnabled() ? "Active" : "Inactive")
+        );
     }
 }

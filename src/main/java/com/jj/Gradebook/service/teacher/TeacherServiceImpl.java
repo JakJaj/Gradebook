@@ -31,18 +31,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
 
         for (Teacher teacher : data) {
-            result.add(
-                    new TeacherDTO(
-                            teacher.getTeacherId(),
-                            teacher.getFirstName(),
-                            teacher.getLastName(),
-                            teacher.getUser().getPesel(),
-                            teacher.getUser().getEmail(),
-                            new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                            new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
-                            (teacher.getUser().isEnabled() ? "Active" : "Inactive")
-                    )
-            );
+            result.add(getTeacherDTO(teacher));
         }
 
         return result;
@@ -53,18 +42,9 @@ public class TeacherServiceImpl implements TeacherService {
         Optional<Teacher> result = teacherRepository.findById(id);
 
         if (result.isPresent()) {
-            Teacher teacher = result.get();
-            return new TeacherDTO(
-                    teacher.getTeacherId(),
-                    teacher.getFirstName(),
-                    teacher.getLastName(),
-                    teacher.getUser().getPesel(),
-                    teacher.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
-                    (teacher.getUser().isEnabled() ? "Active" : "Inactive")
-            );
-        } else {
+            return getTeacherDTO(result.get());
+        }
+        else {
             throw new EntityNotFoundException("No teacher with id - " + id);
         }
 
@@ -74,17 +54,7 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherDTO findByPesel(String pesel) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findTeacherByUser_Pesel(pesel);
         if (result.isPresent()) {
-            Teacher teacher = result.get();
-            return new TeacherDTO(
-                    teacher.getTeacherId(),
-                    teacher.getFirstName(),
-                    teacher.getLastName(),
-                    teacher.getUser().getPesel(),
-                    teacher.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
-                    (teacher.getUser().isEnabled() ? "Active" : "Inactive")
-            );
+            return getTeacherDTO(result.get());
         } else {
             throw new EntityNotFoundException("No teacher with pesel - " + pesel);
         }
@@ -98,16 +68,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         if (existingTeacher.isEmpty()) {
             Teacher savedTeacher = teacherRepository.save(teacher);
-            return new TeacherDTO(
-                    savedTeacher.getTeacherId(),
-                    savedTeacher.getFirstName(),
-                    savedTeacher.getLastName(),
-                    savedTeacher.getUser().getPesel(),
-                    savedTeacher.getUser().getEmail(),
-                    new SimpleDateFormat("dd.MM.yyyy").format(savedTeacher.getDateOfBirth().getTime()),
-                    new SimpleDateFormat("dd.MM.yyyy").format(savedTeacher.getDateOfEmployment().getTime()),
-                    (savedTeacher.getUser().isEnabled() ? "Active" : "Inactive")
-            );
+            return getTeacherDTO(savedTeacher);
         } else {
             throw new EntityAlreadyExistException("Teacher with this pesel already exists");
         }
@@ -123,5 +84,18 @@ public class TeacherServiceImpl implements TeacherService {
         } else {
             throw new EntityNotFoundException("No teacher with id - " + id);
         }
+    }
+
+    private TeacherDTO getTeacherDTO(Teacher teacher){
+        return new TeacherDTO(
+                teacher.getTeacherId(),
+                teacher.getFirstName(),
+                teacher.getLastName(),
+                teacher.getUser().getPesel(),
+                teacher.getUser().getEmail(),
+                new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfBirth().getTime()),
+                new SimpleDateFormat("dd.MM.yyyy").format(teacher.getDateOfEmployment().getTime()),
+                (teacher.getUser().isEnabled() ? "Active" : "Inactive")
+        );
     }
 }

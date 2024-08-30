@@ -32,15 +32,9 @@ public class ParentServiceImpl implements ParentService{
         }
 
         for (Parent parent : data){
-            result.add(
-                    new ParentDTO(
-                            parent.getParentId(),
-                            parent.getFirstName(),
-                            parent.getLastName(),
-                            parent.getUser().getEmail()
-                            )
-            );
+            result.add(getParentDTO(parent));
         }
+
         return result;
     }
 
@@ -49,15 +43,8 @@ public class ParentServiceImpl implements ParentService{
     public ParentDTO findById(Long id) throws EntityNotFoundException {
         Optional<Parent> result = parentRepository.findById(id);
 
-        Parent parent;
         if(result.isPresent()){
-            parent = result.get();
-            return new ParentDTO(
-                    parent.getParentId(),
-                    parent.getFirstName(),
-                    parent.getLastName(),
-                    parent.getUser().getEmail()
-            );
+            return getParentDTO(result.get());
         }
         else{
             throw new EntityNotFoundException("No parent with id - " + id);
@@ -69,12 +56,7 @@ public class ParentServiceImpl implements ParentService{
         Optional<Parent> existingParent = parentRepository.findParentByUser_Pesel(parent.getUser().getPesel());
         if (existingParent.isEmpty()){
             Parent savedParent = parentRepository.save(parent);
-            return new ParentDTO(
-                    savedParent.getParentId(),
-                    savedParent.getFirstName(),
-                    savedParent.getLastName(),
-                    savedParent.getUser().getEmail()
-            );
+            return getParentDTO(savedParent);
         }
         else {
             throw new EntityAlreadyExistException("Parent already exists!");
@@ -90,5 +72,14 @@ public class ParentServiceImpl implements ParentService{
         else {
             throw new EntityNotFoundException("No parent with id - " + id);
         }
+    }
+
+    private ParentDTO getParentDTO(Parent result){
+        return new ParentDTO(
+                result.getParentId(),
+                result.getFirstName(),
+                result.getLastName(),
+                result.getUser().getEmail()
+        );
     }
 }

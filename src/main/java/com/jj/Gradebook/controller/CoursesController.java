@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.CourseDTO;
 import com.jj.Gradebook.entity.Course;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityListEmptyException;
@@ -7,6 +8,7 @@ import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.course.CourseService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,28 +29,29 @@ public class CoursesController {
 
     @CrossOrigin
     @GetMapping("/courses")
-    public List<Course> findAll() throws EntityListEmptyException {
-        List<Course> output = courseService.findAll();
-        return  output;
+    public ResponseEntity<List<CourseDTO>> findAll() throws EntityListEmptyException {
+        List<CourseDTO> output = courseService.findAll();
+        return ResponseEntity.ok(output);
     }
 
     @CrossOrigin
     @GetMapping("/courses/{id}")
-    public Course findById(@PathVariable Long id) throws EntityNotFoundException {
-        Course output = courseService.findById(id);
-        return output;
+    public ResponseEntity<CourseDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
+        CourseDTO output = courseService.findById(id);
+        return ResponseEntity.ok(output);
     }
 
     @CrossOrigin
     @PostMapping("/courses")
-    public Course save(@RequestBody Course course) throws EntityAlreadyExistException {
-        Course output = courseService.save(course);
-        return output;
+    public ResponseEntity<CourseDTO> save(@RequestBody Course course) throws EntityAlreadyExistException {
+        CourseDTO output = courseService.save(course);
+        return ResponseEntity.ok(output);
     }
 
     @CrossOrigin
     @DeleteMapping("/coruses/{id}")
-    public void deleteById(@PathVariable Long id) throws EntityNotFoundException {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         courseService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }

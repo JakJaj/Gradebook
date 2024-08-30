@@ -1,6 +1,7 @@
 package com.jj.Gradebook.service.course;
 
 import com.jj.Gradebook.dao.CourseRepository;
+import com.jj.Gradebook.dto.CourseDTO;
 import com.jj.Gradebook.entity.Course;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
 import com.jj.Gradebook.exceptions.EntityListEmptyException;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,38 +22,41 @@ public class CourseServiceImpl implements CourseService{
 
 
     @Override
-    public List<Course> findAll() throws EntityListEmptyException {
+    public List<CourseDTO> findAll() throws EntityListEmptyException {
         List<Course> data = courseRepository.findAll();
+        List<CourseDTO> result = new ArrayList<>();
 
         if (data.isEmpty()){
             throw new EntityListEmptyException("List of courses is empty!");
         }
 
-        return data;
+        for (Course course : data){
+            result.add(getCourseDTO(course));
+        }
+        return result;
     }
 
     @Override
-    public Course findById(Long id) throws EntityNotFoundException {
+    public CourseDTO findById(Long id) throws EntityNotFoundException {
         Optional<Course> result = courseRepository.findById(id);
 
-        Course course;
         if(result.isPresent()){
-            course = result.get();
+            return getCourseDTO(result.get());
         }
         else {
             throw new EntityNotFoundException("No course with id - " + id);
         }
-        return course;
+
     }
 
     @Override
     @Transactional
-    public Course save(Course course) throws EntityAlreadyExistException {
+    public CourseDTO save(Course course) throws EntityAlreadyExistException {
         Optional<Course> existingCourse = courseRepository.findCourseByCourseNameAndTeacher_TeacherId(course.getCourseName(), course.getTeacher().getTeacherId());
 
         if (existingCourse.isEmpty()){
-
-            return courseRepository.save(course);
+            Course savedCourse = courseRepository.save(course);
+            return getCourseDTO(savedCourse);
         }
         else {
             throw new EntityAlreadyExistException("Course already exists!");
@@ -68,5 +73,14 @@ public class CourseServiceImpl implements CourseService{
         else {
             throw new EntityNotFoundException("No course with id - " + id);
         }
+    }
+
+    private CourseDTO getCourseDTO(Course course){
+        return new CourseDTO(
+                course.getCourseId(),
+                course.getCourseName(),
+                course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName(),
+                course.getDescription()
+        );
     }
 }
