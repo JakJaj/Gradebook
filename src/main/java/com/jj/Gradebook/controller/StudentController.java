@@ -3,6 +3,7 @@ package com.jj.Gradebook.controller;
 import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.student.StudentService;
 import org.json.simple.JSONObject;
@@ -29,7 +30,7 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students")
-    public ResponseEntity<List<StudentDTO>> findAll(){
+    public ResponseEntity<List<StudentDTO>> findAll() throws EntityListEmptyException {
         List<StudentDTO> students = studentService.findAll();
         return ResponseEntity.ok(students);
     }

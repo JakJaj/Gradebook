@@ -4,6 +4,7 @@ import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.parent.ParentService;
 import netscape.javascript.JSObject;
@@ -30,7 +31,7 @@ public class ParentController {
 
     @CrossOrigin
     @GetMapping("/parents")
-    public ResponseEntity<List<ParentDTO>> findAll(){
+    public ResponseEntity<List<ParentDTO>> findAll() throws EntityListEmptyException {
         List<ParentDTO> output = parentService.findAll();
 
         return ResponseEntity.ok(output);

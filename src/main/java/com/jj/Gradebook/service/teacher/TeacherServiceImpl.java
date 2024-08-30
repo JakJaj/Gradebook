@@ -4,6 +4,7 @@ import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,13 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
 
     @Override
-    public List<TeacherDTO> findAll() {
+    public List<TeacherDTO> findAll() throws EntityListEmptyException {
         List<TeacherDTO> result = new ArrayList<>();
         List<Teacher> data = teacherRepository.findAll();
+
+        if (data.isEmpty()){
+            throw new EntityListEmptyException("List of teachers is empty");
+        }
 
         for (Teacher teacher : data) {
             result.add(

@@ -4,6 +4,7 @@ import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,14 @@ public class ParentServiceImpl implements ParentService{
 
     @Override
     @Transactional
-    public List<ParentDTO> findAll() {
+    public List<ParentDTO> findAll() throws EntityListEmptyException {
         List<Parent> data = parentRepository.findAll();
         List<ParentDTO> result = new ArrayList<>();
+
+        if (data.isEmpty()){
+            throw new EntityListEmptyException("List of parents is empty!");
+
+        }
 
         for (Parent parent : data){
             result.add(
@@ -36,7 +42,7 @@ public class ParentServiceImpl implements ParentService{
             );
         }
         return result;
-    }// ! ENTITY LIST EMPTY EXCEPTION FOR ALL FIND ALL METHODS!
+    }
 
     @Override
     @Transactional
