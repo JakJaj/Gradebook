@@ -86,6 +86,11 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+    /**
+     *  Template generator of TeacherDTO from Teacher
+     *  @param teacher the teacher instance with all the information about teacher with teacher's personal data included
+     *  @return       teacherDTO which includes just a data that can be seen by an end users
+     **/
     private TeacherDTO getTeacherDTO(Teacher teacher){
         return new TeacherDTO(
                 teacher.getTeacherId(),

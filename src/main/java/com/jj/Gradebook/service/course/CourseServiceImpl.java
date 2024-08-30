@@ -75,6 +75,11 @@ public class CourseServiceImpl implements CourseService{
         }
     }
 
+    /**
+     *  Template generator of CourseDTO from Course
+     *  @param course the course instance with all the information about course
+     *  @return       courseDTO which includes just a data that can be seen by an end users
+     **/
     private CourseDTO getCourseDTO(Course course){
         return new CourseDTO(
                 course.getCourseId(),

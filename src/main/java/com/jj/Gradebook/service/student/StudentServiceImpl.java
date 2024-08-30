@@ -81,6 +81,11 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    /**
+     *  Template generator of StudentDTO from Student
+     *  @param student the student instance with all the information about student with student's personal data included
+     *  @return       courseDTO which includes just a data that can be seen by an end users
+     **/
     private StudentDTO getStudentDTO(Student student) {
         return new StudentDTO(
                 student.getStudentId(),
