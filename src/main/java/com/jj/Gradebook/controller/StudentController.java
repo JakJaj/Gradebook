@@ -36,7 +36,7 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students/{id}")
-    public ResponseEntity<StudentDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<StudentDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
         StudentDTO student = studentService.findById(id);
         return ResponseEntity.ok(student);
     }
@@ -50,7 +50,7 @@ public class StudentController {
 
     @CrossOrigin
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         studentService.deleteById(id);
         return ResponseEntity.accepted().build();
     }

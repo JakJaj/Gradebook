@@ -22,7 +22,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Course findById(int id) {
+    public Course findById(Long id) {
         Optional<Course> result = courseRepository.findById(id);
 
         Course course;
@@ -43,7 +43,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         courseRepository.deleteById(id);
     }
 }

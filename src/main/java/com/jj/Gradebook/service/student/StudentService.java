@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface StudentService {
     List<StudentDTO> findAll();
-    StudentDTO findById(int id) throws EntityNotFoundException;
+    StudentDTO findById(Long id) throws EntityNotFoundException;
     StudentDTO findByPesel(String pesel) throws EntityNotFoundException;
     StudentDTO save(Student student) throws EntityAlreadyExistException;
-    void deleteById(int id) throws EntityNotFoundException;
+    void deleteById(Long id) throws EntityNotFoundException;
 }

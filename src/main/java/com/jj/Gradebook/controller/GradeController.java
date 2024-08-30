@@ -24,7 +24,7 @@ public class GradeController {
     }
 
     @GetMapping("/grades/{id}")
-    private Grade findById(@PathVariable int id){
+    private Grade findById(@PathVariable Long id){
         return gradeService.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class GradeController {
     }
 
     @DeleteMapping("/grades/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         gradeService.deleteById(id);
     }
 }

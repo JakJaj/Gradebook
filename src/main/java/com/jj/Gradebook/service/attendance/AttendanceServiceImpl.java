@@ -20,7 +20,7 @@ public class AttendanceServiceImpl implements AttendanceService{
     }
 
     @Override
-    public Attendance findById(int id) {
+    public Attendance findById(Long id) {
         Optional<Attendance> result = attendanceRepository.findById(id);
 
         Attendance attendance;
@@ -41,7 +41,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         attendanceRepository.deleteById(id);
     }
 }

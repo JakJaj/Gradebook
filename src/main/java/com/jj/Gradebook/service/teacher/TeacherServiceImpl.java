@@ -44,7 +44,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDTO findById(int id) throws EntityNotFoundException {
+    public TeacherDTO findById(Long id) throws EntityNotFoundException {
         Optional<Teacher> result = teacherRepository.findById(id);
 
         if (result.isPresent()) {
@@ -111,7 +111,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void deleteById(int id) throws EntityNotFoundException {
+    public void deleteById(Long id) throws EntityNotFoundException {
         Optional<Teacher> existingTeacher = teacherRepository.findById(id);
         if (existingTeacher.isPresent()) {
             teacherRepository.deleteById(id);

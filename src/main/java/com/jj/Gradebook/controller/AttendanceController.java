@@ -24,7 +24,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/attendances/{id}")
-    public Attendance findById(@PathVariable int id){
+    public Attendance findById(@PathVariable Long id){
         return attendanceService.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class AttendanceController {
     }
 
     @DeleteMapping("/attendances/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         attendanceService.deleteById(id);
     }
 }

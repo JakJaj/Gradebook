@@ -22,7 +22,7 @@ public class MessengerServiceImpl implements MessageService{
     }
 
     @Override
-    public Message findById(int id) {
+    public Message findById(Long id) {
         Optional<Message> result = messageRepository.findById(id);
 
         Message message;
@@ -43,7 +43,7 @@ public class MessengerServiceImpl implements MessageService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         messageRepository.deleteById(id);
     }
 }

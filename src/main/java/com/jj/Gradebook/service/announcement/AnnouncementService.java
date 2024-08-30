@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AnnouncementService {
     List<Announcements> findAll();
-    Announcements findById(int id);
+    Announcements findById(Long id);
     Announcements save(Announcements announcements);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

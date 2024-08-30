@@ -44,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDTO findById(int id) throws EntityNotFoundException {
+    public StudentDTO findById(Long id) throws EntityNotFoundException {
         Optional<Student> result = studentRepository.findById(id);
         Student student;
         if (result.isPresent()) {
@@ -111,7 +111,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void deleteById(int id) throws EntityNotFoundException {
+    public void deleteById(Long id) throws EntityNotFoundException {
         Optional<Student> existingStudent = studentRepository.findById(id);
         if (existingStudent.isPresent()) {
             studentRepository.deleteById(id);

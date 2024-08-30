@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(Long id) {
         Optional<User> result = userRepository.findById(id);
 
         User theUser = null;
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 }

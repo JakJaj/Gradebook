@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.parent;
 
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.entity.Parent;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,12 @@ public class ParentServiceImpl implements ParentService{
     @Override
     @Transactional
     public List<Parent> findAll() {
-        return parentRepository.findAll();
+        return parentRepository.findAll(); // ! ENTITY LIST EMPTY EXCEPTION FOR ALL FIND ALL METHODS!
     }
 
     @Override
     @Transactional
-    public Parent findById(int id) {
+    public Parent findById(Long id) throws EntityNotFoundException {
         Optional<Parent> result = parentRepository.findById(id);
 
         Parent parent = null;
@@ -31,7 +32,7 @@ public class ParentServiceImpl implements ParentService{
             parent = result.get();
         }
         else{ //TODO: FIND BETTER APPROACH
-            throw new RuntimeException("No parent with id - " + id);
+            throw new EntityNotFoundException("No parent with id - " + id);
         }
 
         return parent;
@@ -39,11 +40,13 @@ public class ParentServiceImpl implements ParentService{
 
     @Override
     public Parent save(Parent parent) {
+
+
         return parentRepository.save(parent);
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         parentRepository.deleteById(id);
     }
 }

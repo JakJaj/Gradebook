@@ -35,7 +35,7 @@ public class ClassController {
     }
 
     @GetMapping("/classes/{id}")
-    public ResponseEntity<ClassDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<ClassDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
         ClassDTO theClass = classService.findById(id);
         return ResponseEntity.ok(theClass);
     }
@@ -47,7 +47,7 @@ public class ClassController {
     }
 
     @DeleteMapping("/classes/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         classService.deleteById(id);
         return ResponseEntity.accepted().build();
     }

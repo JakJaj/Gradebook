@@ -23,7 +23,7 @@ public class MessageController {
     }
 
     @GetMapping("/messages/{id}")
-    public Message findById(@PathVariable int id){
+    public Message findById(@PathVariable Long id){
         return messageService.findById(id);
     }
 
@@ -33,7 +33,7 @@ public class MessageController {
     }
 
     @DeleteMapping("/messages/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         messageService.deleteById(id);
     }
 }

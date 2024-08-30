@@ -23,7 +23,7 @@ public class TimetableController {
     }
 
     @GetMapping("/timetables/{id}")
-    public Timetable findById(@PathVariable int id){
+    public Timetable findById(@PathVariable Long id){
         return timetableService.findById(id);
     }
 
@@ -33,7 +33,7 @@ public class TimetableController {
     }
 
     @DeleteMapping("/timetables/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         timetableService.deleteById(id);
     }
 }

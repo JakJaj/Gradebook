@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User findById(@PathVariable int id){
+    public User findById(@PathVariable Long id){
         return userService.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}") //FIRST YOU HAVE TO DELETE ELEMENTS WITH KEYS CONNECTED TO THIS USER
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable Long id){
         userService.deleteById(id);
     }
 }

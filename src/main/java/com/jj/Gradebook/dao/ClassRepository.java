@@ -7,6 +7,6 @@ import java.time.Year;
 import java.util.Calendar;
 import java.util.Optional;
 
-public interface ClassRepository extends JpaRepository<Class,Integer> {
+public interface ClassRepository extends JpaRepository<Class,Long> {
     Optional<Class> findClassByClassNameAndStartYear(String className, Year startYear);
 }

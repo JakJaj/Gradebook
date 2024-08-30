@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Course_TypeService {
     List<Course_Type> findAll();
-    Course_Type findById(int id);
+    Course_Type findById(Long id);
     Course_Type save(Course_Type courseType);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

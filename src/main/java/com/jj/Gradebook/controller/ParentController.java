@@ -26,29 +26,14 @@ public class ParentController {
 
     @CrossOrigin
     @GetMapping("/parents")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
+    public List<Parent> findAll(){
+        List<Parent> output = parentService.findAll();
 
-        Optional<List<Parent>> parents = Optional.ofNullable(parentService.findAll());
-
-        if (parents.isPresent()) {
-            for (Parent parent : parents.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", parent.getParentId());
-                row.put("FirstName", parent.getFirstName());
-                row.put("LastName", parent.getLastName());
-                row.put("Email", parent.getUser().getEmail());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
         return output;
     }
 
     @GetMapping("/parents/{id}")
-    public Parent findById(@PathVariable int id){
+    public Parent findById(@PathVariable Long id){
         return parentService.findById(id);
     }
 
@@ -58,7 +43,7 @@ public class ParentController {
     }
 
     @DeleteMapping("/parents/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         parentService.deleteById(id);
     }
 }

@@ -9,7 +9,7 @@ import com.jj.Gradebook.exceptions.EntityNotFoundException;
 
 public interface ClassService {
     List<ClassDTO> findAll();
-    ClassDTO findById(int id) throws EntityNotFoundException;
+    ClassDTO findById(Long id) throws EntityNotFoundException;
     ClassDTO save(Class classes) throws EntityAlreadyExistException;
-    void deleteById(int id) throws EntityNotFoundException;
+    void deleteById(Long id) throws EntityNotFoundException;
 }

@@ -39,7 +39,7 @@ public class ClassServiceImpl implements ClassService{
     }
 
     @Override
-    public ClassDTO findById(int id) throws EntityNotFoundException {
+    public ClassDTO findById(Long id) throws EntityNotFoundException {
         Optional<Class> result = classRepository.findById(id);
 
         Class theClass;
@@ -82,7 +82,7 @@ public class ClassServiceImpl implements ClassService{
 
     @Override
     @Transactional
-    public void deleteById(int id) throws EntityNotFoundException {
+    public void deleteById(Long id) throws EntityNotFoundException {
         Optional<Class> existingClass = classRepository.findById(id);
         if (existingClass.isPresent()){
             classRepository.deleteById(id);

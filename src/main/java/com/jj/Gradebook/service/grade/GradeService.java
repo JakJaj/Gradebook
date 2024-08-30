@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GradeService {
     List<Grade> findAll();
-    Grade findById(int id);
+    Grade findById(Long id);
     Grade save(Grade grade);
-    void deleteById(int id);
+    void deleteById(Long id);
 }
