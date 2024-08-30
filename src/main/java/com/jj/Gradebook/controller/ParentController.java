@@ -1,11 +1,16 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.User;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.parent.ParentService;
 import netscape.javascript.JSObject;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,39 +31,27 @@ public class ParentController {
 
     @CrossOrigin
     @GetMapping("/parents")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
+    public ResponseEntity<List<ParentDTO>> findAll() throws EntityListEmptyException {
+        List<ParentDTO> output = parentService.findAll();
 
-        Optional<List<Parent>> parents = Optional.ofNullable(parentService.findAll());
-
-        if (parents.isPresent()) {
-            for (Parent parent : parents.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", parent.getParentId());
-                row.put("FirstName", parent.getFirstName());
-                row.put("LastName", parent.getLastName());
-                row.put("Email", parent.getUser().getEmail());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
-        return output;
+        return ResponseEntity.ok(output);
     }
 
     @GetMapping("/parents/{id}")
-    public Parent findById(@PathVariable int id){
-        return parentService.findById(id);
+    public ResponseEntity<ParentDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
+        ParentDTO output = parentService.findById(id);
+        return ResponseEntity.ok(output);
     }
 
     @PostMapping("/parents")
-    public Parent save(@RequestBody Parent parent){
-        return parentService.save(parent);
+    public ResponseEntity<ParentDTO> save(@RequestBody Parent parent) throws EntityAlreadyExistException {
+        ParentDTO output = parentService.save(parent);
+        return ResponseEntity.ok(output);
     }
 
     @DeleteMapping("/parents/{id}")
-    public void deleteById(@PathVariable int id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         parentService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }

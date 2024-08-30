@@ -1,13 +1,15 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.CourseDTO;
 import com.jj.Gradebook.entity.Course;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.course.CourseService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,24 +29,29 @@ public class CoursesController {
 
     @CrossOrigin
     @GetMapping("/courses")
-    public List<JSONObject> findAll(){
+    public ResponseEntity<List<CourseDTO>> findAll() throws EntityListEmptyException {
+        List<CourseDTO> output = courseService.findAll();
+        return ResponseEntity.ok(output);
+    }
 
-        List<JSONObject> output = new ArrayList<>();
-        Optional<List<Course>> courses = Optional.ofNullable(courseService.findAll());
+    @CrossOrigin
+    @GetMapping("/courses/{id}")
+    public ResponseEntity<CourseDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
+        CourseDTO output = courseService.findById(id);
+        return ResponseEntity.ok(output);
+    }
 
-        if(courses.isPresent()) {
-            for (Course course : courses.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", course.getCourseId());
-                row.put("Course", course.getCourseType());
-                row.put("Teacher", course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName());
-                row.put("Description", course.getDescription());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
-        return  output;
+    @CrossOrigin
+    @PostMapping("/courses")
+    public ResponseEntity<CourseDTO> save(@RequestBody Course course) throws EntityAlreadyExistException {
+        CourseDTO output = courseService.save(course);
+        return ResponseEntity.ok(output);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/coruses/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
+        courseService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }

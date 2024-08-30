@@ -16,7 +16,7 @@ public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="parent_id")
-    private int parentId;
+    private Long parentId;
 
     @Column(name="first_name")
     private String firstName;

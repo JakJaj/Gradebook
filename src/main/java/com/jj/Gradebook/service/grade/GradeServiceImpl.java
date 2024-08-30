@@ -21,7 +21,7 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
-    public Grade findById(int id) {
+    public Grade findById(Long id) {
         Optional<Grade> result = gradeRepository.findById(id);
 
         Grade grade;
@@ -43,7 +43,7 @@ public class GradeServiceImpl implements GradeService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         gradeRepository.deleteById(id);
     }
 }

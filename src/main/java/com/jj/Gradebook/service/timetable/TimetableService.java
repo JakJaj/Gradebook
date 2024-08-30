@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TimetableService {
     List<Timetable> findAll();
-    Timetable findById(int id);
+    Timetable findById(Long id);
     Timetable save(Timetable timetable);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

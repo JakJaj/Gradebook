@@ -3,6 +3,7 @@ package com.jj.Gradebook.controller;
 import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.student.StudentService;
 import org.json.simple.JSONObject;
@@ -29,14 +30,14 @@ public class StudentController {
 
     @CrossOrigin
     @GetMapping("/students")
-    public ResponseEntity<List<StudentDTO>> findAll(){
+    public ResponseEntity<List<StudentDTO>> findAll() throws EntityListEmptyException {
         List<StudentDTO> students = studentService.findAll();
         return ResponseEntity.ok(students);
     }
 
     @CrossOrigin
     @GetMapping("/students/{id}")
-    public ResponseEntity<StudentDTO> findById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<StudentDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
         StudentDTO student = studentService.findById(id);
         return ResponseEntity.ok(student);
     }
@@ -50,7 +51,7 @@ public class StudentController {
 
     @CrossOrigin
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable int id) throws EntityNotFoundException {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         studentService.deleteById(id);
         return ResponseEntity.accepted().build();
     }

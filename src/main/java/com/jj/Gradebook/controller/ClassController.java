@@ -1,9 +1,14 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.ClassDTO;
 import com.jj.Gradebook.entity.Class;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import com.jj.Gradebook.service.classes.ClassService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -24,41 +29,27 @@ public class ClassController {
 
     @CrossOrigin
     @GetMapping("/classes")
-    public List<JSONObject> findAll(){
-        List<JSONObject> output = new ArrayList<>();
+    public ResponseEntity<List<ClassDTO>> findAll() throws EntityListEmptyException {
+        List<ClassDTO> classes = classService.findAll();
 
-        Optional<List<Class>> classes = Optional.ofNullable(classService.findAll());
-
-        if(classes.isPresent()) {
-            for (Class clas : classes.get()) {
-                JSONObject row = new JSONObject();
-                row.put("ID", clas.getClassId());
-                row.put("ClassName", clas.getClassName());
-                row.put("Tutor", clas.getTeacher().getFirstName() + " " + clas.getTeacher().getLastName());
-                row.put("Year", clas.getStart_year());
-                row.put("Status", clas.isStatus());
-                output.add(row);
-            }
-        }
-        else {
-            output.add(new JSONObject());
-        }
-
-        return output;
+        return ResponseEntity.ok(classes);
     }
 
     @GetMapping("/classes/{id}")
-    public Class findById(@PathVariable int id){
-        return classService.findById(id);
+    public ResponseEntity<ClassDTO> findById(@PathVariable Long id) throws EntityNotFoundException {
+        ClassDTO theClass = classService.findById(id);
+        return ResponseEntity.ok(theClass);
     }
 
     @PostMapping("/classes")
-    public Class save(@RequestBody Class theClass){
-        return classService.save(theClass);
+    public ResponseEntity<ClassDTO> save(@RequestBody Class theClass) throws EntityAlreadyExistException {
+        ClassDTO savedClass = classService.save(theClass);
+        return ResponseEntity.ok(savedClass);
     }
 
     @DeleteMapping("/classes/{id}")
-    public void deleteById(@PathVariable int id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws EntityNotFoundException {
         classService.deleteById(id);
+        return ResponseEntity.accepted().build();
     }
 }

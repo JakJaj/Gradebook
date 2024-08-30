@@ -24,7 +24,7 @@ public class NoteController {
     }
 
     @GetMapping("/notes/{id}")
-    public Note findById(@PathVariable int id){
+    public Note findById(@PathVariable Long id){
         return noteService.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class NoteController {
     }
 
     @DeleteMapping("/notes/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         noteService.deleteById(id);
     }
 }

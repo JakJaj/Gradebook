@@ -21,7 +21,7 @@ public class AnnouncementServiceImpl implements AnnouncementService{
     }
 
     @Override
-    public Announcements findById(int id) {
+    public Announcements findById(Long id) {
         Optional<Announcements> result = announcementRepository.findById(id);
 
         Announcements announcement;
@@ -42,7 +42,7 @@ public class AnnouncementServiceImpl implements AnnouncementService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         announcementRepository.deleteById(id);
     }
 }

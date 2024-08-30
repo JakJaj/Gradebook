@@ -1,11 +1,16 @@
 package com.jj.Gradebook.service.parent;
 
 import com.jj.Gradebook.dao.ParentRepository;
+import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,33 +22,64 @@ public class ParentServiceImpl implements ParentService{
 
     @Override
     @Transactional
-    public List<Parent> findAll() {
-        return parentRepository.findAll();
+    public List<ParentDTO> findAll() throws EntityListEmptyException {
+        List<Parent> data = parentRepository.findAll();
+        List<ParentDTO> result = new ArrayList<>();
+
+        if (data.isEmpty()){
+            throw new EntityListEmptyException("List of parents is empty!");
+
+        }
+
+        for (Parent parent : data){
+            result.add(getParentDTO(parent));
+        }
+
+        return result;
     }
 
     @Override
     @Transactional
-    public Parent findById(int id) {
+    public ParentDTO findById(Long id) throws EntityNotFoundException {
         Optional<Parent> result = parentRepository.findById(id);
 
-        Parent parent = null;
         if(result.isPresent()){
-            parent = result.get();
+            return getParentDTO(result.get());
         }
-        else{ //TODO: FIND BETTER APPROACH
-            throw new RuntimeException("No parent with id - " + id);
+        else{
+            throw new EntityNotFoundException("No parent with id - " + id);
         }
-
-        return parent;
     }
 
     @Override
-    public Parent save(Parent parent) {
-        return parentRepository.save(parent);
+    public ParentDTO save(Parent parent) throws EntityAlreadyExistException {
+        Optional<Parent> existingParent = parentRepository.findParentByUser_Pesel(parent.getUser().getPesel());
+        if (existingParent.isEmpty()){
+            Parent savedParent = parentRepository.save(parent);
+            return getParentDTO(savedParent);
+        }
+        else {
+            throw new EntityAlreadyExistException("Parent already exists!");
+        }
     }
 
     @Override
-    public void deleteById(int id) {
-        parentRepository.deleteById(id);
+    public void deleteById(Long id) throws EntityNotFoundException {
+        Optional<Parent> existingParent = parentRepository.findById(id);
+        if (existingParent.isPresent()) {
+            parentRepository.deleteById(id);
+        }
+        else {
+            throw new EntityNotFoundException("No parent with id - " + id);
+        }
+    }
+
+    private ParentDTO getParentDTO(Parent result){
+        return new ParentDTO(
+                result.getParentId(),
+                result.getFirstName(),
+                result.getLastName(),
+                result.getUser().getEmail()
+        );
     }
 }

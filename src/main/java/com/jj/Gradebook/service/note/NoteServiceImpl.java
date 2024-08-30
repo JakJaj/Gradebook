@@ -21,7 +21,7 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public Note findById(int id) {
+    public Note findById(Long id) {
         Optional<Note> result = noteRepository.findById(id);
 
         Note note;
@@ -42,7 +42,7 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         noteRepository.deleteById(id);
     }
 }

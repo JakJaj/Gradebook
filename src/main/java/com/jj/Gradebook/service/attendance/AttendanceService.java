@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AttendanceService {
     List<Attendance> findAll();
-    Attendance findById(int id);
+    Attendance findById(Long id);
     Attendance save(Attendance attendance);
-    void deleteById(int id);
+    void deleteById(Long id);
 }

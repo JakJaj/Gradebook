@@ -1,11 +1,16 @@
 package com.jj.Gradebook.service.classes;
 
 import com.jj.Gradebook.dao.ClassRepository;
+import com.jj.Gradebook.dto.ClassDTO;
 import com.jj.Gradebook.entity.Class;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,33 +21,79 @@ public class ClassServiceImpl implements ClassService{
     private ClassRepository classRepository;
 
     @Override
-    public List<Class> findAll() {
-        return classRepository.findAll();
+    public List<ClassDTO> findAll() throws EntityListEmptyException {
+        List<Class> data = classRepository.findAll();
+        List<ClassDTO> result = new ArrayList<>();
+
+        if (data.isEmpty()){
+            throw new EntityListEmptyException("List of classes is empty!");
+        }
+
+        for(Class classes : data){
+            result.add(
+                    new ClassDTO(
+                            classes.getClassId(),
+                            classes.getClassName(),
+                            classes.getTeacher().getFirstName() + " " + classes.getTeacher().getLastName(),
+                            classes.getStartYear().toString(),
+                            (classes.isStatus() ? "Active" : "Inactive")
+                    )
+            );
+        }
+        return result;
     }
 
     @Override
-    public Class findById(int id) {
+    public ClassDTO findById(Long id) throws EntityNotFoundException {
         Optional<Class> result = classRepository.findById(id);
 
         Class theClass;
         if(result.isPresent()){
             theClass = result.get();
+            return new ClassDTO(
+                    theClass.getClassId(),
+                    theClass.getClassName(),
+                    theClass.getTeacher().getFirstName() + " " + theClass.getTeacher().getLastName(),
+                    theClass.getStartYear().toString(),
+                    (theClass.isStatus() ? "Active" : "Inactive")
+            );
         }
-        else { //TODO: FIND BETTER APPROACH
-            throw new RuntimeException("No class with id - " + id);
+        else {
+            throw new EntityNotFoundException("No class with id - " + id);
         }
-        return theClass;
+
     }
 
     @Override
     @Transactional
-    public Class save(Class classes) {
-        return classRepository.save(classes);
+    public ClassDTO save(Class classes) throws EntityAlreadyExistException {
+        Optional<Class> existingClass = classRepository.findClassByClassNameAndStartYear(classes.getClassName(),classes.getStartYear());
+
+        if (existingClass.isEmpty()){
+            Class savedClass = classRepository.save(classes);
+            return new ClassDTO(
+                    savedClass.getClassId(),
+                    savedClass.getClassName(),
+                    savedClass.getTeacher().getFirstName() + " " + savedClass.getTeacher().getLastName(),
+                    savedClass.getStartYear().toString(),
+                    (savedClass.isStatus() ? "Active" : "Inactive")
+            );
+
+        }
+        else {
+            throw new EntityAlreadyExistException("Class already exists!");
+        }
     }
 
     @Override
     @Transactional
-    public void deleteById(int id) {
-        classRepository.deleteById(id);
+    public void deleteById(Long id) throws EntityNotFoundException {
+        Optional<Class> existingClass = classRepository.findById(id);
+        if (existingClass.isPresent()){
+            classRepository.deleteById(id);
+        }
+        else {
+            throw new EntityNotFoundException("No class with id - " + id);
+        }
     }
 }

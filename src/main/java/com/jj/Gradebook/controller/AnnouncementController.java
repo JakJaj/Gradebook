@@ -23,7 +23,7 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements/{id}")
-    public Announcements findById(@PathVariable int id){
+    public Announcements findById(@PathVariable Long id){
         return announcementService.findById(id);
     }
 
@@ -33,7 +33,7 @@ public class AnnouncementController {
     }
 
     @DeleteMapping("/announcements/{id}")
-    public void deleteById(@PathVariable int id){
+    public void deleteById(@PathVariable Long id){
         announcementService.deleteById(id);
     }
 }

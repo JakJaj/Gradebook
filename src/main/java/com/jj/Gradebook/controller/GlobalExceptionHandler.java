@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.exceptions.EntityAlreadyExistException;
+import com.jj.Gradebook.exceptions.EntityListEmptyException;
 import com.jj.Gradebook.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityAlreadyExistException.class)
     public ResponseEntity<String> handleEntityAlreadyExistException(EntityAlreadyExistException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityListEmptyException.class)
+    public ResponseEntity<String> handleEntityListEmptyException(EntityListEmptyException ex){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
     }
 }
