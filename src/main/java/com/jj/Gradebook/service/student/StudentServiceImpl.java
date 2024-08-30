@@ -68,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO findByPesel(String pesel) throws EntityNotFoundException {
-        Optional<Student> result = studentRepository.findStudentByUserPesel(pesel);
+        Optional<Student> result = studentRepository.findStudentByUser_Pesel(pesel);
         if (result.isPresent()) {
             Student student = result.get();
             return new StudentDTO(
@@ -90,7 +90,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public StudentDTO save(Student student) throws EntityAlreadyExistException {
-        Optional<Student> existingStudent = studentRepository.findStudentByUserPesel(student.getUser().getPesel());
+        Optional<Student> existingStudent = studentRepository.findStudentByUser_Pesel(student.getUser().getPesel());
         if (existingStudent.isEmpty()) {
             Student savedStudent = studentRepository.save(student);
             return new StudentDTO(
