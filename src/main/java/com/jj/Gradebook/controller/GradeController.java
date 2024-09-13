@@ -1,10 +1,13 @@
 package com.jj.Gradebook.controller;
 
+import com.jj.Gradebook.dto.GradeDTO;
 import com.jj.Gradebook.entity.Grade;
 import com.jj.Gradebook.service.grade.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -17,24 +20,19 @@ public class GradeController {
     public GradeController(GradeService gradeService) {
         this.gradeService = gradeService;
     }
-
-    @GetMapping("/grades")
-    public List<Grade> findAll(){
-        return gradeService.findAll();
+    
+    @GetMapping("/grades/{studentID}")
+    public ResponseEntity<HashMap<String, List<GradeDTO>>> getStudentGradesGroupedByCourseByStudentId(@PathVariable Long studentID){
+        System.out.println(studentID);
+        HashMap<String, List<GradeDTO>> grades = gradeService.getGradesGroupedByCourseByStudentId(studentID);
+        return ResponseEntity.ok(grades);
     }
+    //GET Oceny zmapowane na zajęcia = {uczen = {ocenyUcznia}, uczen = {ocenyUcznia} (po klasie)
+    //GET pojedyncza ocena po id oceny dla szczegółów oceny i do edycji oceny
 
-    @GetMapping("/grades/{id}")
-    private Grade findById(@PathVariable Long id){
-        return gradeService.findById(id);
-    }
+    //POST Wstawianie oceny po ID ucznia i ID zajęć
 
-    @PostMapping("/grades")
-    public Grade save(@RequestBody Grade grade){
-        return gradeService.save(grade);
-    }
+    //PATCH Edycja wybranej oceny po ID oceny (wcześniej dostanej z GET
 
-    @DeleteMapping("/grades/{id}")
-    public void deleteById(@PathVariable Long id){
-        gradeService.deleteById(id);
-    }
+    //DELETE Pojedyncza ocena po ID
 }

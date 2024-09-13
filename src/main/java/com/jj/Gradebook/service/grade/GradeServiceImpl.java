@@ -1,13 +1,13 @@
 package com.jj.Gradebook.service.grade;
 
 import com.jj.Gradebook.dao.GradeRepository;
+import com.jj.Gradebook.dto.GradeDTO;
 import com.jj.Gradebook.entity.Grade;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -16,23 +16,40 @@ public class GradeServiceImpl implements GradeService{
     private GradeRepository gradeRepository;
 
     @Override
-    public List<Grade> findAll() {
-        return gradeRepository.findAll();
-    }
+    public HashMap<String, List<GradeDTO>> getGradesGroupedByCourseByStudentId(Long studentId) {
 
-    @Override
-    public Grade findById(Long id) {
-        Optional<Grade> result = gradeRepository.findById(id);
+        Optional<List<Grade>> grades = gradeRepository.findAllByStudent_StudentId(studentId);
+        HashMap<String, List<GradeDTO>> data = new HashMap<>();
 
-        Grade grade;
-        if (result.isPresent()){
-            grade = result.get();
+        if (grades.isPresent()){
+            for (Grade grade: grades.get()){
+                if (!data.containsKey(grade.getCourse().getCourseName())){
+                    data.put(grade.getCourse().getCourseName(), new ArrayList<>(List.of(
+                            new GradeDTO(
+                                    grade.getGradeId(),
+                                    grade.getMark(),
+                                    grade.getDescription(),
+                                    grade.getMagnitude()
+                    ))));
+                }
+                else{
+                    String courseName = grade.getCourse().getCourseName();
+                    List<GradeDTO> currentGrades = data.get(courseName);
+                    currentGrades.add(new GradeDTO(
+                            grade.getGradeId(),
+                            grade.getMark(),
+                            grade.getDescription(),
+                            grade.getMagnitude()
+                    ));
+                    data.remove(courseName);
+                    data.put(courseName, currentGrades);
+
+                }
+            }
         }
-        else{ //TODO: FIND BETTER APPROACH
-            throw new RuntimeException("No grade with id - " + id);
-        }
 
-        return grade;
+        System.out.println(data);
+        return data;
     }
 
     @Override
@@ -46,4 +63,6 @@ public class GradeServiceImpl implements GradeService{
     public void deleteById(Long id) {
         gradeRepository.deleteById(id);
     }
+
+
 }
