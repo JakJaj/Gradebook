@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller;
 
 import com.jj.Gradebook.dto.GradeDTO;
+import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Grade;
 import com.jj.Gradebook.service.grade.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,18 @@ public class GradeController {
     public GradeController(GradeService gradeService) {
         this.gradeService = gradeService;
     }
-    
+
     @GetMapping("/grades/{studentID}")
     public ResponseEntity<HashMap<String, List<GradeDTO>>> getStudentGradesGroupedByCourseByStudentId(@PathVariable Long studentID){
-        System.out.println(studentID);
         HashMap<String, List<GradeDTO>> grades = gradeService.getGradesGroupedByCourseByStudentId(studentID);
         return ResponseEntity.ok(grades);
     }
-    //GET Oceny zmapowane na zajęcia = {uczen = {ocenyUcznia}, uczen = {ocenyUcznia} (po klasie)
+    //GET Oceny zmapowane na zajęcia = {uczen = {ocenyUcznia}, uczen = {ocenyUcznia} (po zajeciach)
+    @GetMapping("/grades/{classID}/{courseID}")
+    public ResponseEntity<HashMap<String, HashMap<Long, List<GradeDTO>>>> getStudnetsGradesGroupedByCoursesByClassIDAndCourseID (@PathVariable Long classID, @PathVariable Long courseID){
+        HashMap<String, HashMap<Long, List<GradeDTO>>> grades = gradeService.getStudnetsGradesGroupedByCoursesByClassIDAndCourseID(classID, courseID);
+        return ResponseEntity.ok(grades);
+    }
     //GET pojedyncza ocena po id oceny dla szczegółów oceny i do edycji oceny
 
     //POST Wstawianie oceny po ID ucznia i ID zajęć
