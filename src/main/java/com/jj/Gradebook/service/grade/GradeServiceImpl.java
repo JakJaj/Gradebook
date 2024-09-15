@@ -1,10 +1,15 @@
 package com.jj.Gradebook.service.grade;
 
+import com.jj.Gradebook.dao.CourseRepository;
 import com.jj.Gradebook.dao.GradeRepository;
+import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dto.GradeDTO;
 import com.jj.Gradebook.dto.StudentDTO;
+import com.jj.Gradebook.entity.Course;
 import com.jj.Gradebook.entity.Grade;
 import com.jj.Gradebook.entity.Student;
+import com.jj.Gradebook.exceptions.EntityNotFoundException;
+import com.jj.Gradebook.service.course.CourseServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,8 @@ import java.util.*;
 public class GradeServiceImpl implements GradeService{
 
     private GradeRepository gradeRepository;
+    private CourseRepository courseRepository;
+    private StudentRepository studentRepository;
 
     @Override
     public HashMap<String, List<GradeDTO>> getGradesGroupedByCourseByStudentId(Long studentId) {
@@ -88,6 +95,42 @@ public class GradeServiceImpl implements GradeService{
             }
         }
         return data;
+    }
+
+    @Override
+    public GradeDTO getGradeByGradeID(Long gradeID) throws EntityNotFoundException {
+        Optional<Grade> existingGrade = gradeRepository.findById(gradeID);
+        if (existingGrade.isPresent()){
+            Grade grade = existingGrade.get();
+            return new GradeDTO(
+                    grade.getGradeId(),
+                    grade.getMark(),
+                    grade.getDescription(),
+                    grade.getMagnitude()
+            );
+        }
+        throw new EntityNotFoundException("No grade with id - " + gradeID);
+    }
+
+    @Override
+    public GradeDTO addGrade(Long courseID, Long studentID, GradeDTO grade) throws EntityNotFoundException {
+        Optional<Course> course = courseRepository.findById(courseID);
+        Optional<Student> student = studentRepository.findById(studentID);
+
+        if (course.isPresent() && student.isPresent()){
+            Grade result = new Grade(course.get(), grade.getMark(), student.get(), grade.getDescription(), grade.getMagnitude());
+            Grade returnedGrade = gradeRepository.save(result);
+        } else if (course.isEmpty()) {
+            throw new EntityNotFoundException("No courses with id - " + courseID);
+        } else {
+            throw new EntityNotFoundException("No student with id - " + studentID);
+        }
+        return new GradeDTO(
+                grade.getGradeId(),
+                grade.getMark(),
+                grade.getDescription(),
+                grade.getMagnitude()
+        );
     }
 
     @Override
