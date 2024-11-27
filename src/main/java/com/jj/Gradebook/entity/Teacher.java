@@ -9,11 +9,11 @@ import java.util.Date;
 
 @Entity
 @Table(name="Teachers")
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+
 public class Teacher {
 
     @Id
@@ -36,13 +36,5 @@ public class Teacher {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
-
-    public Teacher(String firstName, String lastName, Calendar dateOfBirth, Calendar dateOfEmployment, User user) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.dateOfEmployment = dateOfEmployment;
-        this.user = user;
-    }
 
 }

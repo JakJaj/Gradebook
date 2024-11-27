@@ -8,11 +8,11 @@ import java.time.Year;
 
 @Entity
 @Table(name = "Classes")
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+
 public class Class {
 
     @Id
@@ -29,15 +29,5 @@ public class Class {
 
     @Column(name = "start_year")
     private Year startYear;
-
-    @Column(name = "enabled")
-    private boolean status;
-
-    public Class(String className, Teacher teacher, Year startYear, boolean status) {
-        this.className = className;
-        this.teacher = teacher;
-        this.startYear = startYear;
-        this.status = status;
-    }
 
 }

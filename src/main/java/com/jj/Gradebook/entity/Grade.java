@@ -8,9 +8,9 @@ import lombok.*;
 @Table(name = "Grades")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
+
 public class Grade {
 
     @Id
@@ -35,11 +35,4 @@ public class Grade {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    public Grade(Course course, int mark, Student student, String description, int magnitude) {
-        this.course = course;
-        this.mark = mark;
-        this.student = student;
-        this.description = description;
-        this.magnitude = magnitude;
-    }
 }

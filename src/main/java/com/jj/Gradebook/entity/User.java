@@ -5,11 +5,11 @@ import lombok.*;
 
 @Entity
 @Table(name="Users")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 public class User {
 
     @Id
@@ -28,12 +28,6 @@ public class User {
 
     @Column(name = "salt")
     private String salt;
-
-    @Column(name = "token")
-    private String token;
-
-    @Column(name="enabled")
-    private boolean enabled;
 
     @Column(name="role")
     @Enumerated(EnumType.STRING)

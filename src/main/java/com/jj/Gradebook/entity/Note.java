@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Notes")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 public class Note {
 
     @Id

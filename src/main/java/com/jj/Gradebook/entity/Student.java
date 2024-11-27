@@ -12,9 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Students")
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student {
@@ -46,24 +45,11 @@ public class Student {
     @JoinColumn(name = "class_id")
     private Class studentClass;
 
-    @OneToMany(mappedBy="student")
-    private Set<StudentParent> studentParents;
-
     @OneToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy="student")
+    private Set<StudentParent> studentParents;
 
-
-
-    public Student(String firstName, String lastName, Calendar dateOfBirth, String city, String street, int houseNumber, Class studentClass, User user) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.city = city;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.studentClass = studentClass;
-        this.user = user;
-    }
 }

@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Attendances")
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+
 public class Attendance {
 
     @Id
@@ -34,10 +34,4 @@ public class Attendance {
     @JoinColumn(name = "timetable_id")
     private Timetable timetable;
 
-    public Attendance(LocalDateTime dateTime, String status, Student student, Timetable timetable) {
-        this.dateTime = dateTime;
-        this.status = status;
-        this.timetable = timetable;
-        this.student = student;
-    }
 }
