@@ -36,13 +36,8 @@ public class User {
     private boolean enabled;
 
     @Column(name="role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User(String password, String email, String pesel, String salt, String token, boolean enabled, String role) {
-        this.password = password;
-        this.enabled = enabled;
-        this.role = role;
-        this.pesel = pesel;
-    }
 }
 

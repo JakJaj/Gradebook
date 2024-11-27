@@ -1,8 +1,11 @@
 package com.jj.Gradebook.entity;
 
 
+import com.jj.Gradebook.entity.Student_Parent.StudentParent;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name="Parents")
@@ -24,6 +27,8 @@ public class Parent {
     @Column(name="last_name")
     private String lastName;
 
+    @OneToMany(mappedBy = "parent")
+    private Set<StudentParent> studentParents;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
