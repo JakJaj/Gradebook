@@ -28,10 +28,10 @@ public class Teacher {
     private String lastName;
 
     @Column(name="date_of_birth")
-    private Calendar dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name="date_of_employment")
-    private Calendar dateOfEmployment;
+    private Date dateOfEmployment;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")

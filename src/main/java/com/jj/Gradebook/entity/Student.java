@@ -30,7 +30,7 @@ public class Student {
     private String lastName;
 
     @Column(name = "date_of_birth")
-    private Calendar dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "city")
     private String city;
@@ -39,7 +39,7 @@ public class Student {
     private String street;
 
     @Column(name = "house_number")
-    private int houseNumber;
+    private String houseNumber;
 
     @ManyToOne
     @JoinColumn(name = "class_id")

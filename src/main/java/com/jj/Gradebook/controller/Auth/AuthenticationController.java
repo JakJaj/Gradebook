@@ -1,7 +1,6 @@
 package com.jj.Gradebook.controller.Auth;
 
-import com.jj.Gradebook.controller.request.AuthenticationRequest;
-import com.jj.Gradebook.controller.request.RegisterRequest;
+import com.jj.Gradebook.controller.request.*;
 import com.jj.Gradebook.controller.response.AuthenticationResponse;
 import com.jj.Gradebook.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +17,22 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
-    private ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(authenticationService.register(request));
+    @PostMapping("/register/students")
+    public ResponseEntity<AuthenticationResponse> registerStudent(@RequestBody RegisterStudentRequest request){
+        return ResponseEntity.ok(authenticationService.registerStudent(request));
     }
 
+    @PostMapping("/register/teachers")
+    public ResponseEntity <AuthenticationResponse> registerTeacher(@RequestBody RegisterTeacherRequest request){
+        return ResponseEntity.ok(authenticationService.registerTeacher(request));
+    }
+
+    @PostMapping("/register/parents")
+    public ResponseEntity<AuthenticationResponse> registerParent(@RequestBody RegisterParentRequest request){
+        return ResponseEntity.ok(authenticationService.registerParent(request));
+    }
     @PostMapping("/login")
-    private ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

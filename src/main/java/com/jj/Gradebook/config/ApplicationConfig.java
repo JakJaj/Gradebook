@@ -1,6 +1,6 @@
 package com.jj.Gradebook.config;
 
-import com.jj.Gradebook.dto.UserRepository;
+import com.jj.Gradebook.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
