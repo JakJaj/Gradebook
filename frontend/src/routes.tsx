@@ -21,7 +21,7 @@ const routes = [
     },
     {
         path: '/admin',
-        element: <Admin />, 
+        element: <Admin />,
     },
     {
         path: '/admin/teachers/',

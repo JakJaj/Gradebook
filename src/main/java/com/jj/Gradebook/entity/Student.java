@@ -1,18 +1,19 @@
 package com.jj.Gradebook.entity;
 
 
+import com.jj.Gradebook.entity.Student_Parent.StudentParent;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.engine.internal.CascadePoint;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Students")
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student {
@@ -29,7 +30,7 @@ public class Student {
     private String lastName;
 
     @Column(name = "date_of_birth")
-    private Calendar dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "city")
     private String city;
@@ -38,24 +39,17 @@ public class Student {
     private String street;
 
     @Column(name = "house_number")
-    private int houseNumber;
+    private String houseNumber;
 
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Class studentClass;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Student(String firstName, String lastName, Calendar dateOfBirth, String city, String street, int houseNumber, Class studentClass, User user) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.city = city;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.studentClass = studentClass;
-        this.user = user;
-    }
+    @OneToMany(mappedBy="student")
+    private Set<StudentParent> studentParents;
+
 }

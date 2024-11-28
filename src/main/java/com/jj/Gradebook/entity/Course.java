@@ -6,11 +6,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "Courses")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Course {
 
     @Id
@@ -28,9 +27,4 @@ public class Course {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    public Course(String courseName, Teacher teacher, String description) {
-        this.courseName = courseName;
-        this.teacher = teacher;
-        this.description = description;
-    }
 }

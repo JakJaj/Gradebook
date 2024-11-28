@@ -1,15 +1,13 @@
 package com.jj.Gradebook.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
+@Data
 @AllArgsConstructor
-@Setter
-@Getter
+@Builder
 public class ParentDTO {
-    Long id;
-    String firstName;
-    String lastName;
-    String email;
+    private String firstName;
+    private String lastName;
 }

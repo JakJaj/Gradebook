@@ -10,9 +10,8 @@ import java.time.LocalDateTime;
 @Table(name = "Announcements")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 public class Announcements {
 
     @Id
@@ -32,12 +31,5 @@ public class Announcements {
     @ManyToOne()
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
-
-    public Announcements(String title, String content, LocalDateTime dateTime, Teacher teacher) {
-        this.title = title;
-        this.content = content;
-        this.dateTime = dateTime;
-        this.teacher = teacher;
-    }
 
 }

@@ -10,9 +10,8 @@ import lombok.*;
 @Table(name = "Students_Parents")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 public class StudentParent {
 
     @EmbeddedId

@@ -8,11 +8,11 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "Timetables")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 public class Timetable {
 
     @Id
@@ -40,12 +40,4 @@ public class Timetable {
     @JoinColumn(name = "class_id")
     private Class clas;
 
-    public Timetable(Course course, Class clas, LocalTime startTime, LocalTime endTime, String classroomNumber, int dayOfWeek) {
-        this.course = course;
-        this.clas = clas;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.classroomNumber = classroomNumber;
-        this.dayOfWeek = dayOfWeek;
-    }
 }

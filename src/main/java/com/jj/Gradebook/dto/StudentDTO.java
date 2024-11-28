@@ -1,20 +1,18 @@
 package com.jj.Gradebook.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
+@Builder
 public class StudentDTO {
-    private Long studentID;
     private String firstName;
     private String lastName;
-    private String pesel;
-    private String email;
     private String dateOfBirth;
-    private String address;
-    private String studentClass;
-    private String status;
+    private String city;
+    private String street;
+    private String houseNumber;
+
 }
