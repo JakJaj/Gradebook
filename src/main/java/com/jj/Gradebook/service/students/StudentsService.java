@@ -9,6 +9,7 @@ import com.jj.Gradebook.exceptions.NoSuchUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -16,6 +17,7 @@ import java.util.List;
 public class StudentsService {
 
     private final StudentRepository studentRepository;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public StudentsResponse getAllStudents() {
         List<Student> students = studentRepository.findAll();
@@ -25,7 +27,7 @@ public class StudentsService {
                         .studentID(student.getStudentId())
                         .firstName(student.getFirstName())
                         .lastName(student.getLastName())
-                        .dateOfBirth(student.getDateOfBirth().toString())
+                        .dateOfBirth(dateFormat.format(student.getDateOfBirth()))
                         .city(student.getCity())
                         .street(student.getStreet())
                         .houseNumber(student.getHouseNumber())
@@ -50,6 +52,7 @@ public class StudentsService {
                         .studentID(student.getStudentId())
                         .firstName(student.getFirstName())
                         .lastName(student.getLastName())
+                        .dateOfBirth(dateFormat.format(student.getDateOfBirth()))
                         .city(student.getCity())
                         .street(student.getStreet())
                         .houseNumber(student.getHouseNumber())
