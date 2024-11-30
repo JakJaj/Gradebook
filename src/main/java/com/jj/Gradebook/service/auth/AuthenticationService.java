@@ -3,9 +3,9 @@ package com.jj.Gradebook.service.auth;
 
 
 import com.jj.Gradebook.config.JwtService;
-import com.jj.Gradebook.controller.Auth.SecurityUtils;
+import com.jj.Gradebook.controller.auth.SecurityUtils;
 import com.jj.Gradebook.controller.request.*;
-import com.jj.Gradebook.controller.response.AuthenticationResponse;
+import com.jj.Gradebook.controller.response.auth.AuthenticationResponse;
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dao.TeacherRepository;
@@ -17,7 +17,6 @@ import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchUserException;
 import com.jj.Gradebook.exceptions.UserAlreadyExistsException;
-import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 @Service

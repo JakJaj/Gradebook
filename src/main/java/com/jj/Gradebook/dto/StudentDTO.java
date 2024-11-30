@@ -8,6 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class StudentDTO {
+    private Long studentID;
     private String firstName;
     private String lastName;
     private String dateOfBirth;

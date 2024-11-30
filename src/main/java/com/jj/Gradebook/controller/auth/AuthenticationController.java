@@ -1,7 +1,7 @@
-package com.jj.Gradebook.controller.Auth;
+package com.jj.Gradebook.controller.auth;
 
 import com.jj.Gradebook.controller.request.*;
-import com.jj.Gradebook.controller.response.AuthenticationResponse;
+import com.jj.Gradebook.controller.response.auth.AuthenticationResponse;
 import com.jj.Gradebook.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

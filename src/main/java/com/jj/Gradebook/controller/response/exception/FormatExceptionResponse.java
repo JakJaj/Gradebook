@@ -1,5 +1,6 @@
-package com.jj.Gradebook.controller.response;
+package com.jj.Gradebook.controller.response.exception;
 
+import com.jj.Gradebook.controller.response.BaseResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class FormatExceptionResponse extends BaseResponse{
+public class FormatExceptionResponse extends BaseResponse {
 }

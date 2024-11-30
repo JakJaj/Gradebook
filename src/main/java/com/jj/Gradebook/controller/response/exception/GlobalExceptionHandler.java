@@ -1,7 +1,5 @@
-package com.jj.Gradebook.controller;
+package com.jj.Gradebook.controller.response.exception;
 
-import com.jj.Gradebook.controller.response.ExceptionResponse;
-import com.jj.Gradebook.controller.response.FormatExceptionResponse;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchUserException;
 import com.jj.Gradebook.exceptions.UserAlreadyExistsException;

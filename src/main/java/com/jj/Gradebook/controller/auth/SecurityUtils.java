@@ -1,4 +1,4 @@
-package com.jj.Gradebook.controller.Auth;
+package com.jj.Gradebook.controller.auth;
 
 import java.security.SecureRandom;
 import java.util.Base64;
