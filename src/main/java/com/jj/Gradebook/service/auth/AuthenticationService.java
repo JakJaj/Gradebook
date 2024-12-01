@@ -3,21 +3,18 @@ package com.jj.Gradebook.service.auth;
 
 
 import com.jj.Gradebook.config.JwtService;
-import com.jj.Gradebook.controller.Auth.SecurityUtils;
+import com.jj.Gradebook.controller.auth.SecurityUtils;
 import com.jj.Gradebook.controller.request.*;
-import com.jj.Gradebook.controller.response.AuthenticationResponse;
-import com.jj.Gradebook.dao.ParentRepository;
-import com.jj.Gradebook.dao.StudentRepository;
-import com.jj.Gradebook.dao.TeacherRepository;
-import com.jj.Gradebook.dao.UserRepository;
+import com.jj.Gradebook.controller.response.auth.AuthenticationResponse;
+import com.jj.Gradebook.dao.*;
+import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.DateFormatException;
-import com.jj.Gradebook.exceptions.NoSuchUserException;
-import com.jj.Gradebook.exceptions.UserAlreadyExistsException;
-import jakarta.persistence.EntityExistsException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -39,6 +35,7 @@ public class AuthenticationService {
     private final ParentRepository parentRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ClassRepository classRepository;
     private final static int PASSWORD_LENGTH = 10;
 
     //TODO: ZASTANOWIC SIE KIEDY LACZYC UCZNIA Z RODZICEM!!!!
@@ -60,10 +57,13 @@ public class AuthenticationService {
 
         try {
             Date date = dateFormat.parse(request.getStudent().getDateOfBirth());
+            Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
+
             Student student = Student.builder()
                     .firstName(request.getStudent().getFirstName())
                     .lastName(request.getStudent().getLastName())
                     .dateOfBirth(date)
+                    .studentClass(theClass)
                     .city(request.getStudent().getCity())
                     .street(request.getStudent().getStreet())
                     .houseNumber(request.getStudent().getHouseNumber())
@@ -155,10 +155,10 @@ public class AuthenticationService {
     }
 
     private User registerUser(RegisterRequest request){
-        if (repository.findByPesel(request.getPesel()).isPresent()) throw new UserAlreadyExistsException("User with this pesel already exists");
+        if (repository.findByPesel(request.getPesel()).isPresent()) throw new EntityAlreadyExistsException("User with this pesel already exists");
 
         var existingUser = repository.findByEmail(request.getEmail());
-        if (existingUser.isPresent()) throw new UserAlreadyExistsException("User with this email already exists");
+        if (existingUser.isPresent()) throw new EntityAlreadyExistsException("User with this email already exists");
         String salt = SecurityUtils.generateSalt();
         var user = User.builder()
                 .email(request.getEmail())
@@ -174,7 +174,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request){
 
         var user = repository.findByEmail(request.getEmail());
-        if (user.isEmpty()) throw new NoSuchUserException("No user with a specified credentials");
+        if (user.isEmpty()) throw new NoSuchEntityException("No user with a specified credentials");
 
 
         authenticationManager.authenticate(

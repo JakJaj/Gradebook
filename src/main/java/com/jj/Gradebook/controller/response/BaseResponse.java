@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-class BaseResponse {
+public class BaseResponse {
     private String status;
     private String message;
 }

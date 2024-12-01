@@ -7,8 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class ParentDTO {
-    private Long parentID;
-    private String firstName;
-    private String lastName;
+public class ClassDTO {
+    private Long classID;
+    private String className;
+    private int startYear;
+    private TeacherDTO tutor;
 }
