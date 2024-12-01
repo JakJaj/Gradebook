@@ -4,9 +4,8 @@ import com.jj.Gradebook.controller.response.teachers.TeacherResponse;
 import com.jj.Gradebook.controller.response.teachers.TeachersResponse;
 import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.dto.TeacherDTO;
-import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.Teacher;
-import com.jj.Gradebook.exceptions.NoSuchUserException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class TeachersService {
 
     public TeacherResponse getTeacherByID(Long teacherID) {
 
-        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchUserException(String.format("No teacher with id - %d", teacherID)));
+        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", teacherID)));
 
         return TeacherResponse.builder()
                 .status("Success")

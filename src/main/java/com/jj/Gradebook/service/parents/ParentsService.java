@@ -5,7 +5,7 @@ import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.entity.Parent;
-import com.jj.Gradebook.exceptions.NoSuchUserException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class ParentsService {
 
     public ParentResponse getParentByID(Long parentID) {
 
-        Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchUserException(String.format("No parent with id - %d", parentID)));
+        Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", parentID)));
 
         return ParentResponse.builder()
                 .status("Success")

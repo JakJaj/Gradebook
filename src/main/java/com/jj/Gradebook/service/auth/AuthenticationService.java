@@ -15,8 +15,8 @@ import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.DateFormatException;
-import com.jj.Gradebook.exceptions.NoSuchUserException;
-import com.jj.Gradebook.exceptions.UserAlreadyExistsException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import com.jj.Gradebook.exceptions.EntityAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -153,10 +153,10 @@ public class AuthenticationService {
     }
 
     private User registerUser(RegisterRequest request){
-        if (repository.findByPesel(request.getPesel()).isPresent()) throw new UserAlreadyExistsException("User with this pesel already exists");
+        if (repository.findByPesel(request.getPesel()).isPresent()) throw new EntityAlreadyExistsException("User with this pesel already exists");
 
         var existingUser = repository.findByEmail(request.getEmail());
-        if (existingUser.isPresent()) throw new UserAlreadyExistsException("User with this email already exists");
+        if (existingUser.isPresent()) throw new EntityAlreadyExistsException("User with this email already exists");
         String salt = SecurityUtils.generateSalt();
         var user = User.builder()
                 .email(request.getEmail())
@@ -172,7 +172,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request){
 
         var user = repository.findByEmail(request.getEmail());
-        if (user.isEmpty()) throw new NoSuchUserException("No user with a specified credentials");
+        if (user.isEmpty()) throw new NoSuchEntityException("No user with a specified credentials");
 
 
         authenticationManager.authenticate(

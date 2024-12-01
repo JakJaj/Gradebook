@@ -5,7 +5,7 @@ import com.jj.Gradebook.controller.response.students.StudentsResponse;
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Student;
-import com.jj.Gradebook.exceptions.NoSuchUserException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class StudentsService {
 
     public StudentResponse getStudentByID(Long studentID) {
 
-        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchUserException(String.format("No student with id - %d", studentID)));
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
 
         return StudentResponse.builder()
                 .status("Success")

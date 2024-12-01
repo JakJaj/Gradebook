@@ -1,10 +1,12 @@
 package com.jj.Gradebook.service.classes;
 
+import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.dao.ClassRepository;
 import com.jj.Gradebook.dto.ClassDTO;
 import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Class;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,28 @@ public class ClassesService {
                 .status("Success")
                 .message("Successfully returning list of classes")
                 .classes(classDTOList)
+                .build();
+    }
+
+    public ClassResponse getClassByClassID(Long classID) {
+
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+
+        return ClassResponse.builder()
+                .status("Success")
+                .message(String.format("Succesfully return class with id - %d", classID))
+                .theClass(ClassDTO.builder()
+                        .classID(theClass.getClassId())
+                        .className(theClass.getClassName())
+                        .startYear(theClass.getStartYear().getValue())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(theClass.getTeacher().getTeacherId())
+                                .firstName(theClass.getTeacher().getFirstName())
+                                .lastName(theClass.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(theClass.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(theClass.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
                 .build();
     }
 }
