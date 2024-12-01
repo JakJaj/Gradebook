@@ -2,6 +2,7 @@ package com.jj.Gradebook.controller.classes;
 
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
+import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.service.classes.ClassesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,12 @@ public class ClassController {
     }
 
     @GetMapping("/{classID}")
-    private ResponseEntity<ClassResponse> getClassByClassID(@PathVariable Long classID){
+    public ResponseEntity<ClassResponse> getClassByClassID(@PathVariable Long classID){
         return ResponseEntity.ok(classesService.getClassByClassID(classID));
+    }
+
+    @GetMapping("/{clasID}/timetables")
+    public ResponseEntity<TimetableResponse> getTimetablesForTheClass(@PathVariable Long clasID){
+        return ResponseEntity.ok(classesService.getTimetableOfClass(clasID));
     }
 }
