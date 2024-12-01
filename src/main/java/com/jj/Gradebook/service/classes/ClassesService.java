@@ -3,14 +3,14 @@ package com.jj.Gradebook.service.classes;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
-import com.jj.Gradebook.dao.ClassRepository;
-import com.jj.Gradebook.dao.CoursesRepository;
-import com.jj.Gradebook.dao.TeacherRepository;
-import com.jj.Gradebook.dao.TimetableRepository;
+import com.jj.Gradebook.controller.response.students.StudentsResponse;
+import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.ClassDTO;
+import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.dto.TimetableEntryDTO;
 import com.jj.Gradebook.entity.Class;
+import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
@@ -29,8 +29,7 @@ public class ClassesService {
 
     private final ClassRepository classRepository;
     private final TimetableRepository timetableRepository;
-    private final CoursesRepository coursesRepository;
-    private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -82,9 +81,9 @@ public class ClassesService {
                 .build();
     }
 
-    public TimetableResponse getTimetableOfClass(Long clasID) {
+    public TimetableResponse getTimetableOfClass(Long classID) {
 
-        Class theClass = classRepository.findById(clasID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d",clasID)));
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d",classID)));
 
         List<Timetable> timetableList = timetableRepository.findTimetablesByClas_ClassId(theClass.getClassId());
 
@@ -112,8 +111,34 @@ public class ClassesService {
 
         return TimetableResponse.builder()
                 .status("Success")
-                .message(String.format("Successfully returning timetable for class with id - %d",clasID))
+                .message(String.format("Successfully returning timetable for class with id - %d",classID))
                 .timetable(timetableEntry)
+                .build();
+    }
+
+    public StudentsResponse getStudentsOfClass(Long classID) {
+
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d",classID)));
+
+        List<Student> students = studentRepository.findStudentsByStudentClass_ClassId(classID);
+
+        List<StudentDTO> studentDTOList = students.stream()
+                .map(student -> StudentDTO.builder()
+                        .studentID(student.getStudentId())
+                        .classID(theClass.getClassId())
+                        .firstName(student.getFirstName())
+                        .lastName(student.getLastName())
+                        .dateOfBirth(dateFormat.format(student.getDateOfBirth()))
+                        .city(student.getCity())
+                        .street(student.getStreet())
+                        .houseNumber(student.getHouseNumber())
+                        .build())
+                .toList();
+
+        return StudentsResponse.builder()
+                .status("Success")
+                .message(String.format("Returning list of students from class %s" , theClass.getClassName()))
+                .students(studentDTOList)
                 .build();
     }
 }

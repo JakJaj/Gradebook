@@ -6,10 +6,8 @@ import com.jj.Gradebook.config.JwtService;
 import com.jj.Gradebook.controller.auth.SecurityUtils;
 import com.jj.Gradebook.controller.request.*;
 import com.jj.Gradebook.controller.response.auth.AuthenticationResponse;
-import com.jj.Gradebook.dao.ParentRepository;
-import com.jj.Gradebook.dao.StudentRepository;
-import com.jj.Gradebook.dao.TeacherRepository;
-import com.jj.Gradebook.dao.UserRepository;
+import com.jj.Gradebook.dao.*;
+import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Teacher;
@@ -37,6 +35,7 @@ public class AuthenticationService {
     private final ParentRepository parentRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ClassRepository classRepository;
     private final static int PASSWORD_LENGTH = 10;
 
     //TODO: ZASTANOWIC SIE KIEDY LACZYC UCZNIA Z RODZICEM!!!!
@@ -58,10 +57,13 @@ public class AuthenticationService {
 
         try {
             Date date = dateFormat.parse(request.getStudent().getDateOfBirth());
+            Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
+
             Student student = Student.builder()
                     .firstName(request.getStudent().getFirstName())
                     .lastName(request.getStudent().getLastName())
                     .dateOfBirth(date)
+                    .studentClass(theClass)
                     .city(request.getStudent().getCity())
                     .street(request.getStudent().getStreet())
                     .houseNumber(request.getStudent().getHouseNumber())
