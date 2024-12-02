@@ -154,23 +154,25 @@ public class AuthenticationService {
                 .build();
     }
 
-    private User registerUser(RegisterRequest request){
-        if (repository.findByPesel(request.getPesel()).isPresent()) throw new EntityAlreadyExistsException("User with this pesel already exists");
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
 
-        var existingUser = repository.findByEmail(request.getEmail());
-        if (existingUser.isPresent()) throw new EntityAlreadyExistsException("User with this email already exists");
-        String salt = SecurityUtils.generateSalt();
-        var user = User.builder()
+        String generatedPassword = SecurityUtils.generateSalt(PASSWORD_LENGTH);
+
+        User user = registerUser(RegisterRequest.builder()
+                .password(generatedPassword)
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(salt + request.getPassword() ))
                 .pesel(request.getPesel())
-                .salt(salt)
                 .role(request.getRole())
+                .build());
+
+        String token = jwtService.generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .status("Success")
+                .message("Generated password: " + generatedPassword)
+                .token(token)
                 .build();
-
-        return repository.save(user);
     }
-
     public AuthenticationResponse authenticate(AuthenticationRequest request){
 
         var user = repository.findByEmail(request.getEmail());
@@ -191,5 +193,26 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+    private User registerUser(RegisterRequest request){
+        if (repository.findByPesel(request.getPesel()).isPresent()) throw new EntityAlreadyExistsException("User with this pesel already exists");
+
+        var existingUser = repository.findByEmail(request.getEmail());
+        if (existingUser.isPresent()) throw new EntityAlreadyExistsException("User with this email already exists");
+        String salt = SecurityUtils.generateSalt();
+        var user = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(salt + request.getPassword() ))
+                .pesel(request.getPesel())
+                .salt(salt)
+                .role(request.getRole())
+                .build();
+
+        return repository.save(user);
+    }
+
+
+
+
 }
 
