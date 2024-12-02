@@ -26,4 +26,9 @@ public class CoursesController {
     public ResponseEntity<CourseResponse> getCourseByCourseID(@PathVariable Long courseID){
         return ResponseEntity.ok(coursesService.getCourseByCourseID(courseID));
     }
+
+    @GetMapping("/teachers/{teacherID}")
+    public ResponseEntity<CoursesResponse> getCoursesOfTeacher(@PathVariable Long teacherID){
+        return ResponseEntity.ok(coursesService.getCoursesOfTeacher(teacherID));
+    }
 }
