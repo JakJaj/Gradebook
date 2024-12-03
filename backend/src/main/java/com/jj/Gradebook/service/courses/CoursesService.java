@@ -106,7 +106,7 @@ public class CoursesService {
                 .build();
     }
 
-    public CourseGradesResponse getGradesInCourseOfClass(Long classID) {
+    public CourseGradesResponse getGradesInCourseOfClass(Long courseID, Long classID) {
 
         Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
         List<Grade> grades = gradeRepository.findGradesByStudent_StudentClass_ClassId(classID);
@@ -119,20 +119,22 @@ public class CoursesService {
         }
 
         for (Grade grade: grades){
-            gradesOfStudents.get(grade.getStudent().getStudentId()).add(
-                                GradeDTO.builder()
-                                        .gradeID(grade.getGradeId())
-                                        .studentID(grade.getStudent().getStudentId())
-                                        .mark(grade.getMark())
-                                        .magnitude(grade.getMagnitude())
-                                        .description(grade.getDescription())
-                                        .date(dateFormat.format(grade.getDate()))
-                                        .build());
+            if (grade.getCourse().getCourseId().equals(courseID)) {
+                gradesOfStudents.get(grade.getStudent().getStudentId()).add(
+                        GradeDTO.builder()
+                                .gradeID(grade.getGradeId())
+                                .studentID(grade.getStudent().getStudentId())
+                                .mark(grade.getMark())
+                                .magnitude(grade.getMagnitude())
+                                .description(grade.getDescription())
+                                .date(dateFormat.format(grade.getDate()))
+                                .build());
+            }
             }
 
         return CourseGradesResponse.builder()
                 .status("Success")
-                .message("Successfully returning list of each student grades")
+                .message(String.format("Successfully returning list of each student grades for course: %d",courseID))
                 .studentsGrades(gradesOfStudents)
                 .build();
     }
