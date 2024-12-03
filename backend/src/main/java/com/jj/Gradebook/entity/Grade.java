@@ -4,6 +4,8 @@ package com.jj.Gradebook.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Grades")
 @AllArgsConstructor
@@ -26,6 +28,9 @@ public class Grade {
 
     @Column(name = "magnitude")
     private int magnitude;
+
+    @Column(name = "date")
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

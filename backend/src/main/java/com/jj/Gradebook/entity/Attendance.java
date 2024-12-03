@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Attendances")
@@ -21,7 +22,7 @@ public class Attendance {
     private Long attendanceId;
 
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private Date dateTime;
 
     @Column(name = "status")
     private String status;

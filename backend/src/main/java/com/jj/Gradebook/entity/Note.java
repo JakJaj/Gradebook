@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Notes")
@@ -32,12 +33,6 @@ public class Note {
     private String description;
 
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private Date dateTime;
 
-    public Note(Student student, Timetable timetable, String description, LocalDateTime dateTime) {
-        this.timetable = timetable;
-        this.student = student;
-        this.description = description;
-        this.dateTime = dateTime;
-    }
 }

@@ -1,18 +1,21 @@
 package com.jj.Gradebook.service.courses;
 
+import com.jj.Gradebook.controller.courses.CourseGradesResponse;
 import com.jj.Gradebook.controller.response.courses.CourseResponse;
 import com.jj.Gradebook.controller.response.courses.CoursesResponse;
-import com.jj.Gradebook.dao.CoursesRepository;
-import com.jj.Gradebook.dao.TeacherRepository;
+import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.CourseDTO;
+import com.jj.Gradebook.dto.GradeDTO;
 import com.jj.Gradebook.dto.TeacherDTO;
-import com.jj.Gradebook.entity.Course;
-import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.entity.*;
+import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,6 +23,11 @@ import java.util.List;
 public class CoursesService {
     private final CoursesRepository coursesRepository;
     private final TeacherRepository teacherRepository;
+    private final GradeRepository gradeRepository;
+    private final ClassRepository classRepository;
+    private final StudentRepository studentRepository;
+
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public CoursesResponse getAllCourses(){
@@ -95,6 +103,37 @@ public class CoursesService {
                 .status("Success")
                 .message("Successfully returning list of teacher's courses")
                 .courses(courseDTOList)
+                .build();
+    }
+
+    public CourseGradesResponse getGradesInCourseOfClass(Long classID) {
+
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+        List<Grade> grades = gradeRepository.findGradesByStudent_StudentClass_ClassId(classID);
+
+        HashMap<Long, List<GradeDTO>> gradesOfStudents = new HashMap<>();
+
+        List<Student> studentsOfClass = studentRepository.findStudentsByStudentClass_ClassId(theClass.getClassId());
+        for (Student student: studentsOfClass) {
+            gradesOfStudents.put(student.getStudentId(), new ArrayList<>());
+        }
+
+        for (Grade grade: grades){
+            gradesOfStudents.get(grade.getStudent().getStudentId()).add(
+                                GradeDTO.builder()
+                                        .gradeID(grade.getGradeId())
+                                        .studentID(grade.getStudent().getStudentId())
+                                        .mark(grade.getMark())
+                                        .magnitude(grade.getMagnitude())
+                                        .description(grade.getDescription())
+                                        .date(dateFormat.format(grade.getDate()))
+                                        .build());
+            }
+
+        return CourseGradesResponse.builder()
+                .status("Success")
+                .message("Successfully returning list of each student grades")
+                .studentsGrades(gradesOfStudents)
                 .build();
     }
 }
