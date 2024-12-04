@@ -1,5 +1,6 @@
 package com.jj.Gradebook.entity.Student_Parent;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -12,7 +13,6 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 public class StudentParentId implements Serializable {
-
     private Long studentId;
     private Long parentId;
 }

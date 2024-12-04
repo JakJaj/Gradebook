@@ -32,12 +32,6 @@ public class Parent {
     private User user;
 
     @OneToMany(mappedBy = "parent")
+    @EqualsAndHashCode.Exclude
     private Set<StudentParent> studentParents;
-
-    public Parent(String firstName, String lastName, User user) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.user = user;
-    }
-
 }
