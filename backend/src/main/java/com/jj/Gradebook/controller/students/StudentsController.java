@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller.students;
 
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
+import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
 import com.jj.Gradebook.controller.response.students.StudentGradesResponse;
 import com.jj.Gradebook.controller.response.students.StudentResponse;
@@ -47,5 +48,10 @@ public class StudentsController {
     @GetMapping("/{studentID}/attendances")
     public ResponseEntity<StudentAttendancesResponse> getStudentsAttendances(@PathVariable Long studentID){
         return ResponseEntity.ok(attendancesService.getStudentsAttendances(studentID));
+    }
+
+    @GetMapping("/{studentID}/parents")
+    public ResponseEntity<ParentsResponse> getParentsOfStudent(@PathVariable Long studentID){
+        return ResponseEntity.ok(studentsService.getParentsOfStudents(studentID));
     }
 }
