@@ -1,10 +1,12 @@
 package com.jj.Gradebook.service.attendances;
 
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
+import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
 import com.jj.Gradebook.dao.AttendanceRepository;
 import com.jj.Gradebook.dao.ClassRepository;
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dto.AttendanceDTO;
+import com.jj.Gradebook.dto.TimetableEntryDTO;
 import com.jj.Gradebook.entity.Attendance;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Student;
@@ -44,7 +46,7 @@ public class AttendancesService {
                     AttendanceDTO.builder()
                             .attendanceID(attendance.getAttendanceId())
                             .status(attendance.getStatus())
-                            .timetableID(attendance.getTimetable().getTimetableId())
+                            .timetable(null)
                             .studentID(attendance.getStudent().getStudentId())
                             .date(dateFormat.format(attendance.getDateTime()))
                             .build()
@@ -54,6 +56,35 @@ public class AttendancesService {
                 .status("Success")
                 .message(String.format("Successfully returning attendance of class with id - %d", theClass.getClassId()))
                 .studentsAttendance(studentsAttendance)
+                .build();
+    }
+
+    public StudentAttendancesResponse getStudentsAttendances(Long studentID) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        List<Attendance> attendanceList = attendanceRepository.findAttendancesByStudent_StudentId(studentID);
+
+        List<AttendanceDTO> attendanceDTOList = attendanceList.stream()
+                .map(attendance -> AttendanceDTO.builder()
+                        .attendanceID(attendance.getAttendanceId())
+                        .status(attendance.getStatus())
+                        .timetable(TimetableEntryDTO.builder()
+                                .timetableID(attendance.getTimetable().getTimetableId())
+                                .courseName(attendance.getTimetable().getCourse().getCourseName())
+                                .classID(student.getStudentClass().getClassId())
+                                .startTime(attendance.getTimetable().getStartTime().toString())
+                                .endTime(attendance.getTimetable().getEndTime().toString())
+                                .classroom(attendance.getTimetable().getClassroomNumber())
+                                .teacherName(attendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + attendance.getTimetable().getCourse().getTeacher().getLastName())
+                                .build())
+                        .studentID(studentID)
+                        .date(dateFormat.format(attendance.getDateTime()))
+                        .build())
+                .toList();
+
+        return StudentAttendancesResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully returning attendance of student with id - %d", studentID))
+                .attendances(attendanceDTOList)
                 .build();
     }
 }
