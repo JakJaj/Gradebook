@@ -71,6 +71,5 @@ public class TimetablesService {
                 .message(String.format("Successfully returning timetable for %s with userID - %d", user.getRole().toString().toLowerCase(), user.getUserId()))
                 .timetable(timetableEntry)
                 .build();
-
     }
 }
