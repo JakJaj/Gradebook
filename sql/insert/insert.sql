@@ -1,4 +1,3 @@
-
 insert into Classes (class_id, class_name, teacher_id, start_year)
 VALUES (1, "testowa klasa", 1, 2001);
 
@@ -35,6 +34,44 @@ VALUES(3, 1, 5, 1, "Opis3", 3, "2021-11-01");
 insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
 VALUES(4, 2, 5, 1, "Opis4", 3, "2021-11-01");
 
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(5, 1, 5, 3, "Opis4", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(6, 2, 5, 3, "Opis4", 3, "2021-11-01");
+
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (1, "2021-11-01", "Obecny", 1, 1);
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (2, "2021-11-01", "Spozniony", 2, 1);
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (3, "2021-11-01", "Obecny", 1, 1);
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(1, 1, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(2, 2, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(3, 1, 2, "Bla bla bla", "2021-11-01");
+    
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(1, "tytul", "opisa calego ogloszenia", "2021-10-09", 1);
+
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(2, "tytul2", "opisa drugiego calego ogloszenia", "2021-10-09", 1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(1,1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(2,1);
+
 select * from Users;
 select * from Students;
 select * from Parents;
@@ -43,3 +80,4 @@ select * from Classes;
 select * from Courses;
 select * from Timetables;
 select * from Grades;
+select * from Students_Parents;
