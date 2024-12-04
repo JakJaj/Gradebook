@@ -26,4 +26,14 @@ public class CoursesController {
     public ResponseEntity<CourseResponse> getCourseByCourseID(@PathVariable Long courseID){
         return ResponseEntity.ok(coursesService.getCourseByCourseID(courseID));
     }
+
+    @GetMapping("/teachers/{teacherID}")
+    public ResponseEntity<CoursesResponse> getCoursesOfTeacher(@PathVariable Long teacherID){
+        return ResponseEntity.ok(coursesService.getCoursesOfTeacher(teacherID));
+    }
+
+    @GetMapping("/{courseID}/classes/{classID}/grades")
+    public ResponseEntity<CourseGradesResponse> getGradesInCourseOfClass(@PathVariable Long courseID, @PathVariable Long classID){
+        return ResponseEntity.ok(coursesService.getGradesInCourseOfClass(courseID, classID));
+    }
 }

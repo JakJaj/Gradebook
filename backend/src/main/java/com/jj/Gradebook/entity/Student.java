@@ -50,6 +50,6 @@ public class Student {
     private User user;
 
     @OneToMany(mappedBy="student")
+    @EqualsAndHashCode.Exclude
     private Set<StudentParent> studentParents;
-
 }

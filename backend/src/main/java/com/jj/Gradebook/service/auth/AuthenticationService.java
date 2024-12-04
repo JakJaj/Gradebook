@@ -42,6 +42,7 @@ public class AuthenticationService {
     public AuthenticationResponse registerStudent(RegisterStudentRequest request){
 
         String generatedPassword = SecurityUtils.generateSalt(PASSWORD_LENGTH);
+        Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
 
         User user = registerUser(
                 RegisterRequest.builder()
@@ -57,7 +58,7 @@ public class AuthenticationService {
 
         try {
             Date date = dateFormat.parse(request.getStudent().getDateOfBirth());
-            Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
+
 
             Student student = Student.builder()
                     .firstName(request.getStudent().getFirstName())

@@ -1,20 +1,83 @@
-INSERT INTO Users (email, password, pesel, salt, token, enabled, role) VALUES("Teacher@test1.com","PasswordTeacher1","111111111","123SALT321", "321Token123", 1, "TEACHER");
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (1, "testowa klasa", 1, 2001);
 
-INSERT INTO Teachers (first_name, last_name, date_of_birth, date_of_employment, user_id) VALUES("Test1", "Nauczyciel1", STR_TO_DATE('01/09/1993', '%d/%m/%Y'), STR_TO_DATE('11/10/2015', '%d/%m/%Y'), 1);
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (2, "testowa klasa", 1, 2001);
 
-INSERT INTO Users (email, password, pesel, salt, token, enabled, role) VALUES("Teacher@test2.com","PasswordTeacher2","22222222222","123SALT321", "321Token123", 1, "TEACHER");
+insert into Courses(course_id, course_name, teacher_id, description)
+VALUES (1, "testowa lekcja", 1, "testowy opis testowej lekcji prowadzonej przez nauczyciela z id nr 1");
 
-INSERT INTO Teachers (first_name, last_name, date_of_birth, date_of_employment, user_id) VALUES("Test1", "Nauczyciel1", STR_TO_DATE('01/09/1993', '%d/%m/%Y'), STR_TO_DATE('11/10/2015', '%d/%m/%Y'), 2);
+insert into Courses(course_id, course_name, teacher_id, description)
+VALUES (2, "testowa lekcja", 1, "testowy opis testowej lekcji prowadzonej przez nauczyciela z id nr 1");
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (1,1,1, "9:00", "9:45", "101", 1);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (2,1,1, "9:00", "9:45", "101", 2);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (3,1,1, "9:00", "9:45", "101", 4);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (5,1,1, "10:00", "10:45", "101", 6);
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(1, 1, 4, 1, "Opis", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(2, 1, 2, 2, "Opis2", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(3, 1, 5, 1, "Opis3", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(4, 2, 5, 1, "Opis4", 3, "2021-11-01");
 
 
-INSERT INTO Users (email, password, pesel, salt, token, enabled, role) VALUES("Parent@test2.com","PasswordParent1","3333333333","234SALT432", "432Token234", 1, "PARENT");
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(5, 1, 5, 3, "Opis4", 3, "2021-11-01");
 
-INSERT INTO Parents (first_name, last_name, user_id) VALUES("Test1", "Rodzic1", 3);
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(6, 2, 5, 3, "Opis4", 3, "2021-11-01");
 
-INSERT INTO Users (email, password, pesel, salt, token, enabled, role) VALUES("Student@test3.com","PasswordStudent1","4444444444444","234SALT432", "432Token234", 1, "STUDENT");
 
-INSERT INTO Classes (class_name, teacher_id, start_year, enabled) VALUES("IVD", 1, 2020, 1);
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (1, "2021-11-01", "Obecny", 1, 1);
 
-INSERT INTO Students (first_name, last_name, date_of_birth, city, street, house_number, class_id, user_id) VALUES("Test1", "Uczen1", STR_TO_DATE('02/01/2005', '%d/%m/%Y'), "Bytom", "Katowicka", 1, 1, 4);
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (2, "2021-11-01", "Spozniony", 2, 1);
 
-INSERT INTO Courses (course_id, course_type, description, teacher_id) VALUES(1, "Matematyka", "Zajęcia z matematyki dla klas 1-6", 1);
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (3, "2021-11-01", "Obecny", 1, 1);
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(1, 1, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(2, 2, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(3, 1, 2, "Bla bla bla", "2021-11-01");
+    
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(1, "tytul", "opisa calego ogloszenia", "2021-10-09", 1);
+
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(2, "tytul2", "opisa drugiego calego ogloszenia", "2021-10-09", 1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(1,1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(2,1);
+
+select * from Users;
+select * from Students;
+select * from Parents;
+select * from Teachers;
+select * from Classes;
+select * from Courses;
+select * from Timetables;
+select * from Grades;
+select * from Students_Parents;
