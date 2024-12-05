@@ -32,11 +32,11 @@ public class Timetable {
     @Column(name = "day_of_week")
     private int dayOfWeek;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "class_id")
     private Class clas;
 

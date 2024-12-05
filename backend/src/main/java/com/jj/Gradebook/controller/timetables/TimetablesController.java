@@ -1,13 +1,12 @@
 package com.jj.Gradebook.controller.timetables;
 
+import com.jj.Gradebook.controller.request.timetables.CreateTimetableEntry;
+import com.jj.Gradebook.controller.request.timetables.CreateTimetableRequest;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.service.timetable.TimetablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/timetables")
@@ -20,5 +19,10 @@ public class TimetablesController {
     @GetMapping("/users/{userID}")
     public ResponseEntity<TimetableResponse> getUsersTimetable(@PathVariable Long userID){
         return ResponseEntity.ok(timetablesService.getUsersTimetable(userID));
+    }
+
+    @PostMapping()
+    public ResponseEntity<TimetableResponse> createNewTimetableEntry(@RequestBody CreateTimetableRequest request){
+        return ResponseEntity.ok(timetablesService.createNewTimetableEntry(request));
     }
 }

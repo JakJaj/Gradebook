@@ -1,4 +1,4 @@
-package com.jj.Gradebook.controller.request;
+package com.jj.Gradebook.controller.request.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface TimetableRepository extends JpaRepository<Timetable, Long> {
     List<Timetable> findTimetablesByClas_ClassId(Long classID);
     List<Timetable> findTimetablesByCourse_Teacher_TeacherId(Long teacherID);
+    void deleteAllByClas_ClassId(Long classID);
 }

@@ -1,7 +1,6 @@
-package com.jj.Gradebook.controller.request;
+package com.jj.Gradebook.controller.request.auth;
 
 import com.jj.Gradebook.dto.StudentDTO;
-import com.jj.Gradebook.entity.Student;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
