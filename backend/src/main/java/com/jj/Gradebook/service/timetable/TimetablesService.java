@@ -67,7 +67,7 @@ public class TimetablesService {
 
         attendanceRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
         noteRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
-        
+
         timetableRepository.deleteAllByClas_ClassId(theClass.getClassId());
 
 
