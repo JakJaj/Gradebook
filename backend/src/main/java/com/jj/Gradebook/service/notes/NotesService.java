@@ -72,7 +72,6 @@ public class NotesService {
                     .dateTime(dateFormat.parse(request.getDate()))
                     .build());
 
-
             return StudentNotesResponse.builder()
                     .status("Success")
                     .message("Successfully returning created note")
