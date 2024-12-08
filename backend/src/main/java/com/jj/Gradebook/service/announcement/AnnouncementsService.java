@@ -1,13 +1,20 @@
 package com.jj.Gradebook.service.announcement;
 
+import com.jj.Gradebook.controller.request.announcements.CreateAnnouncementRequest;
+import com.jj.Gradebook.controller.response.announcements.AnnouncementResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementsResponse;
 import com.jj.Gradebook.dao.AnnouncementRepository;
+import com.jj.Gradebook.dao.TeacherRepository;
 import com.jj.Gradebook.dto.AnnouncementDTO;
 import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Announcements;
+import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.exceptions.DateFormatException;
+import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -16,6 +23,8 @@ import java.util.List;
 public class AnnouncementsService {
 
     private final AnnouncementRepository announcementRepository;
+    private final TeacherRepository teacherRepository;
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     public AnnouncementsResponse getAllAnnouncements() {
 
@@ -42,5 +51,39 @@ public class AnnouncementsService {
                 .message("Successfully returning all announcements")
                 .announcements(announcementDTOList)
                 .build();
+    }
+
+    public AnnouncementResponse createNewAnnouncement(CreateAnnouncementRequest request) {
+        Teacher teacher = teacherRepository.findById(request.getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d",request.getTeacherID())));
+
+        try {
+            Announcements announcement = announcementRepository.save(Announcements.builder()
+                    .title(request.getTitle())
+                    .content(request.getContent())
+                    .dateTime(dateFormat.parse(request.getDate()))
+                    .teacher(teacher)
+                    .build());
+
+            return AnnouncementResponse.builder()
+                    .status("Success")
+                    .message("Successfully created new announcement")
+                    .announcement(AnnouncementDTO.builder()
+                            .announcementID(announcement.getAnnouncementId())
+                            .title(announcement.getTitle())
+                            .content(announcement.getContent())
+                            .date(dateFormat.format(announcement.getDateTime()))
+                            .teacher(TeacherDTO.builder()
+                                    .teacherID(announcement.getTeacher().getTeacherId())
+                                    .firstName(announcement.getTeacher().getFirstName())
+                                    .lastName(announcement.getTeacher().getLastName())
+                                    .dateOfBirth(dateFormat.format(announcement.getTeacher().getDateOfBirth()))
+                                    .dateOfEmployment(dateFormat.format(announcement.getTeacher().getDateOfEmployment()))
+                                    .build())
+                            .build())
+                    .build();
+        }catch (ParseException ex){
+            throw new DateFormatException("Wrong date format");
+        }
+
     }
 }

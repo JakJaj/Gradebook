@@ -1,19 +1,24 @@
 package com.jj.Gradebook.service.attendances;
 
+import com.jj.Gradebook.controller.request.attendances.CreateAttendanceRequest;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
 import com.jj.Gradebook.dao.AttendanceRepository;
 import com.jj.Gradebook.dao.ClassRepository;
 import com.jj.Gradebook.dao.StudentRepository;
+import com.jj.Gradebook.dao.TimetableRepository;
 import com.jj.Gradebook.dto.AttendanceDTO;
 import com.jj.Gradebook.dto.TimetableEntryDTO;
 import com.jj.Gradebook.entity.Attendance;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Student;
+import com.jj.Gradebook.entity.Timetable;
+import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +31,8 @@ public class AttendancesService {
     private final AttendanceRepository attendanceRepository;
     private final ClassRepository classRepository;
     private final StudentRepository studentRepository;
+    private final TimetableRepository timetableRepository;
+
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     public ClassAttendanceResponse getAttendanceOfClass(Long classID) {
@@ -86,5 +93,43 @@ public class AttendancesService {
                 .message(String.format("Successfully returning attendance of student with id - %d", studentID))
                 .attendances(attendanceDTOList)
                 .build();
+    }
+
+    public StudentAttendancesResponse createNewAttendance(Long studentID, CreateAttendanceRequest request) {
+
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No user with id - %d", studentID)));
+        Timetable timetable = timetableRepository.findById(request.getTimetableID()).orElseThrow(() -> new NoSuchEntityException(String.format("No timetable with id - %d", request.getTimetableID())));
+
+        try {
+            Attendance attendance = attendanceRepository.save(Attendance.builder()
+                    .status(request.getStatus())
+                    .student(student)
+                    .timetable(timetable)
+                    .dateTime(dateFormat.parse(request.getDate()))
+                    .build());
+
+
+            return StudentAttendancesResponse.builder()
+                    .status("Success")
+                    .message("Successfully created new attendance entry")
+                    .attendances(List.of(AttendanceDTO.builder()
+                            .attendanceID(attendance.getAttendanceId())
+                            .status(attendance.getStatus())
+                            .date(dateFormat.format(attendance.getDateTime()))
+                            .studentID(student.getStudentId())
+                            .timetable(TimetableEntryDTO.builder()
+                                    .timetableID(attendance.getTimetable().getTimetableId())
+                                    .courseName(attendance.getTimetable().getCourse().getCourseName())
+                                    .classID(attendance.getTimetable().getClas().getClassId())
+                                    .startTime(attendance.getTimetable().getStartTime().toString())
+                                    .endTime(attendance.getTimetable().getEndTime().toString())
+                                    .classroom(attendance.getTimetable().getClassroomNumber())
+                                    .teacherName(attendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + attendance.getTimetable().getCourse().getTeacher().getLastName())
+                                    .build())
+                            .build()))
+                    .build();
+        }catch (ParseException ex){
+            throw new DateFormatException("Wrong date format");
+        }
     }
 }

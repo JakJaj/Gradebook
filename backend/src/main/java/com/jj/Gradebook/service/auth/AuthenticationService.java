@@ -4,7 +4,7 @@ package com.jj.Gradebook.service.auth;
 
 import com.jj.Gradebook.config.JwtService;
 import com.jj.Gradebook.controller.auth.SecurityUtils;
-import com.jj.Gradebook.controller.request.*;
+import com.jj.Gradebook.controller.request.auth.*;
 import com.jj.Gradebook.controller.response.auth.AuthenticationResponse;
 import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.entity.Class;

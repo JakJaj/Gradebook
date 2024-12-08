@@ -1,6 +1,7 @@
-package com.jj.Gradebook.controller.request;
+package com.jj.Gradebook.controller.request.auth;
 
-import com.jj.Gradebook.dto.TeacherDTO;
+
+import com.jj.Gradebook.dto.ParentDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class RegisterTeacherRequest extends RegisterRequest{
-    private TeacherDTO teacher;
+public class RegisterParentRequest extends RegisterRequest{
+    private ParentDTO parent;
 }

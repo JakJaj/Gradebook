@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller.classes;
 
+import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
@@ -9,10 +10,7 @@ import com.jj.Gradebook.service.attendances.AttendancesService;
 import com.jj.Gradebook.service.classes.ClassesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/classes")
@@ -45,5 +43,10 @@ public class ClassController {
     @GetMapping("/{classID}/attendances")
     public ResponseEntity<ClassAttendanceResponse> getAttendanceOfClass(@PathVariable Long classID){
         return ResponseEntity.ok(attendancesService.getAttendanceOfClass(classID));
+    }
+
+    @PostMapping()
+    public ResponseEntity<ClassResponse> createNewClass(@RequestBody CreateClassRequest request){
+        return ResponseEntity.ok(classesService.createNewClass(request));
     }
 }

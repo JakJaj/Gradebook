@@ -1,5 +1,6 @@
 package com.jj.Gradebook.service.classes;
 
+import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ClassesService {
     private final ClassRepository classRepository;
     private final TimetableRepository timetableRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -139,6 +142,33 @@ public class ClassesService {
                 .status("Success")
                 .message(String.format("Returning list of students from class %s" , theClass.getClassName()))
                 .students(studentDTOList)
+                .build();
+    }
+
+    public ClassResponse createNewClass(CreateClassRequest request) {
+
+        Teacher teacher = teacherRepository.findById(request.getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTeacherID())));
+        Class theClass = classRepository.save(Class.builder()
+                .className(request.getClassName())
+                .startYear(Year.of(request.getStartYear()))
+                .teacher(teacher)
+                .build());
+
+        return ClassResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully created new class with id - %d", theClass.getClassId()))
+                .theClass(ClassDTO.builder()
+                        .classID(theClass.getClassId())
+                        .className(theClass.getClassName())
+                        .startYear(theClass.getStartYear().getValue())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(theClass.getTeacher().getTeacherId())
+                                .firstName(theClass.getTeacher().getFirstName())
+                                .lastName(theClass.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(theClass.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(theClass.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
                 .build();
     }
 }
