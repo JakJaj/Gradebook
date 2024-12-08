@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller.students;
 
+import com.jj.Gradebook.controller.request.attendances.CreateAttendanceRequest;
 import com.jj.Gradebook.controller.request.grades.CreateGradeRequest;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
@@ -59,5 +60,10 @@ public class StudentsController {
     @PostMapping("/{studentID}/grades")
     public ResponseEntity<StudentGradesResponse> createNewGrade(@PathVariable Long studentID, @RequestBody CreateGradeRequest request){
         return ResponseEntity.ok(gradesService.createNewGrade(request, studentID));
+    }
+
+    @PostMapping("/{studentID}/attendances")
+    public ResponseEntity<StudentAttendancesResponse> createNewAttendance(@PathVariable Long studentID, @RequestBody CreateAttendanceRequest request){
+        return ResponseEntity.ok(attendancesService.createNewAttendance(studentID, request));
     }
 }
