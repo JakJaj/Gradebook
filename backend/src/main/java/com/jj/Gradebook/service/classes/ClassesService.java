@@ -1,6 +1,7 @@
 package com.jj.Gradebook.service.classes;
 
 import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
+import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
@@ -167,6 +168,35 @@ public class ClassesService {
                                 .lastName(theClass.getTeacher().getLastName())
                                 .dateOfBirth(dateFormat.format(theClass.getTeacher().getDateOfBirth()))
                                 .dateOfEmployment(dateFormat.format(theClass.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
+                .build();
+    }
+
+    public ClassResponse updateClassDetails(UpdateClassDetailsRequest request) {
+        Class theClass = classRepository.findById(request.getTheClass().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getTheClass().getClassID())));
+        Teacher teacher = teacherRepository.findById(request.getTheClass().getTutorID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTheClass().getTutorID())));
+
+        Class savedClass = classRepository.save(Class.builder()
+                .classId(theClass.getClassId())
+                .className(request.getTheClass().getClassName())
+                .startYear(Year.of(request.getTheClass().getStartYear()))
+                .teacher(teacher)
+                .build());
+
+        return ClassResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully updated class with id - %d", savedClass.getClassId()))
+                .theClass(ClassDTO.builder()
+                        .classID(savedClass.getClassId())
+                        .className(savedClass.getClassName())
+                        .startYear(savedClass.getStartYear().getValue())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(savedClass.getTeacher().getTeacherId())
+                                .firstName(savedClass.getTeacher().getFirstName())
+                                .lastName(savedClass.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(savedClass.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(savedClass.getTeacher().getDateOfEmployment()))
                                 .build())
                         .build())
                 .build();

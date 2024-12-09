@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller.classes;
 
 import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
+import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
@@ -48,5 +49,10 @@ public class ClassController {
     @PostMapping()
     public ResponseEntity<ClassResponse> createNewClass(@RequestBody CreateClassRequest request){
         return ResponseEntity.ok(classesService.createNewClass(request));
+    }
+
+    @PutMapping()
+    public ResponseEntity<ClassResponse> updateClassDetails(@RequestBody UpdateClassDetailsRequest request){
+        return ResponseEntity.ok(classesService.updateClassDetails(request));
     }
 }
