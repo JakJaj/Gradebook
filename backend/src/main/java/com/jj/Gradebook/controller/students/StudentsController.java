@@ -3,6 +3,7 @@ package com.jj.Gradebook.controller.students;
 import com.jj.Gradebook.controller.request.attendances.CreateAttendanceRequest;
 import com.jj.Gradebook.controller.request.grades.CreateGradeRequest;
 import com.jj.Gradebook.controller.request.notes.CreateNoteRequest;
+import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
@@ -71,5 +72,10 @@ public class StudentsController {
     @PostMapping("/{studentID}/notes")
     public ResponseEntity<StudentNotesResponse> createNewNote(@PathVariable Long studentID, @RequestBody CreateNoteRequest request){
         return ResponseEntity.ok(notesService.createNewNote(studentID, request));
+    }
+
+    @PutMapping()
+    public ResponseEntity<StudentResponse> updateStudentDetails(@RequestBody UpdateStudentDetailsRequest request){
+        return ResponseEntity.ok(studentsService.updateStudentDetails(request));
     }
 }
