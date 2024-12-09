@@ -1,5 +1,7 @@
 package com.jj.Gradebook.controller.parents;
 
+import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
+import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
@@ -7,10 +9,7 @@ import com.jj.Gradebook.service.parents.ParentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/parents")
@@ -31,5 +30,15 @@ public class ParentsController {
     @GetMapping("/{parentID}/students")
     public ResponseEntity<StudentsResponse> getStudentsOfParent(@PathVariable Long parentID){
         return ResponseEntity.ok(parentsService.getStudentsOfParent(parentID));
+    }
+
+    @PostMapping("/{parentID}/students")
+    public ResponseEntity<StudentsResponse> addNewStudentToAParents(@PathVariable Long parentID, @RequestBody AddNewStudentsToParentRequest request){
+        return ResponseEntity.ok(parentsService.addNewStudentsToParentRequest(parentID, request));
+    }
+
+    @PutMapping()
+    public ResponseEntity<ParentResponse> updateParentDetails(@RequestBody UpdateParentDetailsRequest request){
+        return ResponseEntity.ok(parentsService.updateParentDetails(request));
     }
 }

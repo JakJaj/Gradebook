@@ -1,17 +1,22 @@
 package com.jj.Gradebook.service.students;
 
+import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
+import com.jj.Gradebook.dao.ClassRepository;
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.dto.StudentDTO;
+import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Student_Parent.StudentParent;
+import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ import java.util.Set;
 public class StudentsService {
 
     private final StudentRepository studentRepository;
+    private final ClassRepository classRepository;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public StudentsResponse getAllStudents() {
@@ -87,5 +93,41 @@ public class StudentsService {
                 .message("Successfully returning list of students parents")
                 .parents(parents)
                 .build();
+    }
+
+    public StudentResponse updateStudentDetails(UpdateStudentDetailsRequest request) {
+        Student student = studentRepository.findById(request.getStudent().getStudentID()).orElseThrow(() -> new NoSuchEntityException(String.format("No user with id - %d", request.getStudent().getStudentID())));
+        Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
+
+        try {
+            Student updatedStudent = studentRepository.save(Student.builder()
+                    .studentId(student.getStudentId())
+                    .firstName(request.getStudent().getFirstName())
+                    .lastName(request.getStudent().getLastName())
+                    .dateOfBirth(dateFormat.parse(request.getStudent().getDateOfBirth()))
+                    .city(request.getStudent().getCity())
+                    .street(request.getStudent().getStreet())
+                    .houseNumber(request.getStudent().getHouseNumber())
+                    .studentClass(theClass)
+                    .user(student.getUser())
+                    .build());
+
+            return StudentResponse.builder()
+                    .status("Success")
+                    .message(String.format("Successfully updated student data with id - %d", request.getStudent().getStudentID()))
+                    .student(StudentDTO.builder()
+                            .studentID(updatedStudent.getStudentId())
+                            .classID(updatedStudent.getStudentClass().getClassId())
+                            .firstName(updatedStudent.getFirstName())
+                            .lastName(updatedStudent.getLastName())
+                            .dateOfBirth(dateFormat.format(updatedStudent.getDateOfBirth()))
+                            .city(updatedStudent.getCity())
+                            .street(updatedStudent.getStreet())
+                            .houseNumber(updatedStudent.getHouseNumber())
+                            .build())
+                    .build();
+        }catch (ParseException exception){
+            throw new DateFormatException("Wrong date format");
+        }
     }
 }

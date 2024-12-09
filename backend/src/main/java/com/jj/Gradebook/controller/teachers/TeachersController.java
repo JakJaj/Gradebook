@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller.teachers;
 
+import com.jj.Gradebook.controller.request.teachers.UpdateTeacherDetailsRequest;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.controller.response.teachers.TeacherResponse;
 import com.jj.Gradebook.controller.response.teachers.TeachersResponse;
@@ -27,5 +28,10 @@ public class TeachersController{
     @GetMapping("/{teacherID}")
     public ResponseEntity<TeacherResponse> getTeacherByID(@PathVariable Long teacherID){
         return ResponseEntity.ok(teachersService.getTeacherByID(teacherID));
+    }
+
+    @PutMapping()
+    public ResponseEntity<TeacherResponse> updateTeacherDetails(@RequestBody UpdateTeacherDetailsRequest request){
+        return ResponseEntity.ok(teachersService.updateTeacherDetails(request));
     }
 }
