@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
+import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
@@ -34,5 +35,10 @@ public class ParentsController {
     @PostMapping("/{parentID}/students")
     public ResponseEntity<StudentsResponse> addNewStudentToAParents(@PathVariable Long parentID, @RequestBody AddNewStudentsToParentRequest request){
         return ResponseEntity.ok(parentsService.addNewStudentsToParentRequest(parentID, request));
+    }
+
+    @PutMapping()
+    public ResponseEntity<ParentResponse> updateParentDetails(@RequestBody UpdateParentDetailsRequest request){
+        return ResponseEntity.ok(parentsService.updateParentDetails(request));
     }
 }

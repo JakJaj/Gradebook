@@ -1,6 +1,7 @@
 package com.jj.Gradebook.service.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
+import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
@@ -137,6 +138,27 @@ public class ParentsService {
                                         .houseNumber(student.getStudent().getHouseNumber())
                                         .build()
                                 ).toList())
+                .build();
+    }
+
+    public ParentResponse updateParentDetails(UpdateParentDetailsRequest request) {
+        Parent parent = parentRepository.findById(request.getParent().getParentID()).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", request.getParent().getParentID())));
+
+        Parent savedParent = parentRepository.save(Parent.builder()
+                .parentId(parent.getParentId())
+                .firstName(request.getParent().getFirstName())
+                .lastName(request.getParent().getLastName())
+                .user(parent.getUser())
+                .build());
+
+        return ParentResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully updated details of student with id - %d", savedParent.getParentId()))
+                .parent(ParentDTO.builder()
+                        .parentID(parent.getParentId())
+                        .firstName(parent.getFirstName())
+                        .lastName(parent.getLastName())
+                        .build())
                 .build();
     }
 }
