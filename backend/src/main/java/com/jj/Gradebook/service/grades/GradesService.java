@@ -1,6 +1,8 @@
 package com.jj.Gradebook.service.grades;
 
 import com.jj.Gradebook.controller.request.grades.CreateGradeRequest;
+import com.jj.Gradebook.controller.request.grades.UpdateGradeDetailsRequest;
+import com.jj.Gradebook.controller.response.grades.GradeResponse;
 import com.jj.Gradebook.controller.response.students.StudentGradesResponse;
 import com.jj.Gradebook.dao.CoursesRepository;
 import com.jj.Gradebook.dao.GradeRepository;
@@ -96,5 +98,40 @@ public class GradesService {
         }
 
 
+    }
+
+    public GradeResponse updateGradeDetails(Long studentID, UpdateGradeDetailsRequest request) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d",studentID)));
+        Grade grade = gradeRepository.findById(request.getGradeID()).orElseThrow(() -> new NoSuchEntityException(String.format("No grade with id - %d", request.getGradeID())));
+
+        if (!grade.getStudent().getStudentId().equals(studentID)) throw new NoSuchEntityException("Selected grade isn't a grade of picked student");
+
+        try {
+            Grade savedGrade = gradeRepository.save(Grade.builder()
+                    .gradeId(request.getGradeID())
+                    .course(grade.getCourse())
+                    .mark(request.getMark())
+                    .magnitude(request.getMagnitude())
+                    .description(request.getDescription())
+                    .date(dateFormat.parse(request.getDate()))
+                    .student(student)
+                    .build());
+
+            return GradeResponse.builder()
+                    .status("Success")
+                    .message(String.format("Successfully updated grade with id - %d", grade.getGradeId()))
+                    .grade(GradeDTO.builder()
+                            .gradeID(savedGrade.getGradeId())
+                            .studentID(savedGrade.getStudent().getStudentId())
+                            .mark(savedGrade.getMark())
+                            .magnitude(savedGrade.getMagnitude())
+                            .description(savedGrade.getDescription())
+                            .date(dateFormat.format(savedGrade.getDate()))
+                            .build())
+                    .build();
+
+        }catch (ParseException ex){
+            throw new DateFormatException("Wrong date format");
+        }
     }
 }

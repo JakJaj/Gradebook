@@ -25,4 +25,5 @@ public class TimetablesController {
     public ResponseEntity<TimetableResponse> createNewTimetableEntry(@RequestBody CreateTimetableRequest request){
         return ResponseEntity.ok(timetablesService.createNewTimetableEntry(request));
     }
+
 }
