@@ -99,4 +99,9 @@ public class StudentsController {
     public ResponseEntity<NoteResponse> updateNoteDetails(@PathVariable Long studentID, @RequestBody UpdateNoteDetailsRequest request){
         return ResponseEntity.ok(notesService.updateNoteDetails(studentID, request));
     }
+
+    @DeleteMapping("/{studentID}/grades/{gradeID}")
+    public ResponseEntity<StudentGradesResponse> deleteGrade(@PathVariable Long studentID, @PathVariable Long gradeID){
+        return ResponseEntity.ok(gradesService.deleteGrade(studentID, gradeID));
+    }
 }

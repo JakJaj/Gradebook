@@ -134,4 +134,15 @@ public class GradesService {
             throw new DateFormatException("Wrong date format");
         }
     }
+
+    public StudentGradesResponse deleteGrade(Long studentID, Long gradeID) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d",studentID)));
+        Grade grade = gradeRepository.findById(gradeID).orElseThrow(() -> new NoSuchEntityException(String.format("No grade with id - %d", gradeID)));
+
+        if (!grade.getStudent().getStudentId().equals(studentID)) throw new NoSuchEntityException("Selected grade isn't a grade of picked student");
+
+        gradeRepository.delete(grade);
+
+        return getAllStudentsGrades(studentID);
+    }
 }
