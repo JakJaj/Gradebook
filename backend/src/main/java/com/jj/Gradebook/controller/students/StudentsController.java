@@ -110,4 +110,8 @@ public class StudentsController {
         return ResponseEntity.ok(attendancesService.deleteAttendance(studentID, attendanceID));
     }
 
+    @DeleteMapping("/{studentID}/notes/{noteID}")
+    public ResponseEntity<StudentNotesResponse> deleteNote(@PathVariable Long studentID, @PathVariable Long noteID){
+        return ResponseEntity.ok(notesService.deleteNote(studentID, noteID));
+    }
 }

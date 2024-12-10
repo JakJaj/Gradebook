@@ -136,4 +136,14 @@ public class NotesService {
             throw new DateFormatException("Wrong date format");
         }
     }
+
+    public StudentNotesResponse deleteNote(Long studentID, Long noteID) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        Note note = noteRepository.findById(noteID).orElseThrow(() -> new NoSuchEntityException(String.format("No note with id - %d", noteID)));
+        if (!note.getStudent().getStudentId().equals(student.getStudentId())) throw new NoSuchEntityException("Selected note isn't a note of picked student");
+
+        noteRepository.delete(note);
+
+        return getAllStudentsNotes(studentID);
+    }
 }

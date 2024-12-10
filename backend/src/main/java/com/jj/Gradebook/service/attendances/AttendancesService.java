@@ -175,7 +175,7 @@ public class AttendancesService {
     }
 
     public StudentAttendancesResponse deleteAttendance(Long studentID, Long attendanceID) {
-        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
         Attendance attendance = attendanceRepository.findById(attendanceID).orElseThrow(() -> new NoSuchEntityException(String.format("No attendance with id - %d", attendanceID)));
         if (!attendance.getStudent().getStudentId().equals(studentID)) throw new NoSuchEntityException("Selected attendance isn't a attendance of picked student");
 
