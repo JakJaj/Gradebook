@@ -1,6 +1,8 @@
 package com.jj.Gradebook.service.attendances;
 
 import com.jj.Gradebook.controller.request.attendances.CreateAttendanceRequest;
+import com.jj.Gradebook.controller.request.attendances.UpdateAttendanceDetailsRequest;
+import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
 import com.jj.Gradebook.dao.AttendanceRepository;
@@ -127,6 +129,45 @@ public class AttendancesService {
                                     .teacherName(attendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + attendance.getTimetable().getCourse().getTeacher().getLastName())
                                     .build())
                             .build()))
+                    .build();
+        }catch (ParseException ex){
+            throw new DateFormatException("Wrong date format");
+        }
+    }
+
+    public AttendanceResponse updateAttendanceDetails(Long studentID, UpdateAttendanceDetailsRequest request) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        Attendance attendance = attendanceRepository.findById(request.getAttendanceID()).orElseThrow(() -> new NoSuchEntityException(String.format("No attendance with id - %d", request.getAttendanceID())));
+        if (!attendance.getStudent().getStudentId().equals(studentID)) throw new NoSuchEntityException("Selected attendance isn't a attendance of picked student");
+
+        try {
+
+            Attendance savedAttendance = attendanceRepository.save(Attendance.builder()
+                    .attendanceId(attendance.getAttendanceId())
+                    .dateTime(dateFormat.parse(request.getDate()))
+                    .status(request.getStatus())
+                    .student(student)
+                    .timetable(attendance.getTimetable())
+                    .build());
+
+            return AttendanceResponse.builder()
+                    .status("Success")
+                    .message(String.format("Successfully updated attendance with id - %d", savedAttendance.getAttendanceId()))
+                    .attendance(AttendanceDTO.builder()
+                            .attendanceID(savedAttendance.getAttendanceId())
+                            .status(savedAttendance.getStatus())
+                            .date(dateFormat.format(savedAttendance.getDateTime()))
+                            .studentID(student.getStudentId())
+                            .timetable(TimetableEntryDTO.builder()
+                                    .timetableID(savedAttendance.getTimetable().getTimetableId())
+                                    .courseName(savedAttendance.getTimetable().getCourse().getCourseName())
+                                    .classID(savedAttendance.getTimetable().getClas().getClassId())
+                                    .startTime(savedAttendance.getTimetable().getStartTime().toString())
+                                    .endTime(savedAttendance.getTimetable().getEndTime().toString())
+                                    .classroom(savedAttendance.getTimetable().getClassroomNumber())
+                                    .teacherName(savedAttendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + savedAttendance.getTimetable().getCourse().getTeacher().getLastName())
+                                    .build())
+                            .build())
                     .build();
         }catch (ParseException ex){
             throw new DateFormatException("Wrong date format");
