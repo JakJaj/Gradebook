@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
 import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
@@ -15,6 +16,7 @@ import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Student_Parent.StudentParent;
 import com.jj.Gradebook.entity.Student_Parent.StudentParentId;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -159,6 +161,21 @@ public class ParentsService {
                         .firstName(parent.getFirstName())
                         .lastName(parent.getLastName())
                         .build())
+                .build();
+    }
+
+    @Transactional
+    public BaseResponse deleteStudentFromParent(Long parentID, Long studentID) {
+        Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", parentID)));
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+
+        StudentParent studentParent = studentParentRepository.getStudentParentByStudent_StudentIdAndParent_ParentId(studentID, parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d is assigned to parent with id - %d", studentID, parentID)));
+
+        studentParentRepository.delete(studentParent);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted student with id - %d from parent with id - %d", studentID, parentID))
                 .build();
     }
 }

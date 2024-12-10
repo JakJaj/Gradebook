@@ -2,6 +2,7 @@ package com.jj.Gradebook.controller.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
 import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
@@ -40,5 +41,10 @@ public class ParentsController {
     @PutMapping()
     public ResponseEntity<ParentResponse> updateParentDetails(@RequestBody UpdateParentDetailsRequest request){
         return ResponseEntity.ok(parentsService.updateParentDetails(request));
+    }
+
+    @DeleteMapping("/{parentID}/students/{studentID}")
+    public ResponseEntity<BaseResponse> deleteStudentFromParent(@PathVariable Long parentID, @PathVariable Long studentID){
+        return ResponseEntity.ok(parentsService.deleteStudentFromParent(parentID, studentID));
     }
 }
