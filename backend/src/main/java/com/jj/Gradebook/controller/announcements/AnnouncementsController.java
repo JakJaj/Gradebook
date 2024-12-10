@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller.announcements;
 
 import com.jj.Gradebook.controller.request.announcements.CreateAnnouncementRequest;
+import com.jj.Gradebook.controller.request.announcements.UpdateAnnouncementDetailsRequest;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementsResponse;
 import com.jj.Gradebook.service.announcement.AnnouncementsService;
@@ -23,5 +24,10 @@ public class AnnouncementsController {
     @PostMapping()
     public ResponseEntity<AnnouncementResponse> createNewAnnouncements(@RequestBody CreateAnnouncementRequest request){
         return ResponseEntity.ok(announcementsService.createNewAnnouncement(request));
+    }
+
+    @PutMapping()
+    public ResponseEntity<AnnouncementResponse> updateAnnouncementDetails(@RequestBody UpdateAnnouncementDetailsRequest request){
+        return ResponseEntity.ok(announcementsService.updateAnnouncementDetail(request));
     }
 }
