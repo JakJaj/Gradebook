@@ -5,9 +5,11 @@ import com.jj.Gradebook.controller.request.attendances.UpdateAttendanceDetailsRe
 import com.jj.Gradebook.controller.request.grades.CreateGradeRequest;
 import com.jj.Gradebook.controller.request.grades.UpdateGradeDetailsRequest;
 import com.jj.Gradebook.controller.request.notes.CreateNoteRequest;
+import com.jj.Gradebook.controller.request.notes.UpdateNoteDetailsRequest;
 import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
 import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
 import com.jj.Gradebook.controller.response.grades.GradeResponse;
+import com.jj.Gradebook.controller.response.notes.NoteResponse;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
@@ -91,5 +93,10 @@ public class StudentsController {
     @PutMapping("/{studentID}/attendances")
     public ResponseEntity<AttendanceResponse> updateAttendanceDetail(@PathVariable Long studentID, @RequestBody UpdateAttendanceDetailsRequest request){
         return ResponseEntity.ok(attendancesService.updateAttendanceDetails(studentID, request));
+    }
+
+    @PutMapping("/{studentID}/notes")
+    public ResponseEntity<NoteResponse> updateNoteDetails(@PathVariable Long studentID, @RequestBody UpdateNoteDetailsRequest request){
+        return ResponseEntity.ok(notesService.updateNoteDetails(studentID, request));
     }
 }

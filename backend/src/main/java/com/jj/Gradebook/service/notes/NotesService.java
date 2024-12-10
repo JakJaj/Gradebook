@@ -1,6 +1,8 @@
 package com.jj.Gradebook.service.notes;
 
 import com.jj.Gradebook.controller.request.notes.CreateNoteRequest;
+import com.jj.Gradebook.controller.request.notes.UpdateNoteDetailsRequest;
+import com.jj.Gradebook.controller.response.notes.NoteResponse;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
 import com.jj.Gradebook.dao.NoteRepository;
 import com.jj.Gradebook.dao.StudentRepository;
@@ -90,6 +92,45 @@ public class NotesService {
                                     .teacherName(note.getTimetable().getCourse().getTeacher().getFirstName() + " " + note.getTimetable().getCourse().getTeacher().getLastName())
                                     .build())
                             .build()))
+                    .build();
+        }catch (ParseException ex){
+            throw new DateFormatException("Wrong date format");
+        }
+    }
+
+    public NoteResponse updateNoteDetails(Long studentID, UpdateNoteDetailsRequest request) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        Note note = noteRepository.findById(request.getNoteID()).orElseThrow(() -> new NoSuchEntityException(String.format("No note with id - %d",request.getNoteID())));
+
+        if (!note.getNoteId().equals(request.getNoteID())) throw new NoSuchEntityException("Selected note isn't a note of picked student");
+
+        try {
+            Note savedNote = noteRepository.save(Note.builder()
+                    .noteId(note.getNoteId())
+                    .student(student)
+                    .timetable(note.getTimetable())
+                    .description(request.getDescription())
+                    .dateTime(dateFormat.parse(request.getDate()))
+                    .build());
+
+            return NoteResponse.builder()
+                    .status("Success")
+                    .message(String.format("Successfully updated note with id - %d", savedNote.getNoteId()))
+                    .note(NoteDTO.builder()
+                            .noteID(savedNote.getNoteId())
+                            .description(savedNote.getDescription())
+                            .date(dateFormat.format(savedNote.getDateTime()))
+                            .studentID(note.getStudent().getStudentId())
+                            .timetableEntry(TimetableEntryDTO.builder()
+                                    .timetableID(savedNote.getTimetable().getTimetableId())
+                                    .courseName(savedNote.getTimetable().getCourse().getCourseName())
+                                    .classID(student.getStudentClass().getClassId())
+                                    .startTime(savedNote.getTimetable().getStartTime().toString())
+                                    .endTime(savedNote.getTimetable().getEndTime().toString())
+                                    .classroom(savedNote.getTimetable().getClassroomNumber())
+                                    .teacherName(savedNote.getTimetable().getCourse().getTeacher().getFirstName() + " " + savedNote.getTimetable().getCourse().getTeacher().getLastName())
+                                    .build())
+                            .build())
                     .build();
         }catch (ParseException ex){
             throw new DateFormatException("Wrong date format");
