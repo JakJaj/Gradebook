@@ -36,7 +36,7 @@ public class Grade {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "student_id")
     private Student student;
 

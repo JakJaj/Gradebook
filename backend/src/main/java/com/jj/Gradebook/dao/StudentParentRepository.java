@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface StudentParentRepository extends JpaRepository<StudentParent, StudentParentId> {
     List<StudentParent> getStudentParentByParent_ParentId(Long parentID);
+
+    void deleteStudentParentsByStudent_StudentId(Long studentID);
 }

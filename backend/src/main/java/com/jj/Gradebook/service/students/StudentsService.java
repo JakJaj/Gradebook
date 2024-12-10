@@ -1,11 +1,11 @@
 package com.jj.Gradebook.service.students;
 
 import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.parents.ParentsResponse;
 import com.jj.Gradebook.controller.response.students.StudentResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
-import com.jj.Gradebook.dao.ClassRepository;
-import com.jj.Gradebook.dao.StudentRepository;
+import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Class;
@@ -13,6 +13,7 @@ import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Student_Parent.StudentParent;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,11 @@ public class StudentsService {
 
     private final StudentRepository studentRepository;
     private final ClassRepository classRepository;
+    private final GradeRepository gradeRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final NoteRepository noteRepository;
+    private final StudentParentRepository studentParentRepository;
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public StudentsResponse getAllStudents() {
@@ -129,5 +135,21 @@ public class StudentsService {
         }catch (ParseException exception){
             throw new DateFormatException("Wrong date format");
         }
+    }
+
+    @Transactional
+    public BaseResponse deleteStudent(Long studentID) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+
+        gradeRepository.deleteGradesByStudent_StudentId(studentID);
+        attendanceRepository.deleteAttendancesByStudent_StudentId(studentID);
+        noteRepository.deleteNotesByStudent_StudentId(studentID);
+        studentParentRepository.deleteStudentParentsByStudent_StudentId(studentID);
+
+        studentRepository.delete(student);
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted student with id - %d", studentID))
+                .build();
     }
 }
