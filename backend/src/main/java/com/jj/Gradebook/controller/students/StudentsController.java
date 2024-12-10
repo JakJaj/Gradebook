@@ -104,4 +104,10 @@ public class StudentsController {
     public ResponseEntity<StudentGradesResponse> deleteGrade(@PathVariable Long studentID, @PathVariable Long gradeID){
         return ResponseEntity.ok(gradesService.deleteGrade(studentID, gradeID));
     }
+
+    @DeleteMapping("/{studentID}/attendances/{attendanceID}")
+    public ResponseEntity<StudentAttendancesResponse> deleteAttendance(@PathVariable Long studentID, @PathVariable Long attendanceID){
+        return ResponseEntity.ok(attendancesService.deleteAttendance(studentID, attendanceID));
+    }
+
 }
