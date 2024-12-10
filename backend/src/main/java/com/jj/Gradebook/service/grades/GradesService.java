@@ -13,6 +13,7 @@ import com.jj.Gradebook.entity.Grade;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -135,6 +136,7 @@ public class GradesService {
         }
     }
 
+    @Transactional
     public StudentGradesResponse deleteGrade(Long studentID, Long gradeID) {
         studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d",studentID)));
         Grade grade = gradeRepository.findById(gradeID).orElseThrow(() -> new NoSuchEntityException(String.format("No grade with id - %d", gradeID)));

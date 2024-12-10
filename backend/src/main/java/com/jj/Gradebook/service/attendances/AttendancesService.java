@@ -17,6 +17,7 @@ import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -174,6 +175,7 @@ public class AttendancesService {
         }
     }
 
+    @Transactional
     public StudentAttendancesResponse deleteAttendance(Long studentID, Long attendanceID) {
         studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
         Attendance attendance = attendanceRepository.findById(attendanceID).orElseThrow(() -> new NoSuchEntityException(String.format("No attendance with id - %d", attendanceID)));

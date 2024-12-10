@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.announcement;
 
 import com.jj.Gradebook.controller.request.announcements.CreateAnnouncementRequest;
 import com.jj.Gradebook.controller.request.announcements.UpdateAnnouncementDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementsResponse;
 import com.jj.Gradebook.dao.AnnouncementRepository;
@@ -12,6 +13,7 @@ import com.jj.Gradebook.entity.Announcements;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -121,5 +123,17 @@ public class AnnouncementsService {
         }catch (ParseException ex){
             throw new DateFormatException("Wrong date format");
         }
+    }
+
+    @Transactional
+    public BaseResponse deleteAnnouncement(Long announcementID) {
+        Announcements announcements = announcementRepository.findById(announcementID).orElseThrow(() -> new NoSuchEntityException(String.format("No announcement with id - %d",announcementID)));
+
+        announcementRepository.delete(announcements);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted announcement with id - %d",announcementID))
+                .build();
     }
 }
