@@ -11,6 +11,7 @@ public interface StudentParentRepository extends JpaRepository<StudentParent, St
     List<StudentParent> getStudentParentByParent_ParentId(Long parentID);
 
     void deleteStudentParentsByStudent_StudentId(Long studentID);
+    void deleteStudentParentByParent_ParentId(Long parentID);
 
     Optional<StudentParent> getStudentParentByStudent_StudentIdAndParent_ParentId(Long studentID, Long parentID);
 }
