@@ -7,6 +7,7 @@ import com.jj.Gradebook.controller.request.grades.UpdateGradeDetailsRequest;
 import com.jj.Gradebook.controller.request.notes.CreateNoteRequest;
 import com.jj.Gradebook.controller.request.notes.UpdateNoteDetailsRequest;
 import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
 import com.jj.Gradebook.controller.response.grades.GradeResponse;
 import com.jj.Gradebook.controller.response.notes.NoteResponse;
@@ -98,5 +99,25 @@ public class StudentsController {
     @PutMapping("/{studentID}/notes")
     public ResponseEntity<NoteResponse> updateNoteDetails(@PathVariable Long studentID, @RequestBody UpdateNoteDetailsRequest request){
         return ResponseEntity.ok(notesService.updateNoteDetails(studentID, request));
+    }
+
+    @DeleteMapping("/{studentID}/grades/{gradeID}")
+    public ResponseEntity<StudentGradesResponse> deleteGrade(@PathVariable Long studentID, @PathVariable Long gradeID){
+        return ResponseEntity.ok(gradesService.deleteGrade(studentID, gradeID));
+    }
+
+    @DeleteMapping("/{studentID}/attendances/{attendanceID}")
+    public ResponseEntity<StudentAttendancesResponse> deleteAttendance(@PathVariable Long studentID, @PathVariable Long attendanceID){
+        return ResponseEntity.ok(attendancesService.deleteAttendance(studentID, attendanceID));
+    }
+
+    @DeleteMapping("/{studentID}/notes/{noteID}")
+    public ResponseEntity<StudentNotesResponse> deleteNote(@PathVariable Long studentID, @PathVariable Long noteID){
+        return ResponseEntity.ok(notesService.deleteNote(studentID, noteID));
+    }
+
+    @DeleteMapping("/{studentID}")
+    public ResponseEntity<BaseResponse> deleteStudent(@PathVariable Long studentID){
+        return ResponseEntity.ok(studentsService.deleteStudent(studentID));
     }
 }

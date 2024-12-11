@@ -2,6 +2,7 @@ package com.jj.Gradebook.controller.announcements;
 
 import com.jj.Gradebook.controller.request.announcements.CreateAnnouncementRequest;
 import com.jj.Gradebook.controller.request.announcements.UpdateAnnouncementDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementResponse;
 import com.jj.Gradebook.controller.response.announcements.AnnouncementsResponse;
 import com.jj.Gradebook.service.announcement.AnnouncementsService;
@@ -29,5 +30,10 @@ public class AnnouncementsController {
     @PutMapping()
     public ResponseEntity<AnnouncementResponse> updateAnnouncementDetails(@RequestBody UpdateAnnouncementDetailsRequest request){
         return ResponseEntity.ok(announcementsService.updateAnnouncementDetail(request));
+    }
+
+    @DeleteMapping("/{announcementID}")
+    public ResponseEntity<BaseResponse> deleteAnnouncement(@PathVariable Long announcementID){
+        return ResponseEntity.ok(announcementsService.deleteAnnouncement(announcementID));
     }
 }
