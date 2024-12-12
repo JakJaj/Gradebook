@@ -235,8 +235,6 @@ public class ClassesService {
         theClass.setTeacher(teacher);
         classRepository.save(theClass);
 
-        //TODO: sprawdz czy dodanie nauczyciela do klasy dziala
-        
         return ClassResponse.builder()
                 .status("Success")
                 .message(String.format("Successfully added teacher with id - %d to class with id - %d", teacherID, classID))
