@@ -47,4 +47,9 @@ public class ParentsController {
     public ResponseEntity<BaseResponse> deleteStudentFromParent(@PathVariable Long parentID, @PathVariable Long studentID){
         return ResponseEntity.ok(parentsService.deleteStudentFromParent(parentID, studentID));
     }
+
+    @DeleteMapping("/{parentID}")
+    public ResponseEntity<BaseResponse> deleteParent(@PathVariable Long parentID){
+        return ResponseEntity.ok(parentsService.deleteParent(parentID));
+    }
 }

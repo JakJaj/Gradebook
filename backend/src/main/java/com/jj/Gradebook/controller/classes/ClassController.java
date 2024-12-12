@@ -2,6 +2,7 @@ package com.jj.Gradebook.controller.classes;
 
 import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
@@ -51,8 +52,18 @@ public class ClassController {
         return ResponseEntity.ok(classesService.createNewClass(request));
     }
 
+    @PostMapping("/{classID}/teachers/{teacherID}")
+    public ResponseEntity<ClassResponse> addTeacherToClass(@PathVariable Long classID, @PathVariable Long teacherID){
+        return ResponseEntity.ok(classesService.addTeacherToClass(classID, teacherID));
+    }
+
     @PutMapping()
     public ResponseEntity<ClassResponse> updateClassDetails(@RequestBody UpdateClassDetailsRequest request){
         return ResponseEntity.ok(classesService.updateClassDetails(request));
+    }
+
+    @DeleteMapping("/{classID}")
+    public ResponseEntity<BaseResponse> deleteClass(@PathVariable Long classID){
+        return ResponseEntity.ok(classesService.deleteClass(classID));
     }
 }

@@ -42,7 +42,13 @@ public class AuthenticationService {
     public AuthenticationResponse registerStudent(RegisterStudentRequest request){
 
         String generatedPassword = SecurityUtils.generateSalt(PASSWORD_LENGTH);
-        Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
+
+
+        Class theClass = null;
+
+        if (request.getStudent().getClassID() != null){
+            theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException("No class with a specified id"));
+        }
 
         User user = registerUser(
                 RegisterRequest.builder()

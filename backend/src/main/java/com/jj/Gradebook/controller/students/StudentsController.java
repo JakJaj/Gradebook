@@ -81,6 +81,10 @@ public class StudentsController {
         return ResponseEntity.ok(notesService.createNewNote(studentID, request));
     }
 
+    @PostMapping("/{studentID}/classes/{classID}")
+    public ResponseEntity<BaseResponse> addStudentToClass(@PathVariable Long studentID, @PathVariable Long classID){
+        return ResponseEntity.ok(studentsService.addStudentToClass(studentID, classID));
+    }
     @PutMapping()
     public ResponseEntity<StudentResponse> updateStudentDetails(@RequestBody UpdateStudentDetailsRequest request){
         return ResponseEntity.ok(studentsService.updateStudentDetails(request));

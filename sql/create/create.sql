@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `grade_book`;
 USE `grade_book`;
 
-DROP TABLE IF EXISTS Messages;
 DROP TABLE IF EXISTS Notes;
 DROP TABLE IF EXISTS Grades;
 DROP TABLE IF EXISTS Students_Parents;
@@ -57,7 +56,7 @@ CREATE TABLE Announcements(
     title VARCHAR(255) NOT NULL,
     content TEXT,
     date_time DATE NOT NULL,
-    teacher_id BIGINT NOT NULL,
+    teacher_id BIGINT,
     PRIMARY KEY (announcement_id),
     FOREIGN KEY (teacher_id) REFERENCES Teachers(teacher_id)
 );
@@ -165,3 +164,78 @@ CREATE TABLE Notes(
     FOREIGN KEY(student_id) REFERENCES Students(student_id),
     FOREIGN KEY(timetable_id) REFERENCES Timetables(timetable_id)
 );
+
+
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (1, "testowa klasa", 1, 2001);
+
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (2, "testowa klasa", 1, 2001);
+
+insert into Courses(course_id, course_name, teacher_id, description)
+VALUES (1, "testowa lekcja", 1, "testowy opis testowej lekcji prowadzonej przez nauczyciela z id nr 1");
+
+insert into Courses(course_id, course_name, teacher_id, description)
+VALUES (2, "testowa lekcja", 1, "testowy opis testowej lekcji prowadzonej przez nauczyciela z id nr 1");
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (1,1,1, "9:00", "9:45", "101", 1);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (2,1,1, "9:00", "9:45", "101", 2);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (3,1,1, "9:00", "9:45", "101", 4);
+
+insert into Timetables(timetable_id, course_id, class_id, start_time, end_time, classroom_number, day_of_week)
+VALUES (5,1,1, "10:00", "10:45", "101", 6);
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(1, 1, 4, 1, "Opis", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(2, 1, 2, 2, "Opis2", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(3, 1, 5, 1, "Opis3", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(4, 2, 5, 1, "Opis4", 3, "2021-11-01");
+
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(5, 1, 5, 3, "Opis4", 3, "2021-11-01");
+
+insert into Grades(grade_id, course_id, mark, student_id, description, magnitude, date)
+VALUES(6, 2, 5, 3, "Opis4", 3, "2021-11-01");
+
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (1, "2021-11-01", "Obecny", 1, 1);
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (2, "2021-11-01", "Spozniony", 2, 1);
+
+insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
+VALUES (3, "2021-11-01", "Obecny", 1, 1);
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(1, 1, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(2, 2, 1, "Bla bla bla", "2021-11-01");
+
+insert into Notes(note_id, student_id, timetable_id, description, date_time)
+VALUES(3, 1, 2, "Bla bla bla", "2021-11-01");
+    
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(1, "tytul", "opisa calego ogloszenia", "2021-10-09", 1);
+
+insert into Announcements(announcement_id, title, content, date_time, teacher_id)
+VALUES(2, "tytul2", "opisa drugiego calego ogloszenia", "2021-10-09", 1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(1,1);
+
+insert into Students_Parents(student_id, parent_id)
+VALUES(2,1);

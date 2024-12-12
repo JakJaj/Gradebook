@@ -101,6 +101,7 @@ public class StudentsService {
                 .build();
     }
 
+    @Transactional
     public StudentResponse updateStudentDetails(UpdateStudentDetailsRequest request) {
         Student student = studentRepository.findById(request.getStudent().getStudentID()).orElseThrow(() -> new NoSuchEntityException(String.format("No user with id - %d", request.getStudent().getStudentID())));
         Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
@@ -150,6 +151,20 @@ public class StudentsService {
         return BaseResponse.builder()
                 .status("Success")
                 .message(String.format("Successfully deleted student with id - %d", studentID))
+                .build();
+    }
+
+    @Transactional
+    public BaseResponse addStudentToClass(Long studentID, Long classID) {
+        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+
+        student.setStudentClass(theClass);
+        studentRepository.save(student);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully added student with id - %d to class with id - %d", studentID, classID))
                 .build();
     }
 }

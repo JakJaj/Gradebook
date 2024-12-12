@@ -178,4 +178,17 @@ public class ParentsService {
                 .message(String.format("Successfully deleted student with id - %d from parent with id - %d", studentID, parentID))
                 .build();
     }
+
+    @Transactional
+    public BaseResponse deleteParent(Long parentID) {
+        Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", parentID)));
+
+        studentParentRepository.deleteStudentParentByParent_ParentId(parentID);
+        parentRepository.delete(parent);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted parent with id - %d", parentID))
+                .build();
+    }
 }

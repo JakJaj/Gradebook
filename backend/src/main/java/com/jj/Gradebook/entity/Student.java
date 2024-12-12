@@ -41,7 +41,7 @@ public class Student {
     @Column(name = "house_number")
     private String houseNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "class_id")
     private Class studentClass;
 

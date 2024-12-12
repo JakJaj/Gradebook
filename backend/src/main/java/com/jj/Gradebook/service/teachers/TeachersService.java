@@ -1,13 +1,17 @@
 package com.jj.Gradebook.service.teachers;
 
 import com.jj.Gradebook.controller.request.teachers.UpdateTeacherDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.teachers.TeacherResponse;
 import com.jj.Gradebook.controller.response.teachers.TeachersResponse;
-import com.jj.Gradebook.dao.TeacherRepository;
+import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.TeacherDTO;
+import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Teacher;
+import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeachersService {
     private final TeacherRepository teacherRepository;
+    private final AnnouncementRepository announcementRepository;
+    private final ClassRepository classRepository;
+    private final CoursesRepository coursesRepository;
+    private final GradeRepository gradeRepository;
+    private final TimetableRepository timetableRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final NoteRepository noteRepository;
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public TeachersResponse getAllTeachers(){
@@ -88,5 +100,32 @@ public class TeachersService {
         }catch (ParseException ex){
             throw new DateFormatException("Wrong date format");
         }
+    }
+
+    @Transactional
+    public BaseResponse deleteTeacher(Long teacherID) {
+        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", teacherID)));
+
+        List<Class> classes = classRepository.findClassesByTeacher_TeacherId(teacherID);
+        for (Class aClass : classes) {
+            aClass.setTeacher(null);
+        }
+
+        classRepository.saveAll(classes);
+        gradeRepository.deleteGradesByCourse_Teacher_TeacherId(teacherID);
+        attendanceRepository.deleteAllByTimetable_Course_Teacher_TeacherId(teacherID);
+        noteRepository.deleteAllByTimetable_Course_Teacher_TeacherId(teacherID);
+        timetableRepository.deleteAllByCourse_Teacher_TeacherId(teacherID);
+
+
+        coursesRepository.deleteCoursesByTeacher_TeacherId(teacherID);
+        announcementRepository.deleteAllByTeacher_TeacherId(teacherID);
+
+        teacherRepository.delete(teacher);
+
+        return TeacherResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted teacher with id - %d", teacherID))
+                .build();
     }
 }

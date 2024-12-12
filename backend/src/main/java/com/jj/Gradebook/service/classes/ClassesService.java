@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.classes;
 
 import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
@@ -16,6 +17,7 @@ import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ public class ClassesService {
     private final TimetableRepository timetableRepository;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final NoteRepository noteRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -197,6 +201,53 @@ public class ClassesService {
                                 .lastName(savedClass.getTeacher().getLastName())
                                 .dateOfBirth(dateFormat.format(savedClass.getTeacher().getDateOfBirth()))
                                 .dateOfEmployment(dateFormat.format(savedClass.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
+                .build();
+    }
+
+    @Transactional
+    public BaseResponse deleteClass(Long classID) {
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+
+        attendanceRepository.deleteAllByStudent_StudentClass_ClassId(classID);
+        noteRepository.deleteAllByStudent_StudentClass_ClassId(classID);
+        timetableRepository.deleteAllByClas_ClassId(classID);
+
+        List<Student> students = studentRepository.findStudentsByStudentClass_ClassId(classID);
+        for (Student student: students){
+            student.setStudentClass(null);
+        }
+        studentRepository.saveAll(students);
+
+        classRepository.delete(theClass);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted class with id - %d", classID))
+                .build();
+    }
+
+    public ClassResponse addTeacherToClass(Long classID, Long teacherID) {
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", teacherID)));
+
+        theClass.setTeacher(teacher);
+        classRepository.save(theClass);
+
+        return ClassResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully added teacher with id - %d to class with id - %d", teacherID, classID))
+                .theClass(ClassDTO.builder()
+                        .classID(theClass.getClassId())
+                        .className(theClass.getClassName())
+                        .startYear(theClass.getStartYear().getValue())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(theClass.getTeacher().getTeacherId())
+                                .firstName(theClass.getTeacher().getFirstName())
+                                .lastName(theClass.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(theClass.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(theClass.getTeacher().getDateOfEmployment()))
                                 .build())
                         .build())
                 .build();
