@@ -52,6 +52,11 @@ public class ClassController {
         return ResponseEntity.ok(classesService.createNewClass(request));
     }
 
+    @PostMapping("/{classID}/teachers/{teacherID}")
+    public ResponseEntity<ClassResponse> addTeacherToClass(@PathVariable Long classID, @PathVariable Long teacherID){
+        return ResponseEntity.ok(classesService.addTeacherToClass(classID, teacherID));
+    }
+
     @PutMapping()
     public ResponseEntity<ClassResponse> updateClassDetails(@RequestBody UpdateClassDetailsRequest request){
         return ResponseEntity.ok(classesService.updateClassDetails(request));

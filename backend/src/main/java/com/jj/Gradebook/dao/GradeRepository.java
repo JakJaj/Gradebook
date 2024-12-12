@@ -9,4 +9,6 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
     List<Grade> findGradesByStudent_StudentClass_ClassId(Long classID);
     List<Grade> findGradesByStudent_StudentId(Long studentID);
     void deleteGradesByStudent_StudentId(Long studentID);
+
+    void deleteGradesByCourse_Teacher_TeacherId(Long teacherID);
 }

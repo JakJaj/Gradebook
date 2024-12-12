@@ -219,12 +219,39 @@ public class ClassesService {
             student.setStudentClass(null);
         }
         studentRepository.saveAll(students);
-        
+
         classRepository.delete(theClass);
 
         return BaseResponse.builder()
                 .status("Success")
                 .message(String.format("Successfully deleted class with id - %d", classID))
+                .build();
+    }
+
+    public ClassResponse addTeacherToClass(Long classID, Long teacherID) {
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", teacherID)));
+
+        theClass.setTeacher(teacher);
+        classRepository.save(theClass);
+
+        //TODO: sprawdz czy dodanie nauczyciela do klasy dziala
+        
+        return ClassResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully added teacher with id - %d to class with id - %d", teacherID, classID))
+                .theClass(ClassDTO.builder()
+                        .classID(theClass.getClassId())
+                        .className(theClass.getClassName())
+                        .startYear(theClass.getStartYear().getValue())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(theClass.getTeacher().getTeacherId())
+                                .firstName(theClass.getTeacher().getFirstName())
+                                .lastName(theClass.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(theClass.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(theClass.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
                 .build();
     }
 }
