@@ -198,6 +198,7 @@ public class AuthenticationService {
                 .status("Success")
                 .message("Successful login")
                 .token(jwtToken)
+                .role(String.valueOf(user.get().getRole()))
                 .build();
     }
 
