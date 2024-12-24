@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/classes")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ClassController {
 
     private final ClassesService classesService;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../data/getData";
+import { loginUser } from "../../data/postData";
 
 function LandingPage() {
     const [email, setEmail] = useState("");

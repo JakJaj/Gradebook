@@ -10,6 +10,7 @@ import lombok.Data;
 public class StudentDTO {
     private Long studentID;
     private Long classID;
+    private String className;
     private String firstName;
     private String lastName;
     private String dateOfBirth;

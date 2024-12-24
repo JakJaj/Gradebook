@@ -1,46 +1,92 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Table from '../../components/Table';
 import TopBar from '../../components/TopBar';
+import AddStudentModal from './Popups/AddStudentModal';
+import { fetchStudents, fetchClasses } from '../../data/getData';
+import { createStudent } from '../../data/postData';
 
 function StudentManagementPage() {
-  const data = useMemo(
-    () => [
-      { name: 'John Doe', role: 'Student', email: 'john@example.com' },
-      { name: 'Jane Smith', role: 'Teacher', email: 'jane@example.com' },
-      // Add more data here
-    ],
-    []
-  );
+    const [data, setData] = useState([]);
+    const [classes, setClasses] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const columns = useMemo(
-    () => [
-      {
-        id: 'name',
-        header: 'Name',
-        accessorKey: 'name',
-      },
-      {
-        id: 'role',
-        header: 'Role',
-        accessorKey: 'role',
-      },
-      {
-        id: 'email',
-        header: 'Email',
-        accessorKey: 'email',
-      },
-    ]
-  );
+    useEffect(() => {
+        const getData = async () => {
+            const students = await fetchStudents();
+            setData(students);
+            const classes = await fetchClasses();
+            setClasses(classes);
+        };
 
-  return (
-    <div>
-      <TopBar title="Admin Dashboard" />
-      <div className="p-8">
-        <h2 className="text-2xl font-semibold mb-4">Student Management</h2>
-        <Table columns={columns} data={data} />
-      </div>
-    </div>
-  );
+        getData();
+    }, []);
+
+    const handleSave = (newStudent) => {
+        setData((prevData) => [...prevData, newStudent]);
+    };
+
+    const handleFormSubmit = async (studentData) => {
+        try {
+            const newStudent = await createStudent(studentData);
+            handleSave(newStudent);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error creating student:', error);
+        }
+    };
+
+    const columns = useMemo(
+        () => [
+            {
+                id: 'id',
+                header: 'ID',
+                accessorKey: 'id',
+            },
+            {
+                id: 'name',
+                header: 'Name',
+                accessorKey: 'name',
+            },
+            {
+                id: 'class',
+                header: 'Class',
+                accessorKey: 'class',
+            },
+            {
+                id: 'birthDate',
+                header: 'Birth Date',
+                accessorKey: 'birthDate',
+            },
+            {
+                id: 'address',
+                header: 'Address',
+                accessorKey: 'address',
+            },
+        ],
+        []
+    );
+
+    return (
+        <div>
+            <TopBar title="Admin Dashboard" />
+            <div className="p-8">
+                <h2 className="text-2xl font-semibold mb-4">User Management</h2>
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
+                >
+                    Add New
+                </button>
+                <Table columns={columns} data={data} />
+            </div>
+            <AddStudentModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={handleFormSubmit}
+                classes={classes}
+            />
+        </div>
+    );
 }
 
 export default StudentManagementPage;
