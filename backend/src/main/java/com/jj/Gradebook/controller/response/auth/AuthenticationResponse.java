@@ -11,4 +11,5 @@ import lombok.experimental.SuperBuilder;
 public class AuthenticationResponse extends BaseResponse {
     private String token;
     private String role;
+    private Long id;
 }

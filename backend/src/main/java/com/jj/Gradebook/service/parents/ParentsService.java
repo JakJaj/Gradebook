@@ -132,6 +132,7 @@ public class ParentsService {
                         .map(student -> StudentDTO.builder()
                                         .studentID(student.getStudent().getStudentId())
                                         .classID(student.getStudent().getStudentClass().getClassId())
+                                        .className(student.getStudent().getStudentClass().getClassName())
                                         .firstName(student.getStudent().getFirstName())
                                         .lastName(student.getStudent().getLastName())
                                         .dateOfBirth(dateFormat.format(student.getStudent().getDateOfBirth()))

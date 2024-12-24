@@ -77,19 +77,19 @@ public class AuthenticationService {
                     .user(user)
                     .build();
 
-            studentRepository.save(student);
+            Student savedStudent = studentRepository.save(student);
 
+            return AuthenticationResponse.builder()
+                    .status("Success")
+                    .message("Generated password: " + generatedPassword)
+                    .token(token)
+                    .id(savedStudent.getStudentId())
+                    .build();
         } catch (ParseException e){
             System.out.println("Wrong date format");
             throw new DateFormatException("Wrong date format");
-
         }
 
-        return AuthenticationResponse.builder()
-                .status("Success")
-                .message("Generated password: " + generatedPassword)
-                .token(token)
-                .build();
     }
 
     public AuthenticationResponse registerTeacher(RegisterTeacherRequest request){
@@ -118,19 +118,21 @@ public class AuthenticationService {
                     .user(user)
                     .build();
 
-            teacherRepository.save(teacher);
+            Teacher savedTeacher = teacherRepository.save(teacher);
 
+            return AuthenticationResponse.builder()
+                    .status("Success")
+                    .message("Generated password: " + generatedPassword)
+                    .token(token)
+                    .id(savedTeacher.getTeacherId())
+                    .build();
         } catch (ParseException e){
             System.out.println("Wrong date format");
             throw new DateFormatException("Wrong date format");
 
         }
 
-        return AuthenticationResponse.builder()
-                .status("Success")
-                .message("Generated password: " + generatedPassword)
-                .token(token)
-                .build();
+
     }
 
     public AuthenticationResponse registerParent(RegisterParentRequest request){
@@ -152,12 +154,13 @@ public class AuthenticationService {
                 .user(user)
                 .build();
 
-        parentRepository.save(parent);
+        Parent savedParent = parentRepository.save(parent);
 
         return AuthenticationResponse.builder()
                 .status("Success")
                 .message("Generated password: " + generatedPassword)
                 .token(token)
+                .id(savedParent.getParentId())
                 .build();
     }
 
