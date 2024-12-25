@@ -62,8 +62,28 @@ function StudentManagementPage() {
                 header: 'Address',
                 accessorKey: 'address',
             },
+            {
+                id: 'actions',
+                header: 'Actions',
+                accessorKey: 'id',
+                cell: ({ row }) => (
+                    <div>
+                        <button
+                            onClick={() => console.log('Edit student with ID:', row.original.id)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            onClick={() => console.log('Delete student with ID:', row.original.id)}
+                            className="px-4 py-2 bg-red-500 text-white rounded"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ),
+            }
         ],
-        []
     );
 
     return (
