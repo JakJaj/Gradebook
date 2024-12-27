@@ -27,6 +27,7 @@ function StudentManagementPage() {
 
     const handleFormSubmit = async (studentData) => {
         try {
+            
             const newStudent = await createStudent(studentData);
             handleSave(newStudent);
             setIsModalOpen(false);

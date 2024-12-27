@@ -55,7 +55,10 @@ export const createStudent = async (studentData) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
+
+        
         });
+        console.log("Saved");
 
         if (!response.ok) {
             throw new Error('Failed to create student');
