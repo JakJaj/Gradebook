@@ -2,13 +2,16 @@ import React, { useMemo, useState, useEffect } from 'react';
 import Table from '../../components/Table';
 import TopBar from '../../components/TopBar';
 import AddStudentModal from './Popups/AddStudentModal';
-import { fetchStudents, fetchClasses } from '../../data/getData';
-import { createStudent } from '../../data/postData';
+import DeleteFieldModal from '../../components/DeleteFieldModal';
+import { fetchStudents, fetchClasses} from '../../data/getData';
+import { deleteStudent } from '../../data/deleteData';
 
 function StudentManagementPage() {
     const [data, setData] = useState([]);
     const [classes, setClasses] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -33,6 +36,16 @@ function StudentManagementPage() {
             setIsModalOpen(false);
         } catch (error) {
             console.error('Error creating student:', error);
+        }
+    };
+
+    const handleDelete = async (studentId) => {
+        const success = await deleteStudent(studentId);
+        if (success) {
+            setData((prevData) => prevData.filter(student => student.id !== studentId));
+            setIsDeleteModalOpen(false);
+        } else {
+            console.error('Failed to delete student');
         }
     };
 
@@ -76,7 +89,10 @@ function StudentManagementPage() {
                             Edit
                         </button>
                         <button
-                            onClick={() => console.log('Delete student with ID:', row.original.id)}
+                            onClick={() => {
+                                setItemToDelete(row.original.id);
+                                setIsDeleteModalOpen(true);
+                            }}
                             className="px-4 py-2 bg-red-500 text-white rounded"
                         >
                             Delete
@@ -85,6 +101,7 @@ function StudentManagementPage() {
                 ),
             }
         ],
+        []
     );
 
     return (
@@ -93,7 +110,7 @@ function StudentManagementPage() {
             <div className="p-8">
                 <h2 className="text-2xl font-semibold mb-4">User Management</h2>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => setIsAddModalOpen(true)}
                     className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
                 >
                     Add New
@@ -101,10 +118,17 @@ function StudentManagementPage() {
                 <Table columns={columns} data={data} />
             </div>
             <AddStudentModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
                 onSave={handleFormSubmit}
                 classes={classes}
+            />
+            <DeleteFieldModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onDelete={handleDelete}
+                itemId={itemToDelete}
+                itemType="Student"
             />
         </div>
     );

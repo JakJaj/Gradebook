@@ -33,6 +33,7 @@ public class StudentsService {
     private final AttendanceRepository attendanceRepository;
     private final NoteRepository noteRepository;
     private final StudentParentRepository studentParentRepository;
+    private final UserRepository userRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -149,8 +150,13 @@ public class StudentsService {
         attendanceRepository.deleteAttendancesByStudent_StudentId(studentID);
         noteRepository.deleteNotesByStudent_StudentId(studentID);
         studentParentRepository.deleteStudentParentsByStudent_StudentId(studentID);
+        student.setStudentClass(null);
+        System.out.println(student.getUser().getUserId());
+        userRepository.deleteById(student.getUser().getUserId());
 
-        studentRepository.delete(student);
+        Student savedStudent = studentRepository.save(student);
+
+        studentRepository.delete(savedStudent);
         return BaseResponse.builder()
                 .status("Success")
                 .message(String.format("Successfully deleted student with id - %d", studentID))

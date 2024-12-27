@@ -10,7 +10,7 @@ function AdminDashboard() {
 
             <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
             <div className="flex flex-wrap justify-center">
-                <Box title="Students" description="Manage student information" link="/admin/students" />
+                <Box title="Students" description="Manage student information" link="/admin/studentManagement" />
                 <Box title="Teachers" description="Manage teacher information" link="/admin/teachers" />
                 <Box title="Parents" description="Manage parent information" link="/admin/parents" />
                 <Box title="Courses" description="Manage course information" link="/admin/courses" />
