@@ -3,6 +3,7 @@ import Table from '../../components/Table';
 import TopBar from '../../components/TopBar';
 import AddStudentModal from './Popups/AddStudentModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
+import { createStudent } from '../../data/postData';
 import { fetchStudents, fetchClasses} from '../../data/getData';
 import { deleteStudent } from '../../data/deleteData';
 
@@ -33,7 +34,7 @@ function StudentManagementPage() {
             
             const newStudent = await createStudent(studentData);
             handleSave(newStudent);
-            setIsModalOpen(false);
+            setIsAddModalOpen(false);
         } catch (error) {
             console.error('Error creating student:', error);
         }
