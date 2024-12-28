@@ -35,7 +35,6 @@ function EditStudentModal({ isOpen, onClose, onSave, student, classes }) {
         };
 
         studentDetails();
-        console.log(studentData);
     }, [student]);
 
     const handleChange = (e) => {
