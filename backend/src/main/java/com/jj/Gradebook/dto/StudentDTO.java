@@ -17,5 +17,7 @@ public class StudentDTO {
     private String city;
     private String street;
     private String houseNumber;
+    private String email;
+    private String pesel;
 
 }

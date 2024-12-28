@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Table from '../../components/Table';
 import TopBar from '../../components/TopBar';
-import AddStudentModal from './Popups/AddStudentModal';
+import AddStudentModal from './popups/student/AddStudentModal';
+import EditStudentModal from './popups/student/EditStudentModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
 import { createStudent } from '../../data/postData';
 import { fetchStudents, fetchClasses} from '../../data/getData';
@@ -11,8 +12,10 @@ function StudentManagementPage() {
     const [data, setData] = useState([]);
     const [classes, setClasses] = useState([]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
+    const [studentToEdit, setStudentToEdit] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -38,6 +41,15 @@ function StudentManagementPage() {
         } catch (error) {
             console.error('Error creating student:', error);
         }
+    };
+
+    const handleUpdate = (updatedStudent) => {
+
+        setData((prevData) =>
+            prevData.map((student) =>
+                student.id === updatedStudent.id ? updatedStudent : student
+            )
+        );
     };
 
     const handleDelete = async (studentId) => {
@@ -84,7 +96,10 @@ function StudentManagementPage() {
                 cell: ({ row }) => (
                     <div>
                         <button
-                            onClick={() => console.log('Edit student with ID:', row.original.id)}
+                            onClick={() => {
+                                setStudentToEdit(row.original.id);
+                                setIsEditModalOpen(true);
+                            }}
                             className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
                         >
                             Edit
@@ -122,6 +137,13 @@ function StudentManagementPage() {
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 onSave={handleFormSubmit}
+                classes={classes}
+            />
+            <EditStudentModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onSave={handleUpdate}
+                student={studentToEdit}
                 classes={classes}
             />
             <DeleteFieldModal

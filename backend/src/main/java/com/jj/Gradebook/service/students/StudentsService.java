@@ -11,6 +11,7 @@ import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Student_Parent.StudentParent;
+import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
@@ -78,6 +79,8 @@ public class StudentsService {
                         .city(student.getCity())
                         .street(student.getStreet())
                         .houseNumber(student.getHouseNumber())
+                        .pesel(student.getUser().getPesel())
+                        .email(student.getUser().getEmail())
                         .build())
                 .build();
 
