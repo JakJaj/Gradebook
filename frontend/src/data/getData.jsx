@@ -65,3 +65,42 @@ export const fetchClasses = async () => {
         return [];
     }
 };
+
+
+export const fetchStudent = async (studentID) => {
+    try {
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch students");
+        }
+
+        const text = await response.text();
+        if (!text) {
+            return [];
+        }
+
+        const result = JSON.parse(text);
+        return {
+            id: result.student.studentID,
+            firstName: result.student.firstName,
+            lastName: result.student.lastName,
+            city: result.student.city,
+            street: result.student.street,
+            houseNumber: result.student.houseNumber,
+            dateOfBirth: result.student.dateOfBirth,
+            email : result.student.email,
+            pesel: result.student.pesel,
+            classID: result.student.classID,
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
