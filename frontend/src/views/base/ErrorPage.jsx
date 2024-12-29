@@ -49,7 +49,7 @@ function ErrorPage() {
             <p className='text-lg font-semibold'>Sorry, the page you are looking for does not exist.</p>
             {path && (
                 <Link to={path} className='mt-4 px-4 py-2 bg-blue-500 text-white rounded'>
-                    Go to Dashboard
+                    Go back
                 </Link>
             )}
         </div>

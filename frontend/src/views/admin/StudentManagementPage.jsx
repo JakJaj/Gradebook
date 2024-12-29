@@ -154,9 +154,8 @@ function StudentManagementPage() {
 
     return (
         <div>
-            <TopBar title="Admin Dashboard" />
+            <TopBar title="Student Management" />
             <div className="p-8">
-                <h2 className="text-2xl font-semibold mb-4">User Management</h2>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
