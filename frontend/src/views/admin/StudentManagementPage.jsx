@@ -4,10 +4,11 @@ import TopBar from '../../components/TopBar';
 import AddStudentModal from './popups/student/AddStudentModal';
 import EditStudentModal from './popups/student/EditStudentModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
-import { createStudent } from '../../data/postData';
-import { fetchStudents, fetchClasses} from '../../data/getData';
-import { deleteStudent } from '../../data/deleteData';
-import { updateStudent } from '../../data/putData';
+
+import { createStudent } from '../../data/student/postData';
+import { fetchStudents, fetchClasses} from '../../data/student/getData';
+import { deleteStudent } from '../../data/student/deleteData';
+import { updateStudent } from '../../data/student/putData';
 
 function StudentManagementPage() {
     const [data, setData] = useState([]);

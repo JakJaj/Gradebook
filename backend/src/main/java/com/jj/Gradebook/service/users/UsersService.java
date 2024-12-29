@@ -73,6 +73,19 @@ public class UsersService {
                         .subClassID(parent.getParentId())
                         .build();
             }
+            case ADMIN -> {
+                return UserResponse.builder()
+                        .status("Success")
+                        .message("Successfully returning user details for admin")
+                        .userID(user.getUserId())
+                        .email(user.getEmail())
+                        .pesel(user.getPesel())
+                        .role(user.getRole())
+                        .firstName("ADMIN")
+                        .lastName("ADMIN")
+                        .subClassID(-1L)
+                        .build();
+            }
         }
 
         return UserResponse.builder()

@@ -13,6 +13,10 @@ const routes = [
         errorElement: <ErrorPage />,
     },
     {
+        path : '/error',
+        element: <ErrorPage />,
+    },
+    {
         path : '/admin/dashboard',
         element: <AdminDashboard />,
     },

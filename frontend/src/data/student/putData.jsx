@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import API_URL from './const';
+import API_URL from '../const';
 
 const url = API_URL;
 
@@ -35,8 +35,6 @@ export const updateStudent = async (studentData) => {
         if (!response.ok) {
             throw new Error('Failed to update student');
         }
-
-        console.log(response);
 
         return true;
     } catch (error) {
