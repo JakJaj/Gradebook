@@ -43,6 +43,8 @@ public class TeachersService {
                         .lastName(teacher.getLastName())
                         .dateOfBirth(dateFormat.format(teacher.getDateOfBirth()))
                         .dateOfEmployment(dateFormat.format(teacher.getDateOfEmployment()))
+                        .pesel(teacher.getUser().getPesel())
+                        .email(teacher.getUser().getEmail())
                         .build())
                 .toList();
 
@@ -66,6 +68,8 @@ public class TeachersService {
                         .lastName(teacher.getLastName())
                         .dateOfEmployment(dateFormat.format(teacher.getDateOfEmployment()))
                         .dateOfBirth(dateFormat.format(teacher.getDateOfBirth()))
+                        .pesel(teacher.getUser().getPesel())
+                        .email(teacher.getUser().getEmail())
                         .build())
                 .build();
     }
@@ -95,6 +99,8 @@ public class TeachersService {
                             .lastName(savedTeacher.getLastName())
                             .dateOfEmployment(dateFormat.format(savedTeacher.getDateOfEmployment()))
                             .dateOfBirth(dateFormat.format(savedTeacher.getDateOfBirth()))
+                            .pesel(savedTeacher.getUser().getPesel())
+                            .email(savedTeacher.getUser().getEmail())
                             .build())
                     .build();
         }catch (ParseException ex){

@@ -13,4 +13,6 @@ public class TeacherDTO {
     private String lastName;
     private String dateOfBirth;
     private String dateOfEmployment;
+    private String email;
+    private String pesel;
 }
