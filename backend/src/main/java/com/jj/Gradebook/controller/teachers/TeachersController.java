@@ -22,6 +22,7 @@ public class TeachersController{
     private final TimetablesService timetablesService;
 
     @GetMapping()
+    @CrossOrigin
     public ResponseEntity<TeachersResponse> getAllTeachers(){
         return ResponseEntity.ok(teachersService.getAllTeachers());
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchStudent } from '../../../../data/getData';
+import { fetchStudent } from '../../../../data/student/getData';
 function EditStudentModal({ isOpen, onClose, onSave, student, classes }) {
     const [studentData, setStudentData] = useState({
         firstName: '',
@@ -35,7 +35,6 @@ function EditStudentModal({ isOpen, onClose, onSave, student, classes }) {
         };
 
         studentDetails();
-        console.log(studentData);
     }, [student]);
 
     const handleChange = (e) => {

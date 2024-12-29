@@ -5,6 +5,7 @@ import StudentLandingPage from "./views/student/StudentLandingPage.jsx";
 import ParentLandingPage from "./views/parent/ParentLandingPage.jsx";
 import TeacherLandingPage from "./views/teacher/TeacherLandingPage.jsx";
 import StudentManagement from "./views/admin/StudentManagementPage.jsx";
+import TeacherManagementPage from "./views/admin/TeacherManagementPage.jsx";
 
 const routes = [
     {
@@ -13,12 +14,20 @@ const routes = [
         errorElement: <ErrorPage />,
     },
     {
+        path : '/error',
+        element: <ErrorPage />,
+    },
+    {
         path : '/admin/dashboard',
         element: <AdminDashboard />,
     },
     {
         path : "/admin/studentManagement",
         element: <StudentManagement />,
+    },
+    {
+        path : "/admin/teacherManagement",
+        element: <TeacherManagementPage />,
     },
     {
         path : '/student/dashboard',

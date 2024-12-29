@@ -4,10 +4,7 @@ import com.jj.Gradebook.controller.response.users.UserResponse;
 import com.jj.Gradebook.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +14,7 @@ public class UsersController {
     private final UsersService usersService;
 
     @GetMapping()
+    @CrossOrigin
     public ResponseEntity<UserResponse> getUserDetails(@RequestHeader("Authorization") String token){
         return ResponseEntity.ok(usersService.getUserDetails(token));
     }

@@ -22,7 +22,7 @@ function Table({ columns, data }) {
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        globalFilterFn: 'includesString', // Use a built-in filter function
+        globalFilterFn: 'includesString',
         initialState: {
             pagination: {
                 pageSize: 10,

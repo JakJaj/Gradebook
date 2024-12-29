@@ -4,9 +4,11 @@ import TopBar from '../../components/TopBar';
 import AddStudentModal from './popups/student/AddStudentModal';
 import EditStudentModal from './popups/student/EditStudentModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
-import { createStudent } from '../../data/postData';
-import { fetchStudents, fetchClasses} from '../../data/getData';
-import { deleteStudent } from '../../data/deleteData';
+
+import { createStudent } from '../../data/student/postData';
+import { fetchStudents, fetchClasses} from '../../data/student/getData';
+import { deleteStudent } from '../../data/student/deleteData';
+import { updateStudent } from '../../data/student/putData';
 
 function StudentManagementPage() {
     const [data, setData] = useState([]);
@@ -43,13 +45,43 @@ function StudentManagementPage() {
         }
     };
 
-    const handleUpdate = (updatedStudent) => {
+    const handleUpdate = async (updatedStudent) => {
+        const [year, month, day] = updatedStudent.dateOfBirth.split('-');
+        const formattedDateOfBirth = `${day}-${month}-${year}`;
 
-        setData((prevData) =>
-            prevData.map((student) =>
-                student.id === updatedStudent.id ? updatedStudent : student
-            )
-        );
+        const studentDetails = {
+            studentID: studentToEdit,
+            classID: updatedStudent.classID,
+            firstName: updatedStudent.firstName,
+            lastName: updatedStudent.lastName,
+            dateOfBirth: formattedDateOfBirth,
+            city: updatedStudent.city,
+            street: updatedStudent.street,
+            houseNumber: updatedStudent.houseNumber,
+            email: updatedStudent.email,
+            pesel: updatedStudent.pesel,
+        };
+
+        const success = await updateStudent(studentDetails);
+        if (success) {
+            setData((prevData) =>
+                prevData.map((student) =>
+                    student.id === studentToEdit
+                        ? {
+                            ...student,
+                            id: studentDetails.studentID,
+                            name: `${studentDetails.firstName} ${studentDetails.lastName}`,
+                            class: classes.find(cls => cls.id === studentDetails.classID)?.name || '',
+                            birthDate: studentDetails.dateOfBirth,
+                            address: `${studentDetails.street} ${studentDetails.houseNumber}, ${studentDetails.city}`,
+                        }
+                        : student
+                )
+            );
+            setIsEditModalOpen(false);
+        } else {
+            console.error('Failed to update student');
+        }
     };
 
     const handleDelete = async (studentId) => {
@@ -122,9 +154,8 @@ function StudentManagementPage() {
 
     return (
         <div>
-            <TopBar title="Admin Dashboard" />
+            <TopBar title="Student Management" />
             <div className="p-8">
-                <h2 className="text-2xl font-semibold mb-4">User Management</h2>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     className="mb-4 px-4 py-2 bg-green-500 text-white rounded"

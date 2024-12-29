@@ -86,6 +86,7 @@ public class StudentsController {
         return ResponseEntity.ok(studentsService.addStudentToClass(studentID, classID));
     }
     @PutMapping()
+    @CrossOrigin
     public ResponseEntity<StudentResponse> updateStudentDetails(@RequestBody UpdateStudentDetailsRequest request){
         return ResponseEntity.ok(studentsService.updateStudentDetails(request));
     }

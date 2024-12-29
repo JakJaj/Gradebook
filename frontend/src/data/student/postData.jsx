@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import API_URL from './const';
+import API_URL from '../const';
 
 const url = API_URL;
 
