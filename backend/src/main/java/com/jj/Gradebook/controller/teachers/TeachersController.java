@@ -39,6 +39,7 @@ public class TeachersController{
     }
 
     @DeleteMapping("/{teacherID}")
+    @CrossOrigin
     public ResponseEntity<BaseResponse> deleteTeacher(@PathVariable Long teacherID){
         return ResponseEntity.ok(teachersService.deleteTeacher(teacherID));
     }
