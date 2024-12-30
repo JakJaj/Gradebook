@@ -34,6 +34,7 @@ public class TeachersController{
     }
 
     @PutMapping()
+    @CrossOrigin
     public ResponseEntity<TeacherResponse> updateTeacherDetails(@RequestBody UpdateTeacherDetailsRequest request){
         return ResponseEntity.ok(teachersService.updateTeacherDetails(request));
     }

@@ -9,6 +9,7 @@ import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.entity.Teacher;
 import com.jj.Gradebook.entity.Timetable;
+import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
@@ -74,12 +75,16 @@ public class TeachersService {
                 .build();
     }
 
+    @Transactional
     public TeacherResponse updateTeacherDetails(UpdateTeacherDetailsRequest request) {
 
         Teacher teacher = teacherRepository.findById(request.getTeacher().getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTeacher().getTeacherID())));
 
         try {
 
+            User userToUpdate = teacher.getUser();
+            userToUpdate.setEmail(request.getTeacher().getEmail());
+            userToUpdate.setPesel(request.getTeacher().getPesel());
 
             Teacher savedTeacher = teacherRepository.save(Teacher.builder()
                     .teacherId(teacher.getTeacherId())

@@ -61,12 +61,11 @@ export const fetchTeacher = async (teacherId) => {
         if (!result || typeof result !== 'object') {
             throw new Error('Invalid response format');
         }
-
-        console.log(result);
         
         return {
             id: result.teacher.teacherID,
-            name: `${result.teacher.firstName} ${result.teacher.lastName}`,
+            firstName: result.teacher.firstName,
+            lastName: result.teacher.lastName,
             email: result.teacher.email,
             pesel : result.teacher.pesel,
             dateOfBirth: result.teacher.dateOfBirth,

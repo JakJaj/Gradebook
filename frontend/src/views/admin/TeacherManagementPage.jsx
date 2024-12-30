@@ -51,7 +51,7 @@ function TeacherManagementPage() {
 
             const savedTeacher = {
                 id: createdTeacher.id,
-                name: createdTeacher.name,
+                name: `${createdTeacher.firstName} ${createdTeacher.lastName}`,
                 email: createdTeacher.email,
                 pesel : createdTeacher.pesel,
                 dateOfBirth: createdTeacher.dateOfBirth,
@@ -67,25 +67,29 @@ function TeacherManagementPage() {
     };
 
     const handleUpdate = async (updatedTeacher) => {
+
         const requestBody = {
-            teacherID: teacherToEdit,
-            email: updatedTeacher.email,
-            pesel: updatedTeacher.pesel,
-            role: 'TEACHER',
             teacher: {
+                teacherID: teacherToEdit.id,
                 firstName: updatedTeacher.firstName,
                 lastName: updatedTeacher.lastName,
                 dateOfBirth: updatedTeacher.dateOfBirth,
                 dateOfEmployment: updatedTeacher.dateOfEmployment,
-            },
+                email: updatedTeacher.email,
+                pesel: updatedTeacher.pesel,
+            }
         };
 
-        const success = await updateTeacher(teacherDetails);
+        const success = await updateTeacher(requestBody);
+
         if (success) {
+            console.log("RECIEVED DATA")
+            console.log(success)
+
             setData((prevData) =>
                 prevData.map((teacher) =>
                     teacher.id === teacherToEdit.id
-                        ? { ...teacher, ...teacherDetails }
+                        ? { ...teacher, ...success }
                         : teacher
                 )
             );
@@ -145,7 +149,9 @@ function TeacherManagementPage() {
                                     firstName: row.original.firstName,
                                     lastName: row.original.lastName,
                                     email: row.original.email,
-                                    subject: row.original.subject,
+                                    pesel: row.original.pesel,
+                                    dateOfBirth: row.original.dateOfBirth,
+                                    dateOfEmployment: row.original.dateOfEmployment,
                                 };
                                 setTeacherToEdit(teacherData);
                                 setIsEditModalOpen(true);
