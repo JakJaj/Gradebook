@@ -1,26 +1,19 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Table from '../../components/Table';
 import TopBar from '../../components/TopBar';
-import AddTeacherModal from './popups/teacher/AddTeacherModal';
-import EditTeacherModal from './popups/teacher/EditTeacherModal';
-import DeleteFieldModal from '../../components/DeleteFieldModal';
-import { createTeacher } from '../../data/teacher/postData';
-import { updateTeacher } from '../../data/teacher/putData';
-import { fetchTeachers, fetchTeacher } from '../../data/teacher/getData';
-import { deleteTeacher } from '../../data/teacher/deleteData';
 
-function TeacherManagementPage() {
+function ParentManagementPage() {
     const [data, setData] = useState([]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
-    const [teacherToEdit, setTeacherToEdit] = useState([]);
+    const [parentToEdit, setParentToEdit] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
             try {
-                const teachers = await fetchTeachers();
+                const teachers = await fetchParents(); // This function is not defined
                 setData(teachers);
             } catch (error) {
                 console.error('Error fetching teachers in TeacherManagementPage:', error);
@@ -30,8 +23,8 @@ function TeacherManagementPage() {
         getData();
     }, []);
 
-    const handleSave = async (newTeacher) => {
-        const requestBody = {
+    const handleSave = async (newParent) => {
+        const requestBody = { // Parent object is not defined
             email: newTeacher.email,
             pesel: newTeacher.pesel,
             role: 'TEACHER',
@@ -44,12 +37,12 @@ function TeacherManagementPage() {
         };
 
         try {
-            const response = await createTeacher(requestBody);
+            const response = await createParent(requestBody); // This function is not defined
             
-            const createdTeacher = await fetchTeacher(response.id);
+            const createdTeacher = await fetchParent(response.id);  // This function is not defined
 
 
-            const savedTeacher = {
+            const savedParent = { // Parent object is not defined
                 id: createdTeacher.id,
                 name: `${createdTeacher.firstName} ${createdTeacher.lastName}`,
                 email: createdTeacher.email,
@@ -58,37 +51,37 @@ function TeacherManagementPage() {
                 dateOfEmployment: createdTeacher.dateOfEmployment,
             }
 
-            if (savedTeacher) {
-                setData((prevData) => [...prevData, savedTeacher]);
+            if (savedParent) {
+                setData((prevData) => [...prevData, savedParent]);
             }
         } catch (error) {
             console.error('Error creating teacher:', error);
         }
     };
 
-    const handleUpdate = async (updatedTeacher) => {
+    const handleUpdate = async (updatedParent) => {
 
-        const requestBody = {
-            teacher: {
-                teacherID: teacherToEdit.id,
-                firstName: updatedTeacher.firstName,
-                lastName: updatedTeacher.lastName,
-                dateOfBirth: updatedTeacher.dateOfBirth,
-                dateOfEmployment: updatedTeacher.dateOfEmployment,
-                email: updatedTeacher.email,
-                pesel: updatedTeacher.pesel,
+        const requestBody = { // Parent object is not defined
+            parent: {
+                teacherID: updatedParent.id,
+                firstName: updatedParent.firstName,
+                lastName: updatedParent.lastName,
+                dateOfBirth: updatedParent.dateOfBirth,
+                dateOfEmployment: updatedParent.dateOfEmployment,
+                email: updatedParent.email,
+                pesel: updatedParent.pesel,
             }
         };
 
-        const success = await updateTeacher(requestBody);
+        const success = await updatedParent(requestBody); // This function is not defined
 
         if (success) {
 
             setData((prevData) =>
-                prevData.map((teacher) =>
-                    teacher.id === teacherToEdit.id
-                        ? { ...teacher, ...success }
-                        : teacher
+                prevData.map((parent) =>
+                    parent.id === parentToEdit.id
+                        ? { ...parent, ...success }
+                        : parent
                 )
             );
             setIsEditModalOpen(false);
@@ -97,17 +90,17 @@ function TeacherManagementPage() {
         }
     };
 
-    const handleDelete = async (teacherId) => {
-        const success = await deleteTeacher(teacherId);
+    const handleDelete = async (parentId) => {
+        const success = await deleteParent(parentId); // This function is not defined
         if (success) {
-            setData((prevData) => prevData.filter(teacher => teacher.id !== teacherId));
+            setData((prevData) => prevData.filter(parent => parent.id !== parentId));
             setIsDeleteModalOpen(false);
         } else {
             console.error('Failed to delete teacher');
         }
     };
 
-    const columns = useMemo(
+    const columns = useMemo( // This function is not defined
         () => [
             {
                 id: 'id',
@@ -142,7 +135,7 @@ function TeacherManagementPage() {
                     <div>
                         <button
                             onClick={() => {
-                                const teacherData = {
+                                const parentData = { // Parent object is not defined
                                     id: row.original.id,
                                     firstName: row.original.firstName,
                                     lastName: row.original.lastName,
@@ -151,7 +144,7 @@ function TeacherManagementPage() {
                                     dateOfBirth: row.original.dateOfBirth,
                                     dateOfEmployment: row.original.dateOfEmployment,
                                 };
-                                setTeacherToEdit(teacherData);
+                                setParentToEdit(parentData);
                                 setIsEditModalOpen(true);
                             }}
                             className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
@@ -176,7 +169,7 @@ function TeacherManagementPage() {
 
     return (
         <div>
-            <TopBar title="Teacher Management" />
+            <TopBar title="Parent Management" />
             <div className="p-8">
                 <button
                     onClick={() => setIsAddModalOpen(true)}
@@ -186,26 +179,25 @@ function TeacherManagementPage() {
                 </button>
                 <Table columns={columns} data={data} />
             </div>
-            <AddTeacherModal
+            <AddParentModal // This component is not defined
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 onSave={handleSave}
             />
-            <EditTeacherModal
+            <EditParentModal // This component is not defined
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
                 onSave={handleUpdate}
-                teacher={teacherToEdit}
+                teacher={parentToEdit}
             />
-            <DeleteFieldModal
+            <DeleteParentModal // This component is not defined
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 onDelete={handleDelete}
                 itemId={itemToDelete}
-                itemType="Teacher"
+                itemType="Parent"
             />
         </div>
     );
 }
-
-export default TeacherManagementPage;
+export default ParentManagementPage;
