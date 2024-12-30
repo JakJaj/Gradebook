@@ -21,7 +21,6 @@ function TeacherManagementPage() {
         const getData = async () => {
             try {
                 const teachers = await fetchTeachers();
-                console.log('Fetched teachers:', teachers);
                 setData(teachers);
             } catch (error) {
                 console.error('Error fetching teachers in TeacherManagementPage:', error);
@@ -32,27 +31,65 @@ function TeacherManagementPage() {
     }, []);
 
     const handleSave = async (newTeacher) => {
-        const createdTeacher = await createTeacher(newTeacher);
-        if (createdTeacher) {
-            setData((prevData) => [...prevData, createdTeacher]);
+        const requestBody = {
+            email: newTeacher.email,
+            pesel: newTeacher.pesel,
+            role: 'TEACHER',
+            teacher: {
+                firstName: newTeacher.firstName,
+                lastName: newTeacher.lastName,
+                dateOfBirth: newTeacher.dateOfBirth,
+                dateOfEmployment: newTeacher.dateOfEmployment,
+            },
+        };
+
+        try {
+            const response = await createTeacher(requestBody);
+            
+            const createdTeacher = await fetchTeacher(response.id);
+
+
+            const savedTeacher = {
+                id: createdTeacher.id,
+                name: `${createdTeacher.firstName} ${createdTeacher.lastName}`,
+                email: createdTeacher.email,
+                pesel : createdTeacher.pesel,
+                dateOfBirth: createdTeacher.dateOfBirth,
+                dateOfEmployment: createdTeacher.dateOfEmployment,
+            }
+
+            if (savedTeacher) {
+                setData((prevData) => [...prevData, savedTeacher]);
+            }
+        } catch (error) {
+            console.error('Error creating teacher:', error);
         }
     };
 
     const handleUpdate = async (updatedTeacher) => {
-        const teacherDetails = {
-            teacherID: teacherToEdit.id,
-            firstName: updatedTeacher.firstName,
-            lastName: updatedTeacher.lastName,
-            email: updatedTeacher.email,
-            subject: updatedTeacher.subject,
+
+        const requestBody = {
+            teacher: {
+                teacherID: teacherToEdit.id,
+                firstName: updatedTeacher.firstName,
+                lastName: updatedTeacher.lastName,
+                dateOfBirth: updatedTeacher.dateOfBirth,
+                dateOfEmployment: updatedTeacher.dateOfEmployment,
+                email: updatedTeacher.email,
+                pesel: updatedTeacher.pesel,
+            }
         };
 
-        const success = await updateTeacher(teacherDetails);
+        const success = await updateTeacher(requestBody);
+
         if (success) {
+            console.log("RECIEVED DATA")
+            console.log(success)
+
             setData((prevData) =>
                 prevData.map((teacher) =>
                     teacher.id === teacherToEdit.id
-                        ? { ...teacher, ...teacherDetails }
+                        ? { ...teacher, ...success }
                         : teacher
                 )
             );
@@ -112,7 +149,9 @@ function TeacherManagementPage() {
                                     firstName: row.original.firstName,
                                     lastName: row.original.lastName,
                                     email: row.original.email,
-                                    subject: row.original.subject,
+                                    pesel: row.original.pesel,
+                                    dateOfBirth: row.original.dateOfBirth,
+                                    dateOfEmployment: row.original.dateOfEmployment,
                                 };
                                 setTeacherToEdit(teacherData);
                                 setIsEditModalOpen(true);

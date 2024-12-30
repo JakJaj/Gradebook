@@ -28,16 +28,19 @@ public class TeachersController{
     }
 
     @GetMapping("/{teacherID}")
+    @CrossOrigin
     public ResponseEntity<TeacherResponse> getTeacherByID(@PathVariable Long teacherID){
         return ResponseEntity.ok(teachersService.getTeacherByID(teacherID));
     }
 
     @PutMapping()
+    @CrossOrigin
     public ResponseEntity<TeacherResponse> updateTeacherDetails(@RequestBody UpdateTeacherDetailsRequest request){
         return ResponseEntity.ok(teachersService.updateTeacherDetails(request));
     }
 
     @DeleteMapping("/{teacherID}")
+    @CrossOrigin
     public ResponseEntity<BaseResponse> deleteTeacher(@PathVariable Long teacherID){
         return ResponseEntity.ok(teachersService.deleteTeacher(teacherID));
     }

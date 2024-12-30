@@ -113,6 +113,11 @@ public class StudentsService {
         Class theClass = classRepository.findById(request.getStudent().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getStudent().getClassID())));
 
         try {
+
+            User userToUpdate = student.getUser();
+            userToUpdate.setEmail(request.getStudent().getEmail());
+            userToUpdate.setPesel(request.getStudent().getPesel());
+            
             Student updatedStudent = studentRepository.save(Student.builder()
                     .studentId(student.getStudentId())
                     .firstName(request.getStudent().getFirstName())

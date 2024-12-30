@@ -5,8 +5,10 @@ const url = API_URL;
 
 export const updateTeacher = async (teacherData) => {
     const token = Cookies.get('jwtToken');
+    console.log("SENDING DATA");
+    console.log(teacherData);
     try {
-        const response = await fetch(`${url}/teachers/${teacherData.teacherID}`, {
+        const response = await fetch(`${url}/teachers`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -20,7 +22,16 @@ export const updateTeacher = async (teacherData) => {
         }
 
         const result = await response.json();
-        return result;
+
+        return {
+            id: result.teacher.teacherID,
+            firstName: result.teacher.firstName,
+            lastName: result.teacher.lastName,
+            email: result.teacher.email,
+            pesel : result.teacher.pesel,
+            dateOfBirth: result.teacher.dateOfBirth,
+            dateOfEmployment: result.teacher.dateOfEmployment,
+        }
     } catch (error) {
         console.error('Error updating teacher:', error);
         return null;

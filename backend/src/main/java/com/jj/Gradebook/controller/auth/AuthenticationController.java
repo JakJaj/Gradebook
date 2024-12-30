@@ -20,20 +20,24 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.registerAdmin(request));
     }
     @PostMapping("/register/students")
+    @CrossOrigin
     public ResponseEntity<AuthenticationResponse> registerStudent(@RequestBody RegisterStudentRequest request){
         return ResponseEntity.ok(authenticationService.registerStudent(request));
     }
 
     @PostMapping("/register/teachers")
+    @CrossOrigin
     public ResponseEntity <AuthenticationResponse> registerTeacher(@RequestBody RegisterTeacherRequest request){
         return ResponseEntity.ok(authenticationService.registerTeacher(request));
     }
 
     @PostMapping("/register/parents")
+    @CrossOrigin
     public ResponseEntity<AuthenticationResponse> registerParent(@RequestBody RegisterParentRequest request){
         return ResponseEntity.ok(authenticationService.registerParent(request));
     }
     @PostMapping("/login")
+    @CrossOrigin
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
