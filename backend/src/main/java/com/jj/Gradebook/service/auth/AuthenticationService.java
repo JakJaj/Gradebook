@@ -107,6 +107,9 @@ public class AuthenticationService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         try {
+            System.out.println(request.getTeacher().getDateOfBirth());
+            System.out.println(request.getTeacher().getDateOfEmployment());
+
             Date dateOfBirth = dateFormat.parse(request.getTeacher().getDateOfBirth());
             Date dateOfEmployment = dateFormat.parse(request.getTeacher().getDateOfEmployment());
 

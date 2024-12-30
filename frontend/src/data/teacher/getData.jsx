@@ -57,13 +57,21 @@ export const fetchTeacher = async (teacherId) => {
 
         const result = await response.json();
 
-        console.log('API response for teacher:', result);
 
         if (!result || typeof result !== 'object') {
             throw new Error('Invalid response format');
         }
 
-        return result;
+        console.log(result);
+        
+        return {
+            id: result.teacher.teacherID,
+            name: `${result.teacher.firstName} ${result.teacher.lastName}`,
+            email: result.teacher.email,
+            pesel : result.teacher.pesel,
+            dateOfBirth: result.teacher.dateOfBirth,
+            dateOfEmployment: result.teacher.dateOfEmployment,
+        }
     } catch (error) {
         console.error(`Error fetching teacher with ID ${teacherId}:`, error);
         return null;

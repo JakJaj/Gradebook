@@ -28,6 +28,7 @@ public class TeachersController{
     }
 
     @GetMapping("/{teacherID}")
+    @CrossOrigin
     public ResponseEntity<TeacherResponse> getTeacherByID(@PathVariable Long teacherID){
         return ResponseEntity.ok(teachersService.getTeacherByID(teacherID));
     }
