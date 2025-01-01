@@ -1,6 +1,7 @@
 package com.jj.Gradebook.service.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
+import com.jj.Gradebook.controller.request.parents.DeleteStudentsToParentRequest;
 import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
@@ -9,12 +10,14 @@ import com.jj.Gradebook.controller.response.students.StudentsResponse;
 import com.jj.Gradebook.dao.ParentRepository;
 import com.jj.Gradebook.dao.StudentParentRepository;
 import com.jj.Gradebook.dao.StudentRepository;
+import com.jj.Gradebook.dao.UserRepository;
 import com.jj.Gradebook.dto.ParentDTO;
 import com.jj.Gradebook.dto.StudentDTO;
 import com.jj.Gradebook.entity.Parent;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Student_Parent.StudentParent;
 import com.jj.Gradebook.entity.Student_Parent.StudentParentId;
+import com.jj.Gradebook.entity.User;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,8 @@ public class ParentsService {
     private final ParentRepository parentRepository;
     private final StudentRepository studentRepository;
     private final StudentParentRepository studentParentRepository;
+    private final UserRepository userRepository;
+
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public ParentsResponse getAllParents(){
@@ -44,6 +49,8 @@ public class ParentsService {
                         .parentID(parent.getParentId())
                         .firstName(parent.getFirstName())
                         .lastName(parent.getLastName())
+                        .pesel(parent.getUser().getPesel())
+                        .email(parent.getUser().getEmail())
                         .build())
                 .toList();
 
@@ -65,6 +72,8 @@ public class ParentsService {
                         .parentID(parent.getParentId())
                         .firstName(parent.getFirstName())
                         .lastName(parent.getLastName())
+                        .pesel(parent.getUser().getPesel())
+                        .email(parent.getUser().getEmail())
                         .build())
                 .build();
     }
@@ -147,6 +156,10 @@ public class ParentsService {
     public ParentResponse updateParentDetails(UpdateParentDetailsRequest request) {
         Parent parent = parentRepository.findById(request.getParent().getParentID()).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", request.getParent().getParentID())));
 
+        User userToUpdate = parent.getUser();
+        userToUpdate.setEmail(request.getParent().getEmail());
+        userToUpdate.setPesel(request.getParent().getPesel());
+
         Parent savedParent = parentRepository.save(Parent.builder()
                 .parentId(parent.getParentId())
                 .firstName(request.getParent().getFirstName())
@@ -161,22 +174,32 @@ public class ParentsService {
                         .parentID(parent.getParentId())
                         .firstName(parent.getFirstName())
                         .lastName(parent.getLastName())
+                        .pesel(parent.getUser().getPesel())
+                        .email(parent.getUser().getEmail())
                         .build())
                 .build();
     }
 
     @Transactional
-    public BaseResponse deleteStudentFromParent(Long parentID, Long studentID) {
+    public BaseResponse deleteStudentFromParent(Long parentID, DeleteStudentsToParentRequest request) {
         Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", parentID)));
-        Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
 
-        StudentParent studentParent = studentParentRepository.getStudentParentByStudent_StudentIdAndParent_ParentId(studentID, parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d is assigned to parent with id - %d", studentID, parentID)));
+        List<Student> students = request.getStudentsIDs().stream()
+                .map(student -> studentRepository.findById(student).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", student))))
+                .toList();
 
-        studentParentRepository.delete(studentParent);
+        if (students.isEmpty()) throw new NoSuchEntityException("No students to delete");
+
+        students.forEach(student -> {
+            StudentParent studentParent = studentParentRepository.getStudentParentByStudent_StudentIdAndParent_ParentId(student.getStudentId(), parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d is assigned to parent with id - %d", student.getStudentId(), parentID)));
+            studentParentRepository.delete(studentParent);
+        });
+
+
 
         return BaseResponse.builder()
                 .status("Success")
-                .message(String.format("Successfully deleted student with id - %d from parent with id - %d", studentID, parentID))
+                .message("Successfully deleted students from parent with ids - " + request.getStudentsIDs().stream().map(String::valueOf).collect(Collectors.joining(", ")))
                 .build();
     }
 
@@ -184,8 +207,10 @@ public class ParentsService {
     public BaseResponse deleteParent(Long parentID) {
         Parent parent = parentRepository.findById(parentID).orElseThrow(() -> new NoSuchEntityException(String.format("No parent with id - %d", parentID)));
 
+        User user = parent.getUser();
         studentParentRepository.deleteStudentParentByParent_ParentId(parentID);
         parentRepository.delete(parent);
+        userRepository.delete(user);
 
         return BaseResponse.builder()
                 .status("Success")

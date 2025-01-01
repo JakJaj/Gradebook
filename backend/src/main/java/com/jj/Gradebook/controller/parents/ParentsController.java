@@ -1,6 +1,7 @@
 package com.jj.Gradebook.controller.parents;
 
 import com.jj.Gradebook.controller.request.parents.AddNewStudentsToParentRequest;
+import com.jj.Gradebook.controller.request.parents.DeleteStudentsToParentRequest;
 import com.jj.Gradebook.controller.request.parents.UpdateParentDetailsRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.parents.ParentResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/parents")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ParentsController {
     private final ParentsService parentsService;
 
@@ -43,9 +45,9 @@ public class ParentsController {
         return ResponseEntity.ok(parentsService.updateParentDetails(request));
     }
 
-    @DeleteMapping("/{parentID}/students/{studentID}")
-    public ResponseEntity<BaseResponse> deleteStudentFromParent(@PathVariable Long parentID, @PathVariable Long studentID){
-        return ResponseEntity.ok(parentsService.deleteStudentFromParent(parentID, studentID));
+    @DeleteMapping("/{parentID}/students")
+    public ResponseEntity<BaseResponse> deleteStudentFromParent(@PathVariable Long parentID, @RequestBody DeleteStudentsToParentRequest request){
+        return ResponseEntity.ok(parentsService.deleteStudentFromParent(parentID, request));
     }
 
     @DeleteMapping("/{parentID}")

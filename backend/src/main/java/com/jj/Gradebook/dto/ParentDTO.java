@@ -11,4 +11,6 @@ public class ParentDTO {
     private Long parentID;
     private String firstName;
     private String lastName;
+    private String email;
+    private String pesel;
 }
