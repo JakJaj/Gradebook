@@ -6,6 +6,7 @@ import ParentLandingPage from "./views/parent/ParentLandingPage.jsx";
 import TeacherLandingPage from "./views/teacher/TeacherLandingPage.jsx";
 import StudentManagement from "./views/admin/StudentManagementPage.jsx";
 import TeacherManagementPage from "./views/admin/TeacherManagementPage.jsx";
+import ParentManagementPage from "./views/admin/ParentManagementPage.jsx";
 
 const routes = [
     {
@@ -28,6 +29,10 @@ const routes = [
     {
         path : "/admin/teacherManagement",
         element: <TeacherManagementPage />,
+    },
+    {
+        path : "/admin/parentManagement",
+        element: <ParentManagementPage />,
     },
     {
         path : '/student/dashboard',
