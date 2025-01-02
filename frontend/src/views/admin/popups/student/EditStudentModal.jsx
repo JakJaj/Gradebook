@@ -23,7 +23,7 @@ function EditStudentModal({ isOpen, onClose, onSave, student, classes }) {
                 setStudentData({
                     firstName: studentDetails.firstName,
                     lastName: studentDetails.lastName,
-                    classID: studentDetails.classID,
+                    classID: studentDetails.classID || '',
                     dateOfBirth: `${year}-${month}-${day}`,
                     city: studentDetails.city,
                     street: studentDetails.street,

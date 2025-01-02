@@ -46,8 +46,8 @@ public class StudentsService {
                         .studentID(student.getStudentId())
                         .firstName(student.getFirstName())
                         .lastName(student.getLastName())
-                        .className(student.getStudentClass().getClassName())
-                        .classID(student.getStudentClass().getClassId())
+                        .className((student.getStudentClass() == null ? null : student.getStudentClass().getClassName()))
+                        .classID((student.getStudentClass() == null ?  null : student.getStudentClass().getClassId()))
                         .dateOfBirth(dateFormat.format(student.getDateOfBirth()))
                         .city(student.getCity())
                         .street(student.getStreet())
@@ -71,8 +71,8 @@ public class StudentsService {
                 .message(String.format("Successfully returning student with id - %d", studentID))
                 .student(StudentDTO.builder()
                         .studentID(student.getStudentId())
-                        .classID(student.getStudentClass().getClassId())
-                        .className(student.getStudentClass().getClassName())
+                        .className((student.getStudentClass() == null ? null : student.getStudentClass().getClassName()))
+                        .classID((student.getStudentClass() == null ?  null : student.getStudentClass().getClassId()))
                         .firstName(student.getFirstName())
                         .lastName(student.getLastName())
                         .dateOfBirth(dateFormat.format(student.getDateOfBirth()))
@@ -117,7 +117,7 @@ public class StudentsService {
             User userToUpdate = student.getUser();
             userToUpdate.setEmail(request.getStudent().getEmail());
             userToUpdate.setPesel(request.getStudent().getPesel());
-            
+
             Student updatedStudent = studentRepository.save(Student.builder()
                     .studentId(student.getStudentId())
                     .firstName(request.getStudent().getFirstName())

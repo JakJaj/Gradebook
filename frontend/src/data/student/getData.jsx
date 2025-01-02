@@ -26,7 +26,7 @@ export const fetchStudents = async () => {
         return result.students.map(student => ({
             id: student.studentID,
             name: `${student.firstName} ${student.lastName}`,
-            class: student.className,
+            class: student.className || '',
             birthDate: student.dateOfBirth,
             address: `${student.street} ${student.houseNumber}, ${student.city}`,
         }));
