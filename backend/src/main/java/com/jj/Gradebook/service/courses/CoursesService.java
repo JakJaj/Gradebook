@@ -1,6 +1,9 @@
 package com.jj.Gradebook.service.courses;
 
 import com.jj.Gradebook.controller.courses.CourseGradesResponse;
+import com.jj.Gradebook.controller.request.courses.AddNewCourseRequest;
+import com.jj.Gradebook.controller.request.courses.UpdateCourseRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.courses.CourseResponse;
 import com.jj.Gradebook.controller.response.courses.CoursesResponse;
 import com.jj.Gradebook.dao.*;
@@ -10,6 +13,7 @@ import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.entity.*;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -136,6 +140,77 @@ public class CoursesService {
                 .status("Success")
                 .message(String.format("Successfully returning list of each student grades for course: %d",courseID))
                 .studentsGrades(gradesOfStudents)
+                .build();
+    }
+
+    public CourseResponse addNewCourse(AddNewCourseRequest request) {
+        System.out.println(request);
+        Teacher teacher = teacherRepository.findById(request.getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTeacherID())));
+
+        Course course = coursesRepository.save(Course.builder()
+                .courseName(request.getCourseName())
+                .description(request.getCourseDescription())
+                .teacher(teacher)
+                .build());
+
+        return CourseResponse.builder()
+                .status("Success")
+                .message("Successfully added new course")
+                .course(CourseDTO.builder()
+                        .courseID(course.getCourseId())
+                        .courseName(course.getCourseName())
+                        .description(course.getDescription())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(course.getTeacher().getTeacherId())
+                                .firstName(course.getTeacher().getFirstName())
+                                .lastName(course.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(course.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(course.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
+                .build();
+    }
+
+    @Transactional
+    public CourseResponse updateCourse(UpdateCourseRequest request) {
+        System.out.println(request);
+        Course course = coursesRepository.findById(request.getCourseID()).orElseThrow(() -> new NoSuchEntityException(String.format("No course with id - %d", request.getCourseID())));
+        Teacher teacher = teacherRepository.findById(request.getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTeacherID())));
+
+        Course updatedCourse = coursesRepository.save(Course.builder()
+                .courseId(course.getCourseId())
+                .courseName(request.getCourseName())
+                .description(request.getCourseDescription())
+                .teacher(teacher)
+                .build());
+
+        return CourseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully updated course with id - %d", updatedCourse.getCourseId()))
+                .course(CourseDTO.builder()
+                        .courseID(updatedCourse.getCourseId())
+                        .courseName(updatedCourse.getCourseName())
+                        .description(updatedCourse.getDescription())
+                        .tutor(TeacherDTO.builder()
+                                .teacherID(updatedCourse.getTeacher().getTeacherId())
+                                .firstName(updatedCourse.getTeacher().getFirstName())
+                                .lastName(updatedCourse.getTeacher().getLastName())
+                                .dateOfBirth(dateFormat.format(updatedCourse.getTeacher().getDateOfBirth()))
+                                .dateOfEmployment(dateFormat.format(updatedCourse.getTeacher().getDateOfEmployment()))
+                                .build())
+                        .build())
+                .build();
+    }
+
+    @Transactional
+    public BaseResponse deleteCourse(Long courseID) {
+        Course course = coursesRepository.findById(courseID).orElseThrow(() -> new NoSuchEntityException(String.format("No course with id - %d", courseID)));
+
+        coursesRepository.delete(course);
+
+        return CourseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted course with id - %d", courseID))
                 .build();
     }
 }

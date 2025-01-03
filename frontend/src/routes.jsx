@@ -7,6 +7,7 @@ import TeacherLandingPage from "./views/teacher/TeacherLandingPage.jsx";
 import StudentManagement from "./views/admin/StudentManagementPage.jsx";
 import TeacherManagementPage from "./views/admin/TeacherManagementPage.jsx";
 import ParentManagementPage from "./views/admin/ParentManagementPage.jsx";
+import CourseManagementPage from "./views/admin/CourseManagementPage.jsx";
 
 const routes = [
     {
@@ -33,6 +34,10 @@ const routes = [
     {
         path : "/admin/parentManagement",
         element: <ParentManagementPage />,
+    },
+    {
+        path : '/admin/courseManagement',
+        element: <CourseManagementPage />,
     },
     {
         path : '/student/dashboard',

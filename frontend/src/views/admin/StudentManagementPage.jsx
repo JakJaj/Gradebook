@@ -63,7 +63,12 @@ function StudentManagementPage() {
         };
 
         const success = await updateStudent(studentDetails);
+
+        
+        
         if (success) {
+            console.log(classes)
+            console.log(studentDetails)
             setData((prevData) =>
                 prevData.map((student) =>
                     student.id === studentToEdit
@@ -71,7 +76,7 @@ function StudentManagementPage() {
                             ...student,
                             id: studentDetails.studentID,
                             name: `${studentDetails.firstName} ${studentDetails.lastName}`,
-                            class: classes.find(cls => cls.id === studentDetails.classID)?.name || '',
+                            class: classes.find(cls => cls.id === Number(studentDetails.classID))?.name || '',
                             birthDate: studentDetails.dateOfBirth,
                             address: `${studentDetails.street} ${studentDetails.houseNumber}, ${studentDetails.city}`,
                         }
