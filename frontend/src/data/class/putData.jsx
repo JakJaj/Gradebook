@@ -3,18 +3,18 @@ import API_URL from '../const';
 
 const url = API_URL;
 
-export const updateTeacher = async (teacherData) => {
+export const updateClass = async (classData) => {
     const token = Cookies.get('jwtToken');
-    console.log("SENDING DATA");
-    console.log(teacherData);
+
+    console.log(classData)
     try {
-        const response = await fetch(`${url}/teachers`, {
+        const response = await fetch(`${url}/classes`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(teacherData),
+            body: JSON.stringify(classData),
         });
 
         if (!response.ok) {
@@ -33,7 +33,7 @@ export const updateTeacher = async (teacherData) => {
             }
         }
     } catch (error) {
-        console.error('Error updating class:', error);
+        console.error('Error updating teacher:', error);
         return null;
     }
 };
