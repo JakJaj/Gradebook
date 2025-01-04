@@ -8,6 +8,8 @@ import StudentManagement from "./views/admin/StudentManagementPage.jsx";
 import TeacherManagementPage from "./views/admin/TeacherManagementPage.jsx";
 import ParentManagementPage from "./views/admin/ParentManagementPage.jsx";
 import CourseManagementPage from "./views/admin/CourseManagementPage.jsx";
+import ClassManagementPage from "./views/admin/ClassManagementPage.jsx";
+import TimetableScheduler from "./components/TimetableScheduler.jsx";
 
 const routes = [
     {
@@ -38,6 +40,14 @@ const routes = [
     {
         path : '/admin/courseManagement',
         element: <CourseManagementPage />,
+    },
+    {
+        path : '/admin/classManagement',
+        element: <ClassManagementPage />,
+    },
+    {
+        path : '/admin/classManagement/timetalbe/:classId',
+        element : <TimetableScheduler />,
     },
     {
         path : '/student/dashboard',

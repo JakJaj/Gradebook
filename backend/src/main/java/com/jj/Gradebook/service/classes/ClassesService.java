@@ -179,6 +179,7 @@ public class ClassesService {
     }
 
     public ClassResponse updateClassDetails(UpdateClassDetailsRequest request) {
+        System.out.println(request);
         Class theClass = classRepository.findById(request.getTheClass().getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getTheClass().getClassID())));
         Teacher teacher = teacherRepository.findById(request.getTheClass().getTutorID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", request.getTheClass().getTutorID())));
 

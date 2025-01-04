@@ -1,0 +1,55 @@
+/* Customize the header row containing day names */
+.rbc-header {
+    background-color: rgb(30 64 175 / var(--tw-bg-opacity, 1));
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 4px; /* Reduce padding */
+    font-size: x-large;
+}
+
+/* Customize the time grid header */
+.rbc-time-header {
+    background-color: #e6e6e6;
+    height: 50px;
+}
+
+/* Customize the cells in the header row containing day names */
+.rbc-time-header-cell {
+    padding: 4px; /* Reduce padding */
+    font-size: 0.875rem; /* Reduce font size */
+    height: 1000vh
+}
+
+/* Hide the event container */
+.rbc-row-content {
+    display: none;
+}
+
+/* Customize the main content area of the time grid */
+.rbc-time-content {
+    border-top: 1px solid #ddd;
+}
+
+/* Customize each time slot */
+.rbc-time-slot {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Customize the event boxes */
+.rbc-event {
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+/* Customize the background of each day cell */
+.rbc-day-bg {
+    background-color: #fff;
+}
+
+/* Customize the background of weekend cells */
+.rbc-day-off {
+    background-color: #f0f0f0;
+}
