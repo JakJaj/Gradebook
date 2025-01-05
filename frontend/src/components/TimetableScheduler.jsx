@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation} from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -7,11 +7,11 @@ import './TimetableScheduler.css';
 import EventDetailsModal from './EventDetailsModal';
 import { fetchCourses } from '../data/course/getData';
 import DeleteEventModal from './DeleteEventModal';
+import { createTimetable } from '../data/timetable/postData';
 
 const localizer = momentLocalizer(moment);
 
 const TimetableScheduler = ({}) => {
-    const { classId } = useParams();
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +19,21 @@ const TimetableScheduler = ({}) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [courses, setCourses] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const location = useLocation();
+    const { theClass } = location.state || {};
+
+
+    useEffect(() => {
+        const getTimetable = async () => {
+            try {
+                const timetable = await fetchTimetable(theClass.id);
+                setEvents(timetable);
+            } catch (error) {
+                console.error('Error fetching timetable in TimetableScheduler:', error);
+            }
+        };
+        getTimetable();
+    }, []);
 
     useEffect(() => {
         const getCourses = async () => {
@@ -68,7 +83,6 @@ const TimetableScheduler = ({}) => {
             tutor,
         };
     
-        console.log(newEvent);
         setEvents([...events, newEvent]);
         setIsModalOpen(false);
     };
@@ -100,11 +114,33 @@ const TimetableScheduler = ({}) => {
         </div>
     );
 
-    const handleSave = () => {
-        // Save the events to the database
-        navigate('/admin/classManagement', { state: { message: 'Timetable saved successfully!' } });
-    }
+    const handleSave = async() => {
+        
+        try{
+            const timetableList = [];
+            
+            
 
+            events.forEach((event) => {
+                const timetable = {
+                    courseID: Number(event.courseId),
+                    classID: theClass.id,
+                    startTime: moment(event.start).format('HH:mm'), // Use event.start
+                    endTime: moment(event.end).format('HH:mm'),     // Use event.end
+                    classroomNumber: event.classroom,
+                    dayOfWeek: moment(event.start).isoWeekday(),
+                };
+                    timetableList.push(timetable);
+            });
+
+            const response = await createTimetable(timetableList);
+            console.log(response);
+            navigate('/admin/classManagement', { state: { message: 'Timetable saved successfully!'} });
+        } catch (error) {
+            console.error('Error creating timetable:', error);  
+        }
+    
+    }
     return (
         <div className="p-6 bg-white rounded shadow-lg">
             <div className="flex justify-between items-center mb-4">

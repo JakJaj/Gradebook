@@ -30,6 +30,11 @@ const EventDetailsModal = ({ isOpen, onClose, onSave, courses, initialData }) =>
             },
         };
         onSave(event);
+
+        setCourseId('');
+        setClassroom('');
+        setStartTime('');
+        setEndTime('');
         onClose();
     };
 
@@ -47,6 +52,7 @@ const EventDetailsModal = ({ isOpen, onClose, onSave, courses, initialData }) =>
                         <select
                             id="course"
                             value={courseId}
+                            required
                             onChange={(e) => setCourseId(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         >
@@ -65,6 +71,7 @@ const EventDetailsModal = ({ isOpen, onClose, onSave, courses, initialData }) =>
                         <input
                             type="text"
                             id="classroom"
+                            required
                             value={classroom}
                             onChange={(e) => setClassroom(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

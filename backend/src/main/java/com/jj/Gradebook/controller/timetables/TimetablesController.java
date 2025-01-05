@@ -17,11 +17,13 @@ public class TimetablesController {
 
 
     @GetMapping("/users/{userID}")
+    @CrossOrigin
     public ResponseEntity<TimetableResponse> getUsersTimetable(@PathVariable Long userID){
         return ResponseEntity.ok(timetablesService.getUsersTimetable(userID));
     }
 
     @PostMapping()
+    @CrossOrigin
     public ResponseEntity<TimetableResponse> createNewTimetableEntry(@RequestBody CreateTimetableRequest request){
         return ResponseEntity.ok(timetablesService.createNewTimetableEntry(request));
     }

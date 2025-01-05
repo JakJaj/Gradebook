@@ -63,6 +63,8 @@ public class TimetablesService {
 
     @Transactional
     public TimetableResponse createNewTimetableEntry(CreateTimetableRequest request) {
+        System.out.println(request);
+
         Class theClass = classRepository.findById(request.getTimetables().get(0).getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getTimetables().get(0).getClassID())));
 
         attendanceRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
