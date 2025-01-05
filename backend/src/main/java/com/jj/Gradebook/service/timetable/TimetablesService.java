@@ -117,7 +117,7 @@ public class TimetablesService {
 
             timetableEntry.get(DayOfWeek.of(currentDayOfTheWeek)).add(TimetableEntryDTO.builder()
                     .timetableID(timetable.getTimetableId())
-                    .courseName(timetable.getCourse().getCourseName())
+                    .courseID(timetable.getCourse().getCourseId())
                     .classID(timetable.getClas().getClassId())
                     .startTime(timetable.getStartTime().toString())
                     .endTime(timetable.getEndTime().toString())
@@ -126,5 +126,19 @@ public class TimetablesService {
                     .build());
         }
         return timetableEntry;
+    }
+
+    public TimetableResponse getClassTimetable(Long classID) {
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+
+        List<Timetable> timetableList = timetableRepository.findTimetablesByClas_ClassId(theClass.getClassId());
+
+        HashMap<DayOfWeek, List<TimetableEntryDTO>> timetableEntry = createHashMapOfTimetable(timetableList);
+
+        return TimetableResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully returning timetable for class with id - %d", classID))
+                .timetable(timetableEntry)
+                .build();
     }
 }
