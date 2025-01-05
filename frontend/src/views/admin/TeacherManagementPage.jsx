@@ -16,6 +16,8 @@ function TeacherManagementPage() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [teacherToEdit, setTeacherToEdit] = useState([]);
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     useEffect(() => {
         const getData = async () => {
@@ -60,6 +62,8 @@ function TeacherManagementPage() {
 
             if (savedTeacher) {
                 setData((prevData) => [...prevData, savedTeacher]);
+                setNotificationMessage('Teacher created successfully! Generated password: ' +  response.password);
+                setShowNotification(true);
             }
         } catch (error) {
             console.error('Error creating teacher:', error);
@@ -176,6 +180,14 @@ function TeacherManagementPage() {
 
     return (
         <div>
+                    {showNotification && (
+            <div className="fixed bottom-0 left-0 right-0 bg-green-500 text-white text-center py-2 flex justify-center items-center px-4">
+                <span>{notificationMessage}</span>
+                <button onClick={() => setShowNotification(false)} className="ml-4 text-white font-bold">
+                    X
+                </button>
+            </div>
+        )}
             <TopBar title="Teacher Management" />
             <div className="p-8">
                 <button

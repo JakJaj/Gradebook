@@ -36,9 +36,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ClassRepository classRepository;
-    private final static int PASSWORD_LENGTH = 10;
+    private final static int PASSWORD_LENGTH = 16;
 
-    //TODO: ZASTANOWIC SIE KIEDY LACZYC UCZNIA Z RODZICEM!!!!
     public AuthenticationResponse registerStudent(RegisterStudentRequest request){
 
         String generatedPassword = SecurityUtils.generateSalt(PASSWORD_LENGTH);
@@ -81,9 +80,10 @@ public class AuthenticationService {
 
             return AuthenticationResponse.builder()
                     .status("Success")
-                    .message("Generated password: " + generatedPassword)
+                    .message("Successfully registered")
                     .token(token)
                     .id(savedStudent.getStudentId())
+                    .password(generatedPassword)
                     .build();
         } catch (ParseException e){
             System.out.println("Wrong date format");
@@ -125,9 +125,10 @@ public class AuthenticationService {
 
             return AuthenticationResponse.builder()
                     .status("Success")
-                    .message("Generated password: " + generatedPassword)
+                    .message("Successfully registered")
                     .token(token)
                     .id(savedTeacher.getTeacherId())
+                    .password(generatedPassword)
                     .build();
         } catch (ParseException e){
             System.out.println("Wrong date format");
@@ -161,9 +162,10 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .status("Success")
-                .message("Generated password: " + generatedPassword)
+                .message("Successfully registered")
                 .token(token)
                 .id(savedParent.getParentId())
+                .password(generatedPassword)
                 .build();
     }
 
@@ -182,8 +184,9 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .status("Success")
-                .message("Generated password: " + generatedPassword)
+                .message("Successfully registered")
                 .token(token)
+                .password(generatedPassword)
                 .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request){

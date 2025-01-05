@@ -19,6 +19,8 @@ function ParentManagementPage() {
     const [isEditParentStudentsModalOpen, setIsEditParentStudentsModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [parentToEdit, setParentToEdit] = useState([]);
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     useEffect(() => {
         const getData = async () => {
@@ -58,6 +60,8 @@ function ParentManagementPage() {
 
             if (savedParent) {
                 setData((prevData) => [...prevData, savedParent]);
+                setNotificationMessage('Parent created successfully! Generated password: ' +  response.password);
+                setShowNotification(true);
             }
         } catch (error) {
             console.error('Error creating teacher:', error);
@@ -180,6 +184,14 @@ function ParentManagementPage() {
 
     return (
         <div>
+            {showNotification && (
+            <div className="fixed bottom-0 left-0 right-0 bg-green-500 text-white text-center py-2 flex justify-center items-center px-4">
+                <span>{notificationMessage}</span>
+                <button onClick={() => setShowNotification(false)} className="ml-4 text-white font-bold">
+                    X
+                </button>
+            </div>
+        )}
             <TopBar title="Parent Management" />
             <div className="p-8">
                 <button
