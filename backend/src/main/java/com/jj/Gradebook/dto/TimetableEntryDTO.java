@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 public class TimetableEntryDTO {
     private Long timetableID;
-    private String courseName;
+    private Long courseID;
     private Long classID;
     private String startTime;
     private String endTime;

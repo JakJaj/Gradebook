@@ -134,7 +134,6 @@ function ClassManagementPage() {
         }
     };
     const handleManageTimetable = (theClass) => {
-        console.log(theClass);
         navigate(`/admin/classManagement/timetalbe/${theClass.id}`, { state: { theClass } });
     };
 

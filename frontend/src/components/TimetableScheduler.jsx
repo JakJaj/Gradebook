@@ -8,6 +8,7 @@ import EventDetailsModal from './EventDetailsModal';
 import { fetchCourses } from '../data/course/getData';
 import DeleteEventModal from './DeleteEventModal';
 import { createTimetable } from '../data/timetable/postData';
+import { fetchTimetable } from '../data/timetable/getData';
 
 const localizer = momentLocalizer(moment);
 
@@ -21,25 +22,14 @@ const TimetableScheduler = ({}) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const location = useLocation();
     const { theClass } = location.state || {};
-
-
-    useEffect(() => {
-        const getTimetable = async () => {
-            try {
-                const timetable = await fetchTimetable(theClass.id);
-                setEvents(timetable);
-            } catch (error) {
-                console.error('Error fetching timetable in TimetableScheduler:', error);
-            }
-        };
-        getTimetable();
-    }, []);
+    const [coursesFetched, setCoursesFetched] = useState(false); // Track when courses are fetched
 
     useEffect(() => {
         const getCourses = async () => {
             try {
                 const courses = await fetchCourses();
                 setCourses(courses);
+                setCoursesFetched(true); // Set coursesFetched to true
             } catch (error) {
                 console.error('Error fetching courses in ClassManagementPage:', error);
             }
@@ -47,6 +37,54 @@ const TimetableScheduler = ({}) => {
         getCourses();
     }, []);
 
+    useEffect(() => {
+        if (!coursesFetched) return; // Wait until courses are fetched
+
+        const getTimetable = async () => {
+            try {
+                const timetable = await fetchTimetable(theClass.id);
+                console.log(timetable); 
+                const timetableToEvents = [];
+
+                Object.keys(timetable).forEach(day => {
+                    timetable[day].forEach(entry => {
+                        const baseDate = moment(defaultDate).day(day);
+
+                        const start = baseDate.clone().set({
+                            hour: moment(entry.startTime, 'HH:mm').hour(),
+                            minute: moment(entry.startTime, 'HH:mm').minute(),
+                        }).toDate();
+
+                        const end = baseDate.clone().set({
+                            hour: moment(entry.endTime, 'HH:mm').hour(),
+                            minute: moment(entry.endTime, 'HH:mm').minute(),
+                        }).toDate();
+
+                        const newEvent = {
+                            timetableID : entry.timetableID,
+                            start,
+                            end,
+                            title: courses.find(course => course.id === entry.courseID)?.name,
+                            subtitle: `Classroom: ${entry.classroom}`,
+                            courseId: entry.courseID,
+                            classroom: entry.classroom,
+                            tutor: { name: entry.teacherName },
+                        };
+
+                        timetableToEvents.push(newEvent);
+                    });
+                });
+
+                setEvents(timetableToEvents);
+            } catch (error) {
+                console.error('Error fetching timetable in TimetableScheduler:', error);
+            }
+        };
+        getTimetable();
+    }, [coursesFetched, theClass]);
+
+
+    
     const handleSelectSlot = ({ start, end }) => {
         if (end - start === 900000) return;
         setSelectedSlot({ start, end });
@@ -88,7 +126,9 @@ const TimetableScheduler = ({}) => {
     };
 
     const handleDeleteEvent = () => {
-        setEvents(events.filter(event => event !== selectedEvent));
+        console.log(selectedEvent);
+
+        setEvents(events.filter(event => event.timetableID !== selectedEvent.timetableID));
         setSelectedEvent(null);
         setIsDeleteEventModalOpen(false);
     };

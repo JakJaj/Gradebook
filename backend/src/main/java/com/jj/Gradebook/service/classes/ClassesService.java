@@ -108,7 +108,7 @@ public class ClassesService {
 
             timetableEntry.get(DayOfWeek.of(currentDayOfTheWeek)).add(TimetableEntryDTO.builder()
                     .timetableID(timetable.getTimetableId())
-                    .courseName(timetable.getCourse().getCourseName())
+                    .courseID(timetable.getCourse().getCourseId())
                     .classID(theClass.getClassId())
                     .startTime(timetable.getStartTime().toString())
                     .endTime(timetable.getEndTime().toString())
