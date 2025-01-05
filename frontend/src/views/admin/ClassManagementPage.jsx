@@ -35,6 +35,7 @@ function ClassManagementPage() {
             }
         };
 
+
         getData();
     }, []);
 
@@ -59,7 +60,6 @@ function ClassManagementPage() {
         const handleCloseMessage = () => {
             setShowMessage(false);
         };
-
 
     const handleSave = async (newClass) => {
         const requestBody = { 
@@ -134,7 +134,8 @@ function ClassManagementPage() {
         }
     };
     const handleManageTimetable = (theClass) => {
-        navigate(`/admin/classManagement/timetalbe/${theClass.id}`);
+        console.log(theClass);
+        navigate(`/admin/classManagement/timetalbe/${theClass.id}`, { state: { theClass } });
     };
 
     const columns = useMemo(    
