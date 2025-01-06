@@ -22,14 +22,14 @@ const TimetableScheduler = ({}) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const location = useLocation();
     const { theClass } = location.state || {};
-    const [coursesFetched, setCoursesFetched] = useState(false); // Track when courses are fetched
+    const [coursesFetched, setCoursesFetched] = useState(false); 
 
     useEffect(() => {
         const getCourses = async () => {
             try {
                 const courses = await fetchCourses();
                 setCourses(courses);
-                setCoursesFetched(true); // Set coursesFetched to true
+                setCoursesFetched(true); 
             } catch (error) {
                 console.error('Error fetching courses in ClassManagementPage:', error);
             }
@@ -38,7 +38,7 @@ const TimetableScheduler = ({}) => {
     }, []);
 
     useEffect(() => {
-        if (!coursesFetched) return; // Wait until courses are fetched
+        if (!coursesFetched) return;
 
         const getTimetable = async () => {
             try {
@@ -165,8 +165,8 @@ const TimetableScheduler = ({}) => {
                 const timetable = {
                     courseID: Number(event.courseId),
                     classID: theClass.id,
-                    startTime: moment(event.start).format('HH:mm'), // Use event.start
-                    endTime: moment(event.end).format('HH:mm'),     // Use event.end
+                    startTime: moment(event.start).format('HH:mm'), 
+                    endTime: moment(event.end).format('HH:mm'),
                     classroomNumber: event.classroom,
                     dayOfWeek: moment(event.start).isoWeekday(),
                 };
@@ -203,13 +203,13 @@ const TimetableScheduler = ({}) => {
                 onSelectEvent={handleSelectEvent}
                 defaultView="work_week"
                 views={['work_week']}
-                step={15} // 15-minute intervals
-                timeslots={4} // 4 segments per hour
+                step={15} 
+                timeslots={4} 
                 min={minTime}
                 max={maxTime}
                 toolbar={false}
                 formats={formats}
-                defaultDate={defaultDate} // Set the default date
+                defaultDate={defaultDate} 
                 components={{
                     event: EventComponent,
                 }}

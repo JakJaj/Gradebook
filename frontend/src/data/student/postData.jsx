@@ -71,6 +71,7 @@ export const createStudent = async (studentData) => {
             class: studentData.className,
             birthDate: payload.student.dateOfBirth,
             address: `${payload.student.street} ${payload.student.houseNumber}, ${payload.student.city}`,
+            password: data.password,
         };
     } catch (error) {
         console.error('Error creating student:', error);

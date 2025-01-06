@@ -11,7 +11,7 @@ public class SecurityUtils {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[length];
         random.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
+        return Base64.getEncoder().encodeToString(salt).substring(0, length - 2);
     }
 
     public static String generateSalt(){
