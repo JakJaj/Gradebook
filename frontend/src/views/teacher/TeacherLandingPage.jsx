@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from '../../components/TopBar';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import AnnouncementModal from '../teacher/popup/AnnouncementModal'
+import AnnouncementModal from '../teacher/popup/AnnouncementModal';
 import Announcement from '../../components/Announcement';
+import { fetchCourses } from '../../data/course/getData';
+import { fetchTimetableTeacher } from '../../data/timetable/getData';
+import { fetchTeacher } from '../../data/teacher/getData';
+import { fetchUserDetails } from '../../data/user/getUser';
 
 const localizer = momentLocalizer(moment);
 
@@ -13,9 +17,105 @@ function TeacherLandingPage() {
     const [announcements, setAnnouncements] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [courses, setCourses] = useState([]);
+    const [coursesFetched, setCoursesFetched] = useState(false); 
+    const [teacher, setTeacher] = useState(null);
+    const [user, setUser] = useState(null);
     const announcementsPerPage = 5;
 
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const user = await fetchUserDetails();
+                setUser(user);
+            } catch (error) {
+                console.error('Error fetching user in TeacherLandingPage:', error);
+            }
+        };
+        getUser();
+    }, []);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const getTeacherData = async () => {
+            try {
+                
+                const teacherData = await fetchTeacher(user.subClassID);
+                
+                setTeacher(teacherData);
+            } catch (error) {
+                console.error('Error fetching teacher data in TeacherLandingPage:', error);
+            }
+        };
+        getTeacherData();
+    }, [user]);
+
+    useEffect(() => {
+        if (!teacher) return;
+
+        const getCourses = async () => {
+            try {
+                const courses = await fetchCourses();
+                setCourses(courses);
+                setCoursesFetched(true); 
+            } catch (error) {
+                console.error('Error fetching courses in ClassManagementPage:', error);
+            }
+        };
+        getCourses();
+    }, [teacher]);
+
+    useEffect(() => {
+        if (!coursesFetched || !teacher) return;
+
+        const getTimetable = async () => {
+            try {
+                console.log(teacher);
+
+                const timetable = await fetchTimetableTeacher(teacher.id); // get timetable by teacher 
+                
+                const timetableToEvents = [];
+
+                Object.keys(timetable).forEach(day => {
+                    timetable[day].forEach(entry => {
+                        const baseDate = moment().day(day);
+
+                        const start = baseDate.clone().set({
+                            hour: moment(entry.startTime, 'HH:mm').hour(),
+                            minute: moment(entry.startTime, 'HH:mm').minute(),
+                        }).toDate();
+
+                        const end = baseDate.clone().set({
+                            hour: moment(entry.endTime, 'HH:mm').hour(),
+                            minute: moment(entry.endTime, 'HH:mm').minute(),
+                        }).toDate();
+
+                        const newEvent = {
+                            timetableID: entry.timetableID,
+                            start,
+                            end,
+                            title: courses.find(course => course.id === entry.courseID)?.name,
+                            subtitle: `Classroom: ${entry.classroom}`,
+                            courseId: entry.courseID,
+                            classroom: entry.classroom,
+                            tutor: { name: entry.teacherName },
+                        };
+
+                        timetableToEvents.push(newEvent);
+                    });
+                });
+
+                setEvents(timetableToEvents);
+            } catch (error) {
+                console.error('Error fetching timetable in TeacherLandingPage:', error);
+            }
+        };
+        getTimetable();
+    }, [coursesFetched, teacher]);
+
     const handleCreateAnnouncement = (announcement) => {
+        console.log(events);
         setAnnouncements([...announcements, announcement]);
     };
 
@@ -35,11 +135,11 @@ function TeacherLandingPage() {
     const maxTime = new Date();
     maxTime.setHours(17, 0, 0);
 
-    const defaultDate = new Date(2023, 0, 2); 
+    const defaultDate = new Date(2023, 0, 2);
 
     const formats = {
         dayFormat: (date, culture, localizer) =>
-            localizer.format(date, 'dddd', culture),
+            localizer.format(date, 'dddd', culture), 
     };
 
     return (

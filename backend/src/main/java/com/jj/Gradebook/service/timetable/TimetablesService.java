@@ -141,4 +141,19 @@ public class TimetablesService {
                 .timetable(timetableEntry)
                 .build();
     }
+
+    public TimetableResponse getTeacherTimetable(Long teacherID) {
+        Teacher teacher = teacherRepository.findById(teacherID).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d", teacherID)));
+
+        List<Timetable> timetableList = timetableRepository.findTimetablesByCourse_Teacher_TeacherId(teacher.getTeacherId());
+
+        HashMap<DayOfWeek, List<TimetableEntryDTO>> timetableEntry = createHashMapOfTimetable(timetableList);
+
+        return TimetableResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully returning timetable for teacher with id - %d", teacherID))
+                .timetable(timetableEntry)
+                .build();
+
+    }
 }
