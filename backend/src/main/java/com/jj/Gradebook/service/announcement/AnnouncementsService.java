@@ -57,6 +57,7 @@ public class AnnouncementsService {
     }
 
     public AnnouncementResponse createNewAnnouncement(CreateAnnouncementRequest request) {
+        System.out.println(request);
         Teacher teacher = teacherRepository.findById(request.getTeacherID()).orElseThrow(() -> new NoSuchEntityException(String.format("No teacher with id - %d",request.getTeacherID())));
 
         try {

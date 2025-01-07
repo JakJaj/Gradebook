@@ -10,6 +10,7 @@ import { fetchStudents, fetchClasses} from '../../data/student/getData';
 import { deleteStudent } from '../../data/student/deleteData';
 import { updateStudent } from '../../data/student/putData';
 
+
 function StudentManagementPage() {
     const [data, setData] = useState([]);
     const [classes, setClasses] = useState([]);

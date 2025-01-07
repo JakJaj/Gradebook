@@ -133,10 +133,7 @@ public class AuthenticationService {
         } catch (ParseException e){
             System.out.println("Wrong date format");
             throw new DateFormatException("Wrong date format");
-
         }
-
-
     }
 
     public AuthenticationResponse registerParent(RegisterParentRequest request){
