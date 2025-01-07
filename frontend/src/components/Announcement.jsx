@@ -7,7 +7,7 @@ const Announcement = ({ announcement, onDelete }) => {
             <p className="text-gray-700">{announcement.content}</p>
             <div className="flex justify-between items-center text-sm text-gray-500">
                 <div>
-                    <span>{announcement.creator}</span> | <span>{new Date(announcement.date).toLocaleDateString()}</span>
+                    <span>{new Date(announcement.date).toLocaleDateString()}</span>
                 </div>
                 <button onClick={() => onDelete(announcement)} className="text-red-500 font-bold">
                     X

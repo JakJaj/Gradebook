@@ -122,6 +122,7 @@ public class TimetablesService {
                     .startTime(timetable.getStartTime().toString())
                     .endTime(timetable.getEndTime().toString())
                     .classroom(timetable.getClassroomNumber())
+                    .classID(timetable.getClas().getClassId())
                     .teacherName(timetable.getCourse().getTeacher().getFirstName() + " " + timetable.getCourse().getTeacher().getLastName())
                     .build());
         }

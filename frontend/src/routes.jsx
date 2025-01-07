@@ -10,6 +10,7 @@ import ParentManagementPage from "./views/admin/ParentManagementPage.jsx";
 import CourseManagementPage from "./views/admin/CourseManagementPage.jsx";
 import ClassManagementPage from "./views/admin/ClassManagementPage.jsx";
 import TimetableScheduler from "./components/TimetableScheduler.jsx";
+import TeacherClassPage from "./views/teacher/TeacherClassPage.jsx";
 
 const routes = [
     {
@@ -60,8 +61,11 @@ const routes = [
     {
         path : '/teacher/dashboard',
         element: <TeacherLandingPage />,
+    },
+    {
+        path : '/teacher/class/:classId',
+        element: <TeacherClassPage />,
     }
-
 ]
 
 
