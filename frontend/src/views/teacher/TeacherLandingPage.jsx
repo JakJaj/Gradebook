@@ -218,7 +218,7 @@ function TeacherLandingPage() {
 
     const handleSelectEvent = (event) => {
         console.log("Class data to display: ", event);
-        navigate(`/teacher/class/${event.classId}`);
+        navigate(`/teacher/class/${event.classId}`, { state: { classData: event } });
     };
 
 return (

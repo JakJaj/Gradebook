@@ -1,114 +1,153 @@
-import React, { useState, useEffect } from 'react';
-import { fetchStudents } from '../../data/student/getData';
+import { useLocation } from 'react-router-dom';
+import { fetchStudentsFromClass } from '../../data/class/getData';
+import Table from '../../components/Table';
+import GradeModal from './popup/GradeModal';
+import AttendanceModal from './popup/AttendanceModal';
+import NoteModal from './popup/NoteModal';
+import TopBar from '../../components/TopBar';
+import React, { useState, useEffect, useMemo } from 'react';
 
 function TeacherClassPage() {
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
-    const [grade, setGrade] = useState('');
-    const [attendance, setAttendance] = useState('');
-    const [note, setNote] = useState('');
+    const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
+    const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
+    const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
+    const [selectedSection, setSelectedSection] = useState('grades');
+    const location = useLocation();
+    const courseId = location.state.courseId;
+
+    const classData = useMemo(() => ({
+        classId: location.state.classData.classId,
+        name: location.state.classData.className
+    }), [location.state.classData.classId, location.state.classData.className]);
 
     useEffect(() => {
         const getStudents = async () => {
             try {
-                const studentsData = await fetchStudents(); //TODO: FETCH STUDENTS BY CLASS ID
-                setStudents(studentsData);
+                const studentsData = await fetchStudentsFromClass(classData.classId);
+                const sortedStudentsData = studentsData.sort((a, b) => {
+                    if (a.lastName < b.lastName) return -1;
+                    if (a.lastName > b.lastName) return 1;
+                    return 0;
+                });
+
+                setStudents(sortedStudentsData);
             } catch (error) {
                 console.error('Error fetching students:', error);
             }
         };
-        getStudents();
-    }, []);
-
-    const handleAddGrade = async () => {
-        if (selectedStudent && grade.trim()) {
-            try {
-                await addGrade(selectedStudent.id, grade);
-                setGrade('');
-                alert('Grade added successfully');
-            } catch (error) {
-                console.error('Error adding grade:', error);
-            }
+        if (classData.classId) {
+            getStudents();
         }
-    };
+    }, [classData]);
 
-    const handleAddAttendance = async () => {
-        if (selectedStudent && attendance.trim()) {
-            try {
-                await addAttendance(selectedStudent.id, attendance);
-                setAttendance('');
-                alert('Attendance entry added successfully');
-            } catch (error) {
-                console.error('Error adding attendance:', error);
-            }
+    const columns = [
+        {
+            id: 'student',
+            header: 'Student',
+            accessorFn: row => `${row.firstName} ${row.lastName}`,
+            cell: info => (
+                <div className="flex justify-between items-center">
+                    <span>{info.row.original.firstName} {info.row.original.lastName}</span>
+                </div>
+            )
+        },
+        {
+            id: 'details',
+            header: selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1),
+            accessorFn: row => {
+                switch (selectedSection) {
+                    case 'grades':
+                        return row.grades; // Assuming row.grades contains the grades data
+                    case 'attendance':
+                        return row.attendance; // Assuming row.attendance contains the attendance data
+                    case 'notes':
+                        return row.notes; // Assuming row.notes contains the notes data
+                    default:
+                        return '';
+                }
+            },
+            cell: info => (
+                <div className="flex justify-between items-center">
+                    <span>
+                        {(() => {
+                            switch (selectedSection) {
+                                case 'grades':
+                                    return info.row.original.grades;
+                                case 'attendance':
+                                    return info.row.original.attendance;
+                                case 'notes':
+                                    return info.row.original.notes;
+                                default:
+                                    return '';
+                            }
+                        })()}
+                    </span>
+                    <button
+                        onClick={() => openModal(info.row.original, selectedSection)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+                    >
+                        +
+                    </button>
+                </div>
+            )
         }
-    };
-
-    const handleAddNote = async () => {
-        if (selectedStudent && note.trim()) {
-            try {
-                await addNote(selectedStudent.id, note);
-                setNote('');
-                alert('Note added successfully');
-            } catch (error) {
-                console.error('Error adding note:', error);
-            }
-        }
-    };
+    ];
 
     return (
         <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">Class Management</h1>
-            <div className="mb-4">
-                <h2 className="text-xl font-semibold">Students</h2>
-                <ul>
-                    {students.map(student => (
-                        <li key={student.id} onClick={() => setSelectedStudent(student)}>
-                            {student.name}
-                        </li>
-                    ))}
-                </ul>
+            <TopBar title={"Class: " + classData.name} />
+            <div className="flex justify-center items-center my-4">
+                <button
+                    onClick={() => setSelectedSection('grades')}
+                    className={`mx-3 px-4 py-2 rounded ${selectedSection === 'grades' ? 'bg-blue-500 text-white' : 'bg-blue-700 text-white'}`}
+                >
+                    Grades
+                </button>
+                <button
+                    onClick={() => setSelectedSection('attendance')}
+                    className={`mx-3 px-4 py-2 rounded ${selectedSection === 'attendance' ? 'bg-blue-500 text-white' : 'bg-blue-700 text-white'}`}
+                >
+                    Attendance
+                </button>
+                <button
+                    onClick={() => setSelectedSection('notes')}
+                    className={`mx-3 px-4 py-2 rounded ${selectedSection === 'notes' ? 'bg-blue-500 text-white' : 'bg-blue-700 text-white'}`}
+                >
+                    Notes
+                </button>
             </div>
-            {selectedStudent && (
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">Manage {selectedStudent.name}</h2>
-                    <div className="mb-2">
-                        <input
-                            type="text"
-                            value={grade}
-                            onChange={(e) => setGrade(e.target.value)}
-                            placeholder="Add Grade"
-                            className="p-2 border border-gray-300 rounded"
-                        />
-                        <button onClick={handleAddGrade} className="bg-blue-500 text-white p-2 rounded ml-2">
-                            Add Grade
-                        </button>
-                    </div>
-                    <div className="mb-2">
-                        <input
-                            type="text"
-                            value={attendance}
-                            onChange={(e) => setAttendance(e.target.value)}
-                            placeholder="Add Attendance"
-                            className="p-2 border border-gray-300 rounded"
-                        />
-                        <button onClick={handleAddAttendance} className="bg-blue-500 text-white p-2 rounded ml-2">
-                            Add Attendance
-                        </button>
-                    </div>
-                    <div className="mb-2">
-                        <input
-                            type="text"
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                            placeholder="Add Note"
-                            className="p-2 border border-gray-300 rounded"
-                        />
-                        <button onClick={handleAddNote} className="bg-blue-500 text-white p-2 rounded ml-2">
-                            Add Note
-                        </button>
-                    </div>
-                </div>
+            <Table columns={columns} data={students} />
+            {isGradeModalOpen && (
+                <GradeModal
+                    isOpen={isGradeModalOpen}
+                    onClose={() => setIsGradeModalOpen(false)}
+                    onSave={async (grade) => {
+                        await addGrade(selectedStudent.id, grade);
+                        setIsGradeModalOpen(false);
+                    }}
+                />
+            )}
+            {isAttendanceModalOpen && (
+                <AttendanceModal
+                    isOpen={isAttendanceModalOpen}
+                    onClose={() => setIsAttendanceModalOpen(false)}
+                    onSave={async (attendance) => {
+                        await addAttendance(selectedStudent.id, attendance);
+                        setIsAttendanceModalOpen(false);
+                    }}
+                />
+            )}
+            {isNoteModalOpen && (
+                <NoteModal
+                    isOpen={isNoteModalOpen}
+                    onClose={() => setIsNoteModalOpen(false)}
+                    onSave={async (note) => {
+                        await addNote(selectedStudent.id, note);
+                        setIsNoteModalOpen(false);
+                    }}
+                />
             )}
         </div>
     );
