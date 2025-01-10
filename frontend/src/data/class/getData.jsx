@@ -77,3 +77,36 @@ export const fetchClass = async (classId) => {
         return null;
     }
 };
+
+export const fetchStudentsFromClass = async (classId) => {
+    const token = Cookies.get('jwtToken');
+    try {
+        const response = await fetch(`${url}/classes/${classId}/students`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result || !Array.isArray(result.students)) {
+            throw new Error('Invalid response format');
+        }
+
+        return result.students.map(student => ({
+            id: student.studentID,
+            firstName: student.firstName,
+            lastName: student.lastName,
+        }));
+
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        return [];
+    }
+}
