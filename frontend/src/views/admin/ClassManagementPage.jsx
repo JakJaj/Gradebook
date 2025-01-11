@@ -23,8 +23,8 @@ function ClassManagementPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const [showMessage, setShowMessage] = useState(false);
+    const [grades, setGrades] = useState([]);
     
-
     useEffect(() => {
         const getData = async () => {
             try {
@@ -34,8 +34,6 @@ function ClassManagementPage() {
                 console.error('Error fetching theClass in ClassManagementPage:', error);
             }
         };
-
-
         getData();
     }, []);
 

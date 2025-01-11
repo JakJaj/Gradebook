@@ -12,4 +12,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     void deleteAttendancesByStudent_StudentId(Long studentID);
     void deleteAllByTimetable_Course_Teacher_TeacherId(Long teacherID);
+
 }

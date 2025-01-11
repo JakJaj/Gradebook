@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { fetchStudentsFromClass } from '../../data/class/getData';
+import { fetchStudentsFromClass, fetchGradesByCourseID, fetchAttendanceByCourseID } from '../../data/class/getData';
 import Table from '../../components/Table';
 import GradeModal from './popup/GradeModal';
 import AttendanceModal from './popup/AttendanceModal';
@@ -14,14 +14,19 @@ function TeacherClassPage() {
     const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
     const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
     const [selectedSection, setSelectedSection] = useState('grades');
+    const [grades, setGrades] = useState([]);
+    const [attendance, setAttendance] = useState([]);
     const location = useLocation();
-    const courseId = location.state.courseId;
+    const courseId = location.state.classData.courseId;
 
-    const classData = useMemo(() => ({
-        classId: location.state.classData.classId,
-        name: location.state.classData.className
-    }), [location.state.classData.classId, location.state.classData.className]);
 
+    const classData = useMemo(() => {
+        return {
+            classId: location.state.classData.classId,
+            name: location.state.classData.className
+        };
+    }, [location.state.classData.classId, location.state.classData.className]);
+    
     useEffect(() => {
         const getStudents = async () => {
             try {
@@ -31,16 +36,44 @@ function TeacherClassPage() {
                     if (a.lastName > b.lastName) return 1;
                     return 0;
                 });
-
+    
                 setStudents(sortedStudentsData);
             } catch (error) {
                 console.error('Error fetching students:', error);
             }
         };
-        if (classData.classId) {
-            getStudents();
-        }
     }, [classData]);
+    
+    useEffect(() => {
+        const getGrades = async () => {
+            if (!classData.classId) return; 
+            try {
+                const grades = await fetchGradesByCourseID(courseId, classData.classId);
+                setGrades(grades);
+            } catch (error) {
+                console.error('Error fetching grades:', error);
+            }
+        };
+    
+        if (classData.classId) {
+            getGrades();
+        }
+    }, [classData, courseId]);
+
+    useEffect(() => {
+        const getAttendance = async () => {
+            if (!classData.classId) return;
+            try {
+                const attendance = await fetchAttendanceByCourseID(courseId, classData.classId);
+                setAttendance(attendance);
+            } catch (error) {
+                console.error('Error fetching attendance:', error);
+            }
+        };
+        if (classData.classId) {
+            getAttendance();
+        }
+    }, [classData, courseId]);
 
     const columns = [
         {
