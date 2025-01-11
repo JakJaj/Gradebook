@@ -110,3 +110,79 @@ export const fetchStudentsFromClass = async (classId) => {
         return [];
     }
 }
+
+
+export const fetchGradesByCourseID = async (courseID, classID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/courses/${courseID}/classes/${classID}/grades`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+
+        const gradesByStudent = {};
+        for (const studentID in result.studentsGrades) {
+            gradesByStudent[studentID] = result.studentsGrades[studentID].map(grade => ({
+                id: grade.gradeID,
+                studentID: parseInt(studentID, 10),
+                mark: grade.mark,
+                magnitude: grade.magnitude,
+                description: grade.description,
+                date: grade.date,
+            }));
+        }
+
+        return gradesByStudent;
+
+    } catch (error) {
+        console.error('Error fetching grades:', error);
+        return [];
+    }
+}
+
+export const fetchAttendanceByCourseID = async (courseID, classID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/courses/${courseID}/classes/${classID}/attendance`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        const attendanceByStudent = {};
+        for (const studentID in result.studentsAttendance) {
+            attendanceByStudent[studentID] = result.studentsAttendance[studentID].map(attendance => ({
+                id: attendance.attendanceID,
+                studentID: parseInt(studentID, 10),
+                date: attendance.date,
+                status: attendance.status,
+            }));
+        }
+
+        return attendanceByStudent;
+
+    } catch (error) {
+        console.error('Error fetching attendance:', error);
+        return [];
+    }
+}
