@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class NoteDTO {
     private Long noteID;
+    private String title;
     private String description;
     private String date;
     private Long studentID;

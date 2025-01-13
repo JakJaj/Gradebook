@@ -210,6 +210,7 @@ export const fetchNotesByCourseID = async (courseID, classID) => {
         for (const studentID in result.studentsNotes) {
             notesByStudent[studentID] = result.studentsNotes[studentID].map(note => ({
                 id: note.noteID,
+                title: note.title,
                 studentID: parseInt(studentID, 10),
                 description: note.description,
                 date: note.date,

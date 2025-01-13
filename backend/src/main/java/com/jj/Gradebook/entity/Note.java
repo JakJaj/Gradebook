@@ -35,4 +35,7 @@ public class Note {
     @Column(name = "date_time")
     private Date dateTime;
 
+    @Column(name="title")
+    private String title;
+
 }

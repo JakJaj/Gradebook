@@ -23,11 +23,6 @@ function TeacherClassPage() {
     const location = useLocation();
     const courseId = location.state.classData.courseId;
 
-
-
-    useEffect(() => {
-        console.log('Selected Section:', selectedSection);
-    }, [selectedSection]);
     const classData = useMemo(() => {
         return {
             classId: location.state.classData.classId,
@@ -127,16 +122,12 @@ function TeacherClassPage() {
             id: 'details',
             header: selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1),
             accessorFn: row => {
-                console.log('Row ID:', row.id);
                 switch (selectedSection) {
                     case 'grades':
-                        console.log('Grades:', grades[row.id]);
                         return grades[row.id] || [];
                     case 'attendance':
-                        console.log('Attendance:', attendance[row.id]);
                         return attendance[row.id] || [];
                     case 'notes':
-                        console.log('Notes:', notes[row.id]);
                         return notes[row.id] || [];
                     default:
                         return [];

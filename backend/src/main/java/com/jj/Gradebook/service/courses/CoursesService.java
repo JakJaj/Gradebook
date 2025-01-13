@@ -267,6 +267,7 @@ public class CoursesService {
                                 .noteID(note.getNoteId())
                                 .studentID(note.getStudent().getStudentId())
                                 .date(dateFormat.format(note.getDateTime()))
+                                .title(note.getTitle())
                                 .description(note.getDescription())
                                 .studentID(note.getStudent().getStudentId())
                                 .timetableEntry(TimetableEntryDTO.builder()
