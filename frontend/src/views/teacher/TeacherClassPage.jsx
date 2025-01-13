@@ -1,11 +1,14 @@
 import { useLocation } from 'react-router-dom';
-import { fetchStudentsFromClass, fetchGradesByCourseID, fetchAttendanceByCourseID } from '../../data/class/getData';
+import { fetchStudentsFromClass, fetchGradesByCourseID, fetchAttendanceByCourseID, fetchNotesByCourseID } from '../../data/class/getData';
 import Table from '../../components/Table';
 import GradeModal from './popup/GradeModal';
 import AttendanceModal from './popup/AttendanceModal';
 import NoteModal from './popup/NoteModal';
 import TopBar from '../../components/TopBar';
 import React, { useState, useEffect, useMemo } from 'react';
+import GradeBox from '../../components/GradeBox';
+import AttendanceBox from '../../components/AttendanceBox';
+import NoteBox from '../../components/NoteBox';
 
 function TeacherClassPage() {
     const [students, setStudents] = useState([]);
@@ -16,10 +19,15 @@ function TeacherClassPage() {
     const [selectedSection, setSelectedSection] = useState('grades');
     const [grades, setGrades] = useState([]);
     const [attendance, setAttendance] = useState([]);
+    const [notes, setNoted] = useState([]);
     const location = useLocation();
     const courseId = location.state.classData.courseId;
 
 
+
+    useEffect(() => {
+        console.log('Selected Section:', selectedSection);
+    }, [selectedSection]);
     const classData = useMemo(() => {
         return {
             classId: location.state.classData.classId,
@@ -42,6 +50,7 @@ function TeacherClassPage() {
                 console.error('Error fetching students:', error);
             }
         };
+        getStudents();
     }, [classData]);
     
     useEffect(() => {
@@ -75,6 +84,34 @@ function TeacherClassPage() {
         }
     }, [classData, courseId]);
 
+    useEffect(() => {
+        const getNotes = async () => {
+            if (!classData.classId) return;
+            try {
+                const notes = await fetchNotesByCourseID(courseId, classData.classId);
+                setNoted(notes);
+            } catch (error) {
+                console.error('Error fetching notes:', error);
+            }
+        };
+        if (classData.classId) {
+            getNotes();
+        }
+    }, [classData, courseId]);
+
+
+    const openGradeModal = () => {
+        setIsGradeModalOpen(true);
+    };
+
+    const openAttendanceModal = () => {
+        setIsAttendanceModalOpen(true);
+    };
+    
+    const openNotesModal = () => {
+        setIsNoteModalOpen(true);
+    };
+
     const columns = [
         {
             id: 'student',
@@ -90,39 +127,56 @@ function TeacherClassPage() {
             id: 'details',
             header: selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1),
             accessorFn: row => {
+                console.log('Row ID:', row.id);
                 switch (selectedSection) {
                     case 'grades':
-                        return row.grades; // Assuming row.grades contains the grades data
+                        console.log('Grades:', grades[row.id]);
+                        return grades[row.id] || [];
                     case 'attendance':
-                        return row.attendance; // Assuming row.attendance contains the attendance data
+                        console.log('Attendance:', attendance[row.id]);
+                        return attendance[row.id] || [];
                     case 'notes':
-                        return row.notes; // Assuming row.notes contains the notes data
+                        console.log('Notes:', notes[row.id]);
+                        return notes[row.id] || [];
                     default:
-                        return '';
+                        return [];
                 }
             },
             cell: info => (
-                <div className="flex justify-between items-center">
-                    <span>
-                        {(() => {
-                            switch (selectedSection) {
-                                case 'grades':
-                                    return info.row.original.grades;
-                                case 'attendance':
-                                    return info.row.original.attendance;
-                                case 'notes':
-                                    return info.row.original.notes;
-                                default:
-                                    return '';
-                            }
-                        })()}
-                    </span>
-                    <button
-                        onClick={() => openModal(info.row.original, selectedSection)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                    >
-                        +
-                    </button>
+                <div className="flex flex-wrap">
+                    {(() => {
+                        switch (selectedSection) {
+                            case 'grades':
+                                return (
+                                    <>
+                                        {info.getValue().map(grade => (
+                                            <GradeBox key={grade.id} grade={grade} selectedSection={selectedSection} />
+                                        ))}
+                                        <button onClick={openGradeModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
+                                    </>
+                                );
+                            case 'attendance':
+                                return (
+                                    <>
+                                        {info.getValue().map(att => (
+                                            <AttendanceBox key={att.id} attendance={att} selectedSection={selectedSection} />
+                                        ))}
+                                        <button onClick={openAttendanceModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
+                                    </>
+                                );
+                            case 'notes':
+                                return (
+                                    <>
+                                        {info.getValue().map(note => (
+                                            <NoteBox key={note.id} note={note} selectedSection={selectedSection} />
+                                        ))}
+                                        <button onClick={openNotesModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
+                                    </>
+                                );
+                            default:
+                                return null;
+                        }
+                    })()}
                 </div>
             )
         }
@@ -151,13 +205,13 @@ function TeacherClassPage() {
                     Notes
                 </button>
             </div>
-            <Table columns={columns} data={students} />
+            <Table columns={columns} data={students} key={selectedSection}/>
             {isGradeModalOpen && (
                 <GradeModal
                     isOpen={isGradeModalOpen}
                     onClose={() => setIsGradeModalOpen(false)}
                     onSave={async (grade) => {
-                        await addGrade(selectedStudent.id, grade);
+                        await addGrade(selectedStudent.id, grade); // addGrade is not defined
                         setIsGradeModalOpen(false);
                     }}
                 />
@@ -167,7 +221,7 @@ function TeacherClassPage() {
                     isOpen={isAttendanceModalOpen}
                     onClose={() => setIsAttendanceModalOpen(false)}
                     onSave={async (attendance) => {
-                        await addAttendance(selectedStudent.id, attendance);
+                        await addAttendance(selectedStudent.id, attendance); // addAttendance is not defined
                         setIsAttendanceModalOpen(false);
                     }}
                 />
@@ -177,7 +231,7 @@ function TeacherClassPage() {
                     isOpen={isNoteModalOpen}
                     onClose={() => setIsNoteModalOpen(false)}
                     onSave={async (note) => {
-                        await addNote(selectedStudent.id, note);
+                        await addNote(selectedStudent.id, note); // addNote is not defined
                         setIsNoteModalOpen(false);
                     }}
                 />

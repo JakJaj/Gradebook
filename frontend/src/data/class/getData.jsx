@@ -186,3 +186,41 @@ export const fetchAttendanceByCourseID = async (courseID, classID) => {
         return [];
     }
 }
+
+
+export const fetchNotesByCourseID = async (courseID, classID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/courses/${courseID}/classes/${classID}/notes`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        const notesByStudent = {};
+        for (const studentID in result.studentsNotes) {
+            notesByStudent[studentID] = result.studentsNotes[studentID].map(note => ({
+                id: note.noteID,
+                studentID: parseInt(studentID, 10),
+                description: note.description,
+                date: note.date,
+                timetableEntry: note.timetableEntry
+            }));
+        }
+
+        return notesByStudent;
+
+    } catch (error) {
+        console.error('Error fetching notes:', error);
+        return [];
+    }
+}
