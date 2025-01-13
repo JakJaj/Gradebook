@@ -1,8 +1,12 @@
-insert into Classes (class_id, class_name, teacher_id, start_year)
-VALUES (1, "testowa klasa", 1, 2001);
 
 insert into Classes (class_id, class_name, teacher_id, start_year)
-VALUES (2, "testowa klasa", 1, 2001);
+VALUES (1, "IC", 1, 2001);
+
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (2, "IVB", 1, 2005);
+
+insert into Classes (class_id, class_name, teacher_id, start_year)
+VALUES (3, "IIA", 1, 2001);
 
 insert into Courses(course_id, course_name, teacher_id, description)
 VALUES (1, "testowa lekcja", 1, "testowy opis testowej lekcji prowadzonej przez nauczyciela z id nr 1");
@@ -49,16 +53,16 @@ insert into Attendances(attendance_id, date_time, status, student_id, timetable_
 VALUES (2, "2021-11-01", "Spozniony", 2, 1);
 
 insert into Attendances(attendance_id, date_time, status, student_id, timetable_id)
-VALUES (3, "2021-11-01", "Obecny", 1, 1);
+VALUES (3, "2021-11-01", "present", 1, 17);
 
-insert into Notes(note_id, student_id, timetable_id, description, date_time)
-VALUES(1, 1, 1, "Bla bla bla", "2021-11-01");
+insert into Notes(note_id, student_id, timetable_id, title, description, date_time)
+VALUES(1, 1, 1, "title" "Bla bla bla", "2021-11-01");
 
-insert into Notes(note_id, student_id, timetable_id, description, date_time)
-VALUES(2, 2, 1, "Bla bla bla", "2021-11-01");
+insert into Notes(note_id, student_id, timetable_id, title, description, date_time)
+VALUES(2, 2, 17, "title", "Bla bla bla", "2021-11-01");
 
-insert into Notes(note_id, student_id, timetable_id, description, date_time)
-VALUES(3, 1, 2, "Bla bla bla", "2021-11-01");
+insert into Notes(note_id, student_id, timetable_id, title, description, date_time)
+VALUES(3, 1, 2, "title", "Bla bla bla", "2021-11-01");
     
 insert into Announcements(announcement_id, title, content, date_time, teacher_id)
 VALUES(1, "tytul", "opisa calego ogloszenia", "2021-10-09", 1);
@@ -72,6 +76,9 @@ VALUES(1,1);
 insert into Students_Parents(student_id, parent_id)
 VALUES(2,1);
 
+USE `grade_book`;
+
+
 select * from Users;
 select * from Students;
 select * from Parents;
@@ -81,3 +88,6 @@ select * from Courses;
 select * from Timetables;
 select * from Grades;
 select * from Students_Parents;
+select * from Attendances;
+select * from Announcements;
+select * from Notes;

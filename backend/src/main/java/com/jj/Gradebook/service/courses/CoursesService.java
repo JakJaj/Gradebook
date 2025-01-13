@@ -2,6 +2,7 @@ package com.jj.Gradebook.service.courses;
 
 import com.jj.Gradebook.controller.courses.CourseAttendanceResponse;
 import com.jj.Gradebook.controller.courses.CourseGradesResponse;
+import com.jj.Gradebook.controller.courses.CourseNotesResponse;
 import com.jj.Gradebook.controller.request.courses.AddNewCourseRequest;
 import com.jj.Gradebook.controller.request.courses.UpdateCourseRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
@@ -30,6 +31,7 @@ public class CoursesService {
     private final ClassRepository classRepository;
     private final StudentRepository studentRepository;
     private final AttendanceRepository attendanceRepository;
+    private final NoteRepository noteRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -244,6 +246,42 @@ public class CoursesService {
                 .status("Success")
                 .message(String.format("Successfully returning list of each student attendance for course: %d",courseID))
                 .studentsAttendance(attendancesOfStudents)
+                .build();
+    }
+
+    public CourseNotesResponse getNotesInCourseOfClass(Long courseID, Long classID) {
+        Class theClass = classRepository.findById(classID).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", classID)));
+        List<Note> notes = noteRepository.findNotesByStudent_StudentClass_ClassId(classID);
+
+        HashMap<Long, List<NoteDTO>> notesOfStudents = new HashMap<>();
+
+        List<Student> studentsOfClass = studentRepository.findStudentsByStudentClass_ClassId(theClass.getClassId());
+        for (Student student: studentsOfClass) {
+            notesOfStudents.put(student.getStudentId(), new ArrayList<>());
+        }
+
+        for (Note note: notes){
+            if (note.getTimetable().getCourse().getCourseId().equals(courseID)) {
+                notesOfStudents.get(note.getStudent().getStudentId()).add(
+                        NoteDTO.builder()
+                                .noteID(note.getNoteId())
+                                .studentID(note.getStudent().getStudentId())
+                                .date(dateFormat.format(note.getDateTime()))
+                                .title(note.getTitle())
+                                .description(note.getDescription())
+                                .studentID(note.getStudent().getStudentId())
+                                .timetableEntry(TimetableEntryDTO.builder()
+                                        .timetableID(note.getTimetable().getTimetableId())
+                                        .courseID(note.getTimetable().getCourse().getCourseId())
+                                        .build())
+                                .build());
+            }
+        }
+
+        return CourseNotesResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully returning list of each student notes for course: %d",courseID))
+                .studentsNotes(notesOfStudents)
                 .build();
     }
 }

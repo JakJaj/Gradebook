@@ -48,6 +48,11 @@ public class CoursesController {
     }
 
     @CrossOrigin
+    @GetMapping("/{courseID}/classes/{classID}/notes")
+    public ResponseEntity<CourseNotesResponse> getNotesInCourseOfClass(@PathVariable Long courseID, @PathVariable Long classID){
+        return ResponseEntity.ok(coursesService.getNotesInCourseOfClass(courseID, classID));
+    }
+    @CrossOrigin
     @PostMapping()
     public ResponseEntity<CourseResponse> addNewCourse( @RequestBody AddNewCourseRequest request){
         return ResponseEntity.ok(coursesService.addNewCourse(request));
