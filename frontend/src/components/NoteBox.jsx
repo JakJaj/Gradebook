@@ -1,9 +1,6 @@
 import React from 'react';
 
-
-
-const NoteBox = ({ note }) => {
-
+const NoteBox = ({ note, onEdit, onDelete }) => {
     return (
         <div className="relative group">
             <div className="note-box bg-teal-600 text-white p-2 rounded-md">
@@ -13,6 +10,14 @@ const NoteBox = ({ note }) => {
                 <p><strong>Title:</strong> {note.title}</p>
                 <p><strong>Description:</strong> {note.description}</p>
                 <p><strong>Date:</strong> {note.date}</p>
+                <div className="flex justify-between mt-2">
+                    <button onClick={() => onEdit(note)} className="bg-blue-500 text-white px-2 py-1 rounded">
+                        Edit
+                    </button>
+                    <button onClick={() => onDelete(note)} className="bg-red-500 text-white px-2 py-1 rounded">
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     );
