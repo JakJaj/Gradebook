@@ -2,6 +2,7 @@ package com.jj.Gradebook.controller.timetables;
 
 import com.jj.Gradebook.controller.request.timetables.CreateTimetableEntry;
 import com.jj.Gradebook.controller.request.timetables.CreateTimetableRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.service.timetable.TimetablesService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,12 @@ public class TimetablesController {
     @CrossOrigin
     public ResponseEntity<TimetableResponse> createNewTimetableEntry(@RequestBody CreateTimetableRequest request){
         return ResponseEntity.ok(timetablesService.createNewTimetableEntry(request));
+    }
+
+    @DeleteMapping("/{timetableID}")
+    @CrossOrigin
+    public ResponseEntity<BaseResponse> deleteTimetableEntry(@PathVariable Long timetableID){
+        return ResponseEntity.ok(timetablesService.deleteTimetableEntry(timetableID));
     }
 
 }

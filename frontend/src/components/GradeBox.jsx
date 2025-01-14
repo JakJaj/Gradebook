@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const getColorForGrade = (mark) => {
     switch (mark) {
         case 1:
@@ -20,20 +19,27 @@ const getColorForGrade = (mark) => {
     }
 };
 
-
-const GradeBox = ({ grade}) => {
+const GradeBox = ({ grade, onEdit, onDelete }) => {
     const gradeColor = getColorForGrade(grade.mark);
-    
+
     return (
         <div className="relative group">
             <div className={`grade-box p-2 rounded-md ${gradeColor}`}>
                 <p>{grade.mark}</p>
             </div>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2  hidden group-hover:block bg-white text-black text-sm p-4 rounded-md shadow-lg w-64">
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white text-black text-sm p-4 rounded-md shadow-lg w-64">
                 <p><strong>Mark:</strong> {grade.mark}</p>
                 <p><strong>Magnitude:</strong> {grade.magnitude}</p>
                 <p><strong>Description:</strong> {grade.description}</p>
                 <p><strong>Date:</strong> {grade.date}</p>
+                <div className="flex justify-between mt-2">
+                    <button onClick={() => onEdit(grade)} className="bg-blue-500 text-white px-2 py-1 rounded">
+                        Edit
+                    </button>
+                    <button onClick={() => onDelete(grade)} className="bg-red-500 text-white px-2 py-1 rounded">
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     );

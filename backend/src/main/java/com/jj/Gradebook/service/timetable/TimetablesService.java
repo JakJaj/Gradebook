@@ -3,6 +3,7 @@ package com.jj.Gradebook.service.timetable;
 import com.jj.Gradebook.config.JwtService;
 import com.jj.Gradebook.controller.request.timetables.CreateTimetableEntry;
 import com.jj.Gradebook.controller.request.timetables.CreateTimetableRequest;
+import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.TimetableEntryDTO;
@@ -63,23 +64,14 @@ public class TimetablesService {
 
     @Transactional
     public TimetableResponse createNewTimetableEntry(CreateTimetableRequest request) {
-        System.out.println(request);
-
-        Class theClass = classRepository.findById(request.getTimetables().get(0).getClassID()).orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", request.getTimetables().get(0).getClassID())));
-
-        attendanceRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
-        noteRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
-
-        timetableRepository.deleteAllByClas_ClassId(theClass.getClassId());
-
-
         List<Timetable> timetableListToSave = new ArrayList<>();
 
-        for (CreateTimetableEntry timetableEntry: request.getTimetables()){
+        for (CreateTimetableEntry timetableEntry : request.getTimetables()) {
+            Course course = coursesRepository.findById(timetableEntry.getCourseID())
+                    .orElseThrow(() -> new NoSuchEntityException(String.format("No course with id - %d", timetableEntry.getCourseID())));
 
-            System.out.println(timetableEntry);
-
-            Course course =  coursesRepository.findById(timetableEntry.getCourseID()).orElseThrow(() -> new NoSuchEntityException(String.format("No course - %d", timetableEntry.getCourseID())));
+            Class theClass = classRepository.findById(timetableEntry.getClassID())
+                    .orElseThrow(() -> new NoSuchEntityException(String.format("No class with id - %d", timetableEntry.getClassID())));
 
             Timetable timetable = Timetable.builder()
                     .course(course)
@@ -93,16 +85,48 @@ public class TimetablesService {
             timetableListToSave.add(timetable);
         }
 
-        List<Timetable> createdTimetables = timetableRepository.saveAll(timetableListToSave);
-
-        HashMap<DayOfWeek, List<TimetableEntryDTO>> timetableEntry = createHashMapOfTimetable(createdTimetables);
+        timetableRepository.saveAll(timetableListToSave);
 
         return TimetableResponse.builder()
                 .status("Success")
-                .message("Succesfully created new timetable")
-                .timetable(timetableEntry)
+                .message("Successfully created new timetable entries")
                 .build();
     }
+
+    @Transactional
+    public BaseResponse deleteTimetableEntry(Long timetableId) {
+        Timetable timetable = timetableRepository.findById(timetableId)
+                .orElseThrow(() -> new NoSuchEntityException(String.format("No timetable entry with id - %d", timetableId)));
+
+        Class theClass = timetable.getClas();
+        attendanceRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
+        noteRepository.deleteAllByStudent_StudentClass_ClassId(theClass.getClassId());
+
+        timetableRepository.delete(timetable);
+
+        return BaseResponse.builder()
+                .status("Success")
+                .message(String.format("Successfully deleted timetable entry with id - %d", timetableId))
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private HashMap<DayOfWeek, List<TimetableEntryDTO>> createHashMapOfTimetable(List<Timetable> createdTimetables) {
         HashMap<DayOfWeek, List<TimetableEntryDTO>> timetableEntry = new HashMap<>();

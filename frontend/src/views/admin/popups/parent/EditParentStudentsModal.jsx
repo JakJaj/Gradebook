@@ -129,7 +129,7 @@ function EditParentStudentsModal({ isOpen, onClose, parent }) {
                     <div className="w-1/2 pr-2">
                         <h3 className="text-xl mb-2">All Students</h3>
                         <ul className="border rounded p-2 h-64 overflow-y-scroll">
-                        {allStudents.map((student) => (
+                        {filteredStudents.map((student) => (
                             <li key={student.id} className="flex justify-between items-center mb-2">
                                 <span>{student.id} | {student.name} | {student.birthDate}</span>
                                 <button

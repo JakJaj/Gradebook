@@ -19,7 +19,7 @@ function TeacherClassPage() {
     const [selectedSection, setSelectedSection] = useState('grades');
     const [grades, setGrades] = useState([]);
     const [attendance, setAttendance] = useState([]);
-    const [notes, setNoted] = useState([]);
+    const [notes, setNotes] = useState([]);
     const location = useLocation();
     const courseId = location.state.classData.courseId;
 
@@ -29,7 +29,7 @@ function TeacherClassPage() {
             name: location.state.classData.className
         };
     }, [location.state.classData.classId, location.state.classData.className]);
-    
+
     useEffect(() => {
         const getStudents = async () => {
             try {
@@ -84,7 +84,7 @@ function TeacherClassPage() {
             if (!classData.classId) return;
             try {
                 const notes = await fetchNotesByCourseID(courseId, classData.classId);
-                setNoted(notes);
+                setNotes(notes);
             } catch (error) {
                 console.error('Error fetching notes:', error);
             }
@@ -105,6 +105,57 @@ function TeacherClassPage() {
     
     const openNotesModal = () => {
         setIsNoteModalOpen(true);
+    };
+
+    const handleEditGrade = (grade) => {
+        console.log("Edit grade", grade);
+        // grade api call is not defined
+        setSelectedStudent(grade);
+        setIsGradeModalOpen(true);
+    };
+
+    const handleDeleteGrade = async (grade) => {
+        console.log("Delete grade", grade);
+        try {
+            await deleteGrade(grade.id); // deleteGrade is not defined
+            setGrades(grades.filter(g => g.id !== grade.id));
+        } catch (error) {
+            console.error('Error deleting grade:', error);
+        }
+    };
+
+    const handleEditAttendance = (attendance) => {
+        console.log("Edit attendance", attendance);
+        // attendance api call is not defined
+        setSelectedStudent(attendance);
+        setIsAttendanceModalOpen(true);
+    };
+
+    const handleDeleteAttendance = async (attendance) => {
+        console.log("Delete attendance", attendance);
+        try {
+            await deleteAttendance(attendance.id); // deleteAttendance is not defined
+            setAttendance(attendance.filter(a => a.id !== attendance.id));
+        } catch (error) {
+            console.error('Error deleting attendance:', error);
+        }
+    };
+
+    const handleEditNote = (note) => {
+        console.log("Edit note", note);
+        // note api call is not defined
+        setSelectedStudent(note);
+        setIsNoteModalOpen(true);
+    };
+
+    const handleDeleteNote = async (note) => {
+        console.log("Delete note", note);
+        try {
+            await deleteNote(note.id); // deleteNote is not defined
+            setNotes(notes.filter(n => n.id !== note.id));
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
     };
 
     const columns = [
@@ -141,7 +192,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(grade => (
-                                            <GradeBox key={grade.id} grade={grade} selectedSection={selectedSection} />
+                                            <GradeBox key={grade.id} grade={grade} onEdit={handleEditGrade} onDelete={handleDeleteGrade} />
                                         ))}
                                         <button onClick={openGradeModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
@@ -150,7 +201,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(att => (
-                                            <AttendanceBox key={att.id} attendance={att} selectedSection={selectedSection} />
+                                            <AttendanceBox key={att.id} attendance={att} onEdit={handleEditAttendance} onDelete={handleDeleteAttendance} />
                                         ))}
                                         <button onClick={openAttendanceModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
@@ -159,7 +210,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(note => (
-                                            <NoteBox key={note.id} note={note} selectedSection={selectedSection} />
+                                            <NoteBox key={note.id} note={note} onEdit={handleEditNote} onDelete={handleDeleteNote} />
                                         ))}
                                         <button onClick={openNotesModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
