@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation} from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './TimetableScheduler.css'; 
+import './TimetableScheduler.css';
 import EventDetailsModal from './EventDetailsModal';
 import { fetchCourses } from '../data/course/getData';
 import DeleteEventModal from './DeleteEventModal';
 import { createTimetable } from '../data/timetable/postData';
 import { fetchTimetable } from '../data/timetable/getData';
+import { deleteTimetableEntry } from '../data/timetable/deleteData';
 
 const localizer = momentLocalizer(moment);
 
-const TimetableScheduler = ({}) => {
+const TimetableScheduler = () => {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
+    const [newEvents, setNewEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -22,16 +24,16 @@ const TimetableScheduler = ({}) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const location = useLocation();
     const { theClass } = location.state || {};
-    const [coursesFetched, setCoursesFetched] = useState(false); 
+    const [coursesFetched, setCoursesFetched] = useState(false);
 
     useEffect(() => {
         const getCourses = async () => {
             try {
                 const courses = await fetchCourses();
                 setCourses(courses);
-                setCoursesFetched(true); 
+                setCoursesFetched(true);
             } catch (error) {
-                console.error('Error fetching courses in ClassManagementPage:', error);
+                console.error('Error fetching courses in TimetableScheduler:', error);
             }
         };
         getCourses();
@@ -43,7 +45,6 @@ const TimetableScheduler = ({}) => {
         const getTimetable = async () => {
             try {
                 const timetable = await fetchTimetable(theClass.id);
-                console.log(timetable); 
                 const timetableToEvents = [];
 
                 Object.keys(timetable).forEach(day => {
@@ -61,7 +62,7 @@ const TimetableScheduler = ({}) => {
                         }).toDate();
 
                         const newEvent = {
-                            timetableID : entry.timetableID,
+                            timetableID: entry.timetableID,
                             start,
                             end,
                             title: courses.find(course => course.id === entry.courseID)?.name,
@@ -83,8 +84,6 @@ const TimetableScheduler = ({}) => {
         getTimetable();
     }, [coursesFetched, theClass]);
 
-
-    
     const handleSelectSlot = ({ start, end }) => {
         if (end - start === 900000) return;
         setSelectedSlot({ start, end });
@@ -98,39 +97,62 @@ const TimetableScheduler = ({}) => {
 
     const handleSaveEvent = (eventDetails) => {
         const { startTime, endTime, courseId, courseName, classroom, tutor } = eventDetails;
-    
+
         const baseDate = moment(defaultDate);
-    
+
         const start = baseDate.clone().day(startTime.day).set({
             hour: moment(startTime.time, 'HH:mm').hour(),
             minute: moment(startTime.time, 'HH:mm').minute(),
         }).toDate();
-    
+
         const end = baseDate.clone().day(endTime.day).set({
             hour: moment(endTime.time, 'HH:mm').hour(),
             minute: moment(endTime.time, 'HH:mm').minute(),
         }).toDate();
-    
+
         const newEvent = {
             start,
             end,
             title: courseName,
-            subtitle : "Classroom: " + classroom,
+            subtitle: "Classroom: " + classroom,
             courseId,
             classroom,
             tutor,
         };
-    
-        setEvents([...events, newEvent]);
+
+        setNewEvents([...newEvents, newEvent]);
         setIsModalOpen(false);
     };
 
-    const handleDeleteEvent = () => {
-        console.log(selectedEvent);
-
-        setEvents(events.filter(event => event.timetableID !== selectedEvent.timetableID));
+    const handleDeleteEvent = async () => {
+        if (selectedEvent.timetableID) {
+            await deleteTimetableEntry(selectedEvent.timetableID);
+            setEvents(events.filter(event => event.timetableID !== selectedEvent.timetableID));
+        } else {
+            setNewEvents(newEvents.filter(event => event.start !== selectedEvent.start || event.end !== selectedEvent.end));
+        }
+    
         setSelectedEvent(null);
         setIsDeleteEventModalOpen(false);
+    };
+
+    const handleSave = async () => {
+        try {
+            const timetableList = newEvents.map(event => ({
+                courseID: Number(event.courseId),
+                classID: theClass.id,
+                startTime: moment(event.start).format('HH:mm'),
+                endTime: moment(event.end).format('HH:mm'),
+                classroomNumber: event.classroom,
+                dayOfWeek: moment(event.start).isoWeekday(),
+            }));
+
+            const response = await createTimetable(timetableList);
+            console.log(response);
+            navigate('/admin/classManagement', { state: { message: 'Timetable saved successfully!' } });
+        } catch (error) {
+            console.error('Error creating timetable:', error);
+        }
     };
 
     const minTime = new Date();
@@ -154,47 +176,19 @@ const TimetableScheduler = ({}) => {
         </div>
     );
 
-    const handleSave = async() => {
-        
-        try{
-            const timetableList = [];
-            
-            
-
-            events.forEach((event) => {
-                const timetable = {
-                    courseID: Number(event.courseId),
-                    classID: theClass.id,
-                    startTime: moment(event.start).format('HH:mm'), 
-                    endTime: moment(event.end).format('HH:mm'),
-                    classroomNumber: event.classroom,
-                    dayOfWeek: moment(event.start).isoWeekday(),
-                };
-                    timetableList.push(timetable);
-            });
-
-            const response = await createTimetable(timetableList);
-            console.log(response);
-            navigate('/admin/classManagement', { state: { message: 'Timetable saved successfully!'} });
-        } catch (error) {
-            console.error('Error creating timetable:', error);  
-        }
-    
-    }
     return (
         <div className="p-6 bg-white rounded shadow-lg">
             <div className="flex justify-between items-center mb-4">
-                
                 <button onClick={() => navigate('/admin/classManagement')} className="px-4 py-2 bg-gray-500 text-white rounded">
                     Back to Classes
                 </button>
-                <button onClick={() => {handleSave()}} className="px-4 py-2 bg-blue-500 text-white rounded"> 
+                <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded">
                     Save
                 </button>
             </div>
             <Calendar
                 localizer={localizer}
-                events={events}
+                events={[...events, ...newEvents]}
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: '80vh' }}
@@ -203,13 +197,13 @@ const TimetableScheduler = ({}) => {
                 onSelectEvent={handleSelectEvent}
                 defaultView="work_week"
                 views={['work_week']}
-                step={15} 
-                timeslots={4} 
+                step={15}
+                timeslots={4}
                 min={minTime}
                 max={maxTime}
                 toolbar={false}
                 formats={formats}
-                defaultDate={defaultDate} 
+                defaultDate={defaultDate}
                 components={{
                     event: EventComponent,
                 }}

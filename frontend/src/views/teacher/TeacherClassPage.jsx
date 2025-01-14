@@ -29,7 +29,7 @@ function TeacherClassPage() {
             name: location.state.classData.className
         };
     }, [location.state.classData.classId, location.state.classData.className]);
-    
+
     useEffect(() => {
         const getStudents = async () => {
             try {
@@ -141,7 +141,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(grade => (
-                                            <GradeBox key={grade.id} grade={grade} selectedSection={selectedSection} />
+                                            <GradeBox key={grade.id} grade={grade} />
                                         ))}
                                         <button onClick={openGradeModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
@@ -150,7 +150,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(att => (
-                                            <AttendanceBox key={att.id} attendance={att} selectedSection={selectedSection} />
+                                            <AttendanceBox key={att.id} attendance={att} />
                                         ))}
                                         <button onClick={openAttendanceModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
@@ -159,7 +159,7 @@ function TeacherClassPage() {
                                 return (
                                     <>
                                         {info.getValue().map(note => (
-                                            <NoteBox key={note.id} note={note} selectedSection={selectedSection} />
+                                            <NoteBox key={note.id} note={note} />
                                         ))}
                                         <button onClick={openNotesModal} className="ml-2 p-2 bg-green-500 text-white rounded">+</button>
                                     </>
