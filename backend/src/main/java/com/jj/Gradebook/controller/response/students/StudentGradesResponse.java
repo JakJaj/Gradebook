@@ -16,4 +16,5 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentGradesResponse extends BaseResponse {
     private HashMap<String, List<GradeDTO>> grades;
+    private Long gradeID;
 }

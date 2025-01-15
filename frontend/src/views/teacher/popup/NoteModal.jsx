@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
 function NoteModal({ isOpen, onClose, onSave }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
+
 
     const handleSave = () => {
         if (title.trim() && description.trim()) {

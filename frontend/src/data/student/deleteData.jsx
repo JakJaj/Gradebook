@@ -24,3 +24,25 @@ export const deleteStudent = async (studentId) => {
         return false;
     }
 };
+
+export const deleteGrade = async (studentID, gradeId) => {
+    try {
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/grades/${gradeId}`, {
+            method: 'DELETE',
+            headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete grade");
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting grade:', error);
+        return false;
+    }
+
+}

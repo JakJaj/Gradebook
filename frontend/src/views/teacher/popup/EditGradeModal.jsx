@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-const GradeModal = ({ isOpen, onClose, onSave }) => {
+const GradeModal = ({ isOpen, onClose, onSave, oldGrade }) => {
     const [grade, setGrade] = useState('');
     const [magnitude, setMagnitude] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
 
+    useEffect(() => {
+        
+        setGrade(oldGrade.mark)
+        setMagnitude(oldGrade.magnitude)
+        setDescription(oldGrade.description)
+        setDate(moment(oldGrade.date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+    }
+    , [oldGrade]);
+
     const handleSave = () => {
         if (grade && magnitude && description && date) {
-            onSave({
-                mark : grade,
-                description : description,
-                magnitude : magnitude,
-                date : date,
-            });
+            onSave({ grade, magnitude, description, date });
             setGrade('');
             setMagnitude('');
             setDescription('');
