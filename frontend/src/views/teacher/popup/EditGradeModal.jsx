@@ -17,7 +17,7 @@ const GradeModal = ({ isOpen, onClose, onSave, oldGrade }) => {
 
     const handleSave = () => {
         if (grade && magnitude && description && date) {
-            onSave({ grade, magnitude, description, date });
+            onSave({ mark:grade, magnitude, description, date });
             setGrade('');
             setMagnitude('');
             setDescription('');

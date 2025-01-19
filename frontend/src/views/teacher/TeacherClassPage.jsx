@@ -15,6 +15,7 @@ import EditNoteModal from './popup/EditNoteModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
 import { postGrade, postAttendance, postNote } from '../../data/student/postData';
 import { deleteGrade, deleteAttendance, deleteNote } from '../../data/student/deleteData';
+import { putGrade, putAttendance, putNote } from '../../data/student/putData';
 
 function TeacherClassPage() {
     const [students, setStudents] = useState([]);
@@ -129,8 +130,6 @@ function TeacherClassPage() {
     };
 
     const handleEditGrade = (grade) => {
-        console.log("Edit grade", grade);
-        // grade api call is not defined
         setSelectedGrade(grade);
         setSelectedStudent(students.find(student => student.id === grade.studentID));
         setIsEditGradeModalOpen(true);
@@ -145,8 +144,6 @@ function TeacherClassPage() {
     };
 
     const handleEditAttendance = (attendance) => {
-        console.log("Edit attendance", attendance);
-        // attendance api call is not defined
         setSelectedAttendance(attendance);
         setSelectedStudent(students.find(student => student.id === attendance.studentID));
         setIsEditAttendanceModalOpen(true);
@@ -161,8 +158,6 @@ function TeacherClassPage() {
     };
 
     const handleEditNote = (note) => {
-        console.log("Edit note", note);
-        // note api call is not defined
         setSelectedNote(note);
         setSelectedStudent(students.find(student => student.id === note.studentID));
         setIsEditNoteModalOpen(true);
@@ -424,9 +419,33 @@ function TeacherClassPage() {
                     isOpen={isEditGradeModalOpen}
                     onClose={() => setIsEditGradeModalOpen(false)}
                     onSave={async (grade) => {
-                        console.log("Grade", grade);
-                        await putGrade(selectedStudent.id, grade); // addGrade is not defined
-                        setIsEditGradeModalOpen(false);
+                        const body = {
+                            gradeID: selectedGrade.id,
+                            courseID : courseId,
+                            mark : grade.mark,
+                            description: grade.description,
+                            magnitude: grade.magnitude,
+                            date: grade.date,
+                        }
+                        const created = await putGrade(body, selectedStudent.id);
+                        if (created) {
+                            const createdGrade = {
+                                id: selectedGrade.id,
+                                studentID: selectedStudent.id,
+                                mark: Number(grade.mark),
+                                magnitude: Number(grade.magnitude),
+                                description: grade.description,
+                                date: grade.date,
+                            };
+                            setGrades(prevGrades => {
+                                const updatedGrades = {
+                                    ...prevGrades,
+                                    [selectedStudent.id]: [...(prevGrades[selectedStudent.id] || []).map(g => g.id === selectedGrade.id ? createdGrade : g)]
+                                };
+                                return updatedGrades;
+                            });
+                            setIsEditGradeModalOpen(false);
+                        }
                     }}
                     oldGrade={selectedGrade}
                 />
@@ -437,9 +456,32 @@ function TeacherClassPage() {
                     onClose={() => setIsEditAttendanceModalOpen(false)}
                     
                     onSave={async (attendance) => {
-                        console.log("Attendance", attendance);
-                        await putAttendance(selectedStudent.id, attendance); // addAttendance is not defined
-                        setIsEditAttendanceModalOpen(false);
+                        const body = {
+                            attendanceID: selectedAttendance.id,
+                            studentID: selectedStudent.id,
+                            courseID : courseId,
+                            date: attendance.date,
+                            status: attendance.status,
+                        }
+
+                        const created = await putAttendance(body, selectedStudent.id);
+                        if (created) {
+                            const createdAttendance = {
+                                id: selectedAttendance.id,
+                                studentID: selectedStudent.id,
+                                date: attendance.date,
+                                status: attendance.status,
+                            };
+                            setAttendance(prevAttendance => {
+                                const updatedAttendance = {
+                                    ...prevAttendance,
+                                    [selectedStudent.id]: [...(prevAttendance[selectedStudent.id] || []).map(a => a.id === selectedAttendance.id ? createdAttendance : a)]
+                                };
+                                return updatedAttendance;
+                            });
+                            setIsEditAttendanceModalOpen(false);
+                        }
+                        
                     }}
                     oldAttendance={selectedAttendance}
                 />
@@ -449,9 +491,32 @@ function TeacherClassPage() {
                     isOpen={isEditNoteModalOpen}
                     onClose={() => setIsEditNoteModalOpen(false)}
                     onSave={async (note) => {
-                        console.log("Note", note);
-                        await putNote(selectedStudent.id, note); // addNote is not defined
-                        setIsEditNoteModalOpen(false);
+                        const body = {
+                            noteID: selectedNote.id,
+                            studentID: selectedStudent.id,
+                            courseID : courseId,
+                            title: note.title,
+                            description: note.description,
+                            date : note.date,
+                        }
+                        const created = await putNote(body, selectedStudent.id);
+                        if (created) {
+                            const createdNote = {
+                                id: selectedNote.id,
+                                studentID: selectedStudent.id,
+                                title: note.title,
+                                description: note.description,
+                                date: note.date,
+                            };
+                            setNotes(prevNotes => {
+                                const updatedNotes = {
+                                    ...prevNotes,
+                                    [selectedStudent.id]: [...(prevNotes[selectedStudent.id] || []).map(n => n.id === selectedNote.id ? createdNote : n)]
+                                };
+                                return updatedNotes;
+                            });
+                            setIsEditNoteModalOpen(false);
+                        }
                     }}
                     oldNote={selectedNote}
                 />

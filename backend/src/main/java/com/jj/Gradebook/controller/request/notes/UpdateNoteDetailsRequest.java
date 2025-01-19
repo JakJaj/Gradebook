@@ -6,5 +6,6 @@ import lombok.Data;
 public class UpdateNoteDetailsRequest {
     private Long noteID;
     private String description;
+    private String title;
     private String date;
 }

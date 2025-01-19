@@ -116,6 +116,7 @@ public class NotesService {
             Note savedNote = noteRepository.save(Note.builder()
                     .noteId(note.getNoteId())
                     .student(student)
+                            .title(request.getTitle())
                             .course(note.getCourse())
                     .description(request.getDescription())
                     .dateTime(dateFormat.parse(request.getDate()))
