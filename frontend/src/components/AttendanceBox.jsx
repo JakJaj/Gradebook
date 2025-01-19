@@ -2,12 +2,12 @@ import React from 'react';
 
 
 const getColorForAttendance = (attendance) => {
-    switch (attendance.status.toLowerCase()) {
-        case 'present':
+    switch (attendance.status) {
+        case 'Present':
             return 'bg-green-500 text-green-500';
-        case 'absent':
+        case 'Absent':
             return 'bg-red-500 text-red-500';
-        case 'late':
+        case 'Late':
             return 'bg-yellow-500 text-yellow-500';
         default:
             return 'bg-gray-300 text-gray-300';

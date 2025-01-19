@@ -15,4 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentAttendancesResponse extends BaseResponse {
     private List<AttendanceDTO> attendances;
+    private Long attendanceID;
 }

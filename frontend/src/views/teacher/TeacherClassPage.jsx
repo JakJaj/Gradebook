@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { data, useLocation } from 'react-router-dom';
 import { fetchStudentsFromClass, fetchGradesByCourseID, fetchAttendanceByCourseID, fetchNotesByCourseID } from '../../data/class/getData';
 import Table from '../../components/Table';
 import GradeModal from './popup/GradeModal';
@@ -13,8 +13,8 @@ import EditGradeModal from './popup/EditGradeModal';
 import EditAttendanceModal from './popup/EditAttendanceModal';
 import EditNoteModal from './popup/EditNoteModal';
 import DeleteFieldModal from '../../components/DeleteFieldModal';
-import { postGrade } from '../../data/student/postData';
-import { deleteGrade } from '../../data/student/deleteData';
+import { postGrade, postAttendance, postNote } from '../../data/student/postData';
+import { deleteGrade, deleteAttendance, deleteNote } from '../../data/student/deleteData';
 
 function TeacherClassPage() {
     const [students, setStudents] = useState([]);
@@ -155,7 +155,7 @@ function TeacherClassPage() {
     const handleDeleteAttendance = async (attendance) => {
         console.log("Delete attendance", attendance);
         setDeleteItemId(attendance.id);
-        setSelectedStudent(students.find(student => student.id === grade.studentID));
+        setSelectedStudent(students.find(student => student.id === attendance.studentID));
         setDeleteItemType('attendance');
         setIsDeleteModalOpen(true);
     };
@@ -171,7 +171,7 @@ function TeacherClassPage() {
     const handleDeleteNote = async (note) => {
         console.log("Delete note", note);
         setDeleteItemId(note.id);
-        setSelectedStudent(students.find(student => student.id === grade.studentID));
+        setSelectedStudent(students.find(student => student.id === note.studentID));
         setDeleteItemType('note');
         setIsDeleteModalOpen(true);
     };
@@ -179,7 +179,6 @@ function TeacherClassPage() {
 
     const handleDelete = async (itemId) => {
         try {
-            console.log('Deleting', selectedStudent);
             if (deleteItemType === 'grade') {
                 const result = await deleteGrade(selectedStudent.id, itemId); 
                 if(result){
@@ -192,11 +191,28 @@ function TeacherClassPage() {
                     });
                 }
             } else if (deleteItemType === 'attendance') {
-                await deleteAttendance(itemId); // deleteAttendance is not defined
-                setAttendance(attendance.filter(a => a.id !== itemId));
+                const result = await deleteAttendance(selectedStudent.id, itemId);
+                if(result){
+                    setAttendance(prevAttendance => {
+                        const updatedAttendance = {
+                            ...prevAttendance,
+                            [selectedStudent.id]: [...(prevAttendance[selectedStudent.id] || []).filter(a => a.id !== itemId)]
+                        }
+                        return updatedAttendance;
+                    });
+                }
             } else if (deleteItemType === 'note') {
-                await deleteNote(itemId); // deleteNote is not defined
-                setNotes(notes.filter(n => n.id !== itemId));
+                
+                const result = await deleteNote(selectedStudent.id, itemId);
+                if(result){
+                    setNotes(prevNotes => {
+                        const updatedNote = {
+                            ...prevNotes,
+                            [selectedStudent.id]: [...(prevNotes[selectedStudent.id] || []).filter(n => n.id !== itemId)]
+                        }
+                        return updatedNote;
+                    });
+                }
             }
             setIsDeleteModalOpen(false);
             setDeleteItemId(null);
@@ -340,10 +356,30 @@ function TeacherClassPage() {
                     onClose={() => setIsAttendanceModalOpen(false)}
                     
                     onSave={async (attendance) => {
-                        console.log("Attendance", attendance);
-                        await postAttendance(selectedStudent.id, attendance); // addAttendance is not defined
-                        setIsAttendanceModalOpen(false);
-                    }}
+                        const body = {
+                            studentID: selectedStudent.id,
+                            courseID : courseId,
+                            date: attendance.date,
+                            status: attendance.status,
+                        }
+
+                        const created = await postAttendance(body, selectedStudent.id);
+                        if (created) {
+                            const createdAttendance = {
+                                id: created,
+                                studentID: selectedStudent.id,
+                                date: attendance.date,
+                                status: attendance.status,
+                            };
+                            setAttendance(prevAttendance => {
+                                const updatedAttendance = {
+                                    ...prevAttendance,
+                                    [selectedStudent.id]: [...(prevAttendance[selectedStudent.id] || []), createdAttendance]
+                                };
+                                return updatedAttendance;
+                            });
+                            setIsAttendanceModalOpen(false);
+                    }}}
                     oldAttendance={selectedAttendance}
                 />
             )}
@@ -352,9 +388,31 @@ function TeacherClassPage() {
                     isOpen={isNoteModalOpen}
                     onClose={() => setIsNoteModalOpen(false)}
                     onSave={async (note) => {
-                        console.log("Note", note);
-                        await postNote(selectedStudent.id, note); // addNote is not defined
-                        setIsNoteModalOpen(false);
+                        const body = {
+                            studentID: selectedStudent.id,
+                            courseID : courseId,
+                            title: note.title,
+                            description: note.description,
+                            date : note.date,
+                        }
+                        const created = await postNote(body, selectedStudent.id); 
+                        if (created) {
+                            const createdNote = {
+                                id: created,
+                                studentID: selectedStudent.id,
+                                title: note.title,
+                                description: note.description,
+                                date: note.date,
+                            };
+                            setNotes(prevNotes => {
+                                const updatedNotes = {
+                                    ...prevNotes,
+                                    [selectedStudent.id]: [...(prevNotes[selectedStudent.id] || []), createdNote]
+                                };
+                                return updatedNotes;
+                            });
+                            setIsNoteModalOpen(false);
+                        }
                     }}
                     oldNote={selectedNote}
                 />

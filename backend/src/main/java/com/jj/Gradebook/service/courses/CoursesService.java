@@ -227,16 +227,24 @@ public class CoursesService {
         }
 
         for (Attendance attendance: attendances){
-            if (attendance.getTimetable().getCourse().getCourseId().equals(courseID)) {
+            if (attendance.getCourse().getCourseId().equals(courseID)) {
                 attendancesOfStudents.get(attendance.getStudent().getStudentId()).add(
                         AttendanceDTO.builder()
                                 .attendanceID(attendance.getAttendanceId())
                                 .studentID(attendance.getStudent().getStudentId())
                                 .date(dateFormat.format(attendance.getDateTime()))
                                 .status(attendance.getStatus())
-                                .timetable(TimetableEntryDTO.builder()
-                                        .timetableID(attendance.getTimetable().getTimetableId())
-                                        .courseID(attendance.getTimetable().getCourse().getCourseId())
+                                .course(CourseDTO.builder()
+                                        .courseID(attendance.getCourse().getCourseId())
+                                        .courseName(attendance.getCourse().getCourseName())
+                                        .description(attendance.getCourse().getDescription())
+                                        .tutor(TeacherDTO.builder()
+                                                .teacherID(attendance.getCourse().getTeacher().getTeacherId())
+                                                .firstName(attendance.getCourse().getTeacher().getFirstName())
+                                                .lastName(attendance.getCourse().getTeacher().getLastName())
+                                                .dateOfBirth(dateFormat.format(attendance.getCourse().getTeacher().getDateOfBirth()))
+                                                .dateOfEmployment(dateFormat.format(attendance.getCourse().getTeacher().getDateOfEmployment()))
+                                                .build())
                                         .build())
                                 .build());
             }
@@ -261,7 +269,7 @@ public class CoursesService {
         }
 
         for (Note note: notes){
-            if (note.getTimetable().getCourse().getCourseId().equals(courseID)) {
+            if (note.getCourse().getCourseId().equals(courseID)) {
                 notesOfStudents.get(note.getStudent().getStudentId()).add(
                         NoteDTO.builder()
                                 .noteID(note.getNoteId())
@@ -270,9 +278,17 @@ public class CoursesService {
                                 .title(note.getTitle())
                                 .description(note.getDescription())
                                 .studentID(note.getStudent().getStudentId())
-                                .timetableEntry(TimetableEntryDTO.builder()
-                                        .timetableID(note.getTimetable().getTimetableId())
-                                        .courseID(note.getTimetable().getCourse().getCourseId())
+                                .course(CourseDTO.builder()
+                                        .courseID(note.getCourse().getCourseId())
+                                        .courseName(note.getCourse().getCourseName())
+                                        .description(note.getCourse().getDescription())
+                                        .tutor(TeacherDTO.builder()
+                                                .teacherID(note.getCourse().getTeacher().getTeacherId())
+                                                .firstName(note.getCourse().getTeacher().getFirstName())
+                                                .lastName(note.getCourse().getTeacher().getLastName())
+                                                .dateOfBirth(dateFormat.format(note.getCourse().getTeacher().getDateOfBirth()))
+                                                .dateOfEmployment(dateFormat.format(note.getCourse().getTeacher().getDateOfEmployment()))
+                                                .build())
                                         .build())
                                 .build());
             }

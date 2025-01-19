@@ -46,3 +46,43 @@ export const deleteGrade = async (studentID, gradeId) => {
     }
 
 }
+
+export const deleteAttendance = async (studentID, attendanceID) => {
+    try{
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/attendances/${attendanceID}`, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Failed to delete attendance");
+        }
+        return true;
+    }catch(error){
+        console.error('Error deleting attendance:', error);
+        return false;
+    }
+}
+
+export const deleteNote = async (studentID, noteID) => {
+    try{
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/notes/${noteID}`, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Failed to delete note");
+        }
+        return true;
+    }catch(error){
+        console.error('Error deleting note:', error);
+        return false;
+    }
+}

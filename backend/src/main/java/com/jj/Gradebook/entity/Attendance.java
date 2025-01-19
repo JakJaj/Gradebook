@@ -32,7 +32,7 @@ public class Attendance {
     private Student student;
 
     @ManyToOne()
-    @JoinColumn(name = "timetable_id")
-    private Timetable timetable;
+    @JoinColumn(name = "course_id")
+    private Course course;
 
 }
