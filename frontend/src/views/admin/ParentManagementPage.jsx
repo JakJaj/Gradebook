@@ -83,8 +83,6 @@ function ParentManagementPage() {
         const success = await updateParent(requestBody);
 
         if (success) {
-            console.log(success)
-
             setData((prevData) =>
                 prevData.map((parent) =>
                     parent.id === parentToEdit.id

@@ -210,8 +210,12 @@ function TeacherLandingPage() {
 
     const EventComponent = ({ event }) => (
         <div style={{ fontSize: '0.8em', textAlign: 'left', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: '-120px', top: '20px' }}>
-                <strong>{event.className} - Classroom: {event.classroom}</strong>
+            <div >
+                <strong>{event.title}</strong>
+                <br />
+                <strong>{event.className}</strong>
+                <br />
+                <strong>{event.classroom}</strong>
             </div>
         </div>
     );

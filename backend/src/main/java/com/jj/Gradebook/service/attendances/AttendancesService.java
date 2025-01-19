@@ -5,16 +5,13 @@ import com.jj.Gradebook.controller.request.attendances.UpdateAttendanceDetailsRe
 import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
-import com.jj.Gradebook.dao.AttendanceRepository;
-import com.jj.Gradebook.dao.ClassRepository;
-import com.jj.Gradebook.dao.StudentRepository;
-import com.jj.Gradebook.dao.TimetableRepository;
+import com.jj.Gradebook.dao.*;
 import com.jj.Gradebook.dto.AttendanceDTO;
+import com.jj.Gradebook.dto.CourseDTO;
+import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.dto.TimetableEntryDTO;
-import com.jj.Gradebook.entity.Attendance;
+import com.jj.Gradebook.entity.*;
 import com.jj.Gradebook.entity.Class;
-import com.jj.Gradebook.entity.Student;
-import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
@@ -34,7 +31,7 @@ public class AttendancesService {
     private final AttendanceRepository attendanceRepository;
     private final ClassRepository classRepository;
     private final StudentRepository studentRepository;
-    private final TimetableRepository timetableRepository;
+    private final CoursesRepository coursesRepository;
 
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -56,7 +53,7 @@ public class AttendancesService {
                     AttendanceDTO.builder()
                             .attendanceID(attendance.getAttendanceId())
                             .status(attendance.getStatus())
-                            .timetable(null)
+                            .course(null)
                             .studentID(attendance.getStudent().getStudentId())
                             .date(dateFormat.format(attendance.getDateTime()))
                             .build()
@@ -77,15 +74,16 @@ public class AttendancesService {
                 .map(attendance -> AttendanceDTO.builder()
                         .attendanceID(attendance.getAttendanceId())
                         .status(attendance.getStatus())
-                        .timetable(TimetableEntryDTO.builder()
-                                .timetableID(attendance.getTimetable().getTimetableId())
-                                .courseID(attendance.getTimetable().getCourse().getCourseId())
-                                .classID(student.getStudentClass().getClassId())
-                                .startTime(attendance.getTimetable().getStartTime().toString())
-                                .endTime(attendance.getTimetable().getEndTime().toString())
-                                .classroom(attendance.getTimetable().getClassroomNumber())
-                                .teacherName(attendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + attendance.getTimetable().getCourse().getTeacher().getLastName())
+                        .course(CourseDTO.builder()
+                                .courseID(attendance.getCourse().getCourseId())
+                                .courseName(attendance.getCourse().getCourseName())
+                                .tutor(TeacherDTO.builder()
+                                        .teacherID(attendance.getCourse().getTeacher().getTeacherId())
+                                        .firstName(attendance.getCourse().getTeacher().getFirstName())
+                                        .lastName(attendance.getCourse().getTeacher().getLastName())
+                                        .build())
                                 .build())
+
                         .studentID(studentID)
                         .date(dateFormat.format(attendance.getDateTime()))
                         .build())
@@ -101,13 +99,13 @@ public class AttendancesService {
     public StudentAttendancesResponse createNewAttendance(Long studentID, CreateAttendanceRequest request) {
 
         Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No user with id - %d", studentID)));
-        Timetable timetable = timetableRepository.findById(request.getTimetableID()).orElseThrow(() -> new NoSuchEntityException(String.format("No timetable with id - %d", request.getTimetableID())));
+        Course course = coursesRepository.findById(request.getCourseID()).orElseThrow(() -> new NoSuchEntityException(String.format("No course with id - %d", request.getCourseID())));
 
         try {
             Attendance attendance = attendanceRepository.save(Attendance.builder()
                     .status(request.getStatus())
                     .student(student)
-                    .timetable(timetable)
+                    .course(course)
                     .dateTime(dateFormat.parse(request.getDate()))
                     .build());
 
@@ -115,20 +113,21 @@ public class AttendancesService {
             return StudentAttendancesResponse.builder()
                     .status("Success")
                     .message("Successfully created new attendance entry")
+                    .attendanceID(attendance.getAttendanceId())
                     .attendances(List.of(AttendanceDTO.builder()
                             .attendanceID(attendance.getAttendanceId())
                             .status(attendance.getStatus())
                             .date(dateFormat.format(attendance.getDateTime()))
                             .studentID(student.getStudentId())
-                            .timetable(TimetableEntryDTO.builder()
-                                    .timetableID(attendance.getTimetable().getTimetableId())
-                                    .courseID(attendance.getTimetable().getCourse().getCourseId())
-                                    .classID(attendance.getTimetable().getClas().getClassId())
-                                    .startTime(attendance.getTimetable().getStartTime().toString())
-                                    .endTime(attendance.getTimetable().getEndTime().toString())
-                                    .classroom(attendance.getTimetable().getClassroomNumber())
-                                    .teacherName(attendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + attendance.getTimetable().getCourse().getTeacher().getLastName())
-                                    .build())
+                                    .course(CourseDTO.builder()
+                                            .courseID(attendance.getCourse().getCourseId())
+                                            .courseName(attendance.getCourse().getCourseName())
+                                            .tutor(TeacherDTO.builder()
+                                                    .teacherID(attendance.getCourse().getTeacher().getTeacherId())
+                                                    .firstName(attendance.getCourse().getTeacher().getFirstName())
+                                                    .lastName(attendance.getCourse().getTeacher().getLastName())
+                                                    .build())
+                                            .build())
                             .build()))
                     .build();
         }catch (ParseException ex){
@@ -148,7 +147,7 @@ public class AttendancesService {
                     .dateTime(dateFormat.parse(request.getDate()))
                     .status(request.getStatus())
                     .student(student)
-                    .timetable(attendance.getTimetable())
+                            .course(attendance.getCourse())
                     .build());
 
             return AttendanceResponse.builder()
@@ -159,14 +158,14 @@ public class AttendancesService {
                             .status(savedAttendance.getStatus())
                             .date(dateFormat.format(savedAttendance.getDateTime()))
                             .studentID(student.getStudentId())
-                            .timetable(TimetableEntryDTO.builder()
-                                    .timetableID(savedAttendance.getTimetable().getTimetableId())
-                                    .courseID(savedAttendance.getTimetable().getCourse().getCourseId())
-                                    .classID(savedAttendance.getTimetable().getClas().getClassId())
-                                    .startTime(savedAttendance.getTimetable().getStartTime().toString())
-                                    .endTime(savedAttendance.getTimetable().getEndTime().toString())
-                                    .classroom(savedAttendance.getTimetable().getClassroomNumber())
-                                    .teacherName(savedAttendance.getTimetable().getCourse().getTeacher().getFirstName() + " " + savedAttendance.getTimetable().getCourse().getTeacher().getLastName())
+                            .course(CourseDTO.builder()
+                                    .courseID(savedAttendance.getCourse().getCourseId())
+                                    .courseName(savedAttendance.getCourse().getCourseName())
+                                    .tutor(TeacherDTO.builder()
+                                            .teacherID(savedAttendance.getCourse().getTeacher().getTeacherId())
+                                            .firstName(savedAttendance.getCourse().getTeacher().getFirstName())
+                                            .lastName(savedAttendance.getCourse().getTeacher().getLastName())
+                                            .build())
                                     .build())
                             .build())
                     .build();

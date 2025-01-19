@@ -4,11 +4,15 @@ import com.jj.Gradebook.controller.request.notes.CreateNoteRequest;
 import com.jj.Gradebook.controller.request.notes.UpdateNoteDetailsRequest;
 import com.jj.Gradebook.controller.response.notes.NoteResponse;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
+import com.jj.Gradebook.dao.CoursesRepository;
 import com.jj.Gradebook.dao.NoteRepository;
 import com.jj.Gradebook.dao.StudentRepository;
 import com.jj.Gradebook.dao.TimetableRepository;
+import com.jj.Gradebook.dto.CourseDTO;
 import com.jj.Gradebook.dto.NoteDTO;
+import com.jj.Gradebook.dto.TeacherDTO;
 import com.jj.Gradebook.dto.TimetableEntryDTO;
+import com.jj.Gradebook.entity.Course;
 import com.jj.Gradebook.entity.Note;
 import com.jj.Gradebook.entity.Student;
 import com.jj.Gradebook.entity.Timetable;
@@ -28,7 +32,7 @@ public class NotesService {
 
     private final StudentRepository studentRepository;
     private final NoteRepository noteRepository;
-    private final TimetableRepository timetableRepository;
+    private final CoursesRepository coursesRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -45,14 +49,14 @@ public class NotesService {
                         .description(note.getDescription())
                         .date(dateFormat.format(note.getDateTime()))
                         .studentID(note.getStudent().getStudentId())
-                        .timetableEntry(TimetableEntryDTO.builder()
-                                .timetableID(note.getTimetable().getTimetableId())
-                                .courseID(note.getTimetable().getCourse().getCourseId())
-                                .classID(student.getStudentClass().getClassId())
-                                .startTime(note.getTimetable().getStartTime().toString())
-                                .endTime(note.getTimetable().getEndTime().toString())
-                                .classroom(note.getTimetable().getClassroomNumber())
-                                .teacherName(note.getTimetable().getCourse().getTeacher().getFirstName() + " " + note.getTimetable().getCourse().getTeacher().getLastName())
+                        .course(CourseDTO.builder()
+                                .courseID(note.getCourse().getCourseId())
+                                .courseName(note.getCourse().getCourseName())
+                                .tutor(TeacherDTO.builder()
+                                        .teacherID(note.getCourse().getTeacher().getTeacherId())
+                                        .firstName(note.getCourse().getTeacher().getFirstName())
+                                        .lastName(note.getCourse().getTeacher().getLastName())
+                                        .build())
                                 .build())
                         .build())
                 .toList();
@@ -66,12 +70,12 @@ public class NotesService {
 
     public StudentNotesResponse createNewNote(Long studentID, CreateNoteRequest request) {
         Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No user with id - %d", studentID)));
-        Timetable timetable = timetableRepository.findById(request.getTimetableID()).orElseThrow(() -> new NoSuchEntityException(String.format("No timetable with id - %d", request.getTimetableID())));
-
+        Course course = coursesRepository.findById(request.getCourseID()).orElseThrow(() -> new NoSuchEntityException(String.format("No course with id - %d", request.getCourseID())));
         try {
             Note note = noteRepository.save(Note.builder()
                     .student(student)
-                    .timetable(timetable)
+                    .course(course)
+                    .title(request.getTitle())
                     .description(request.getDescription())
                     .dateTime(dateFormat.parse(request.getDate()))
                     .build());
@@ -79,21 +83,22 @@ public class NotesService {
             return StudentNotesResponse.builder()
                     .status("Success")
                     .message("Successfully returning created note")
+                    .noteID(note.getNoteId())
                     .notes(List.of(NoteDTO.builder()
                             .noteID(note.getNoteId())
                                     .title(note.getTitle())
                             .description(note.getDescription())
                             .date(dateFormat.format(note.getDateTime()))
                             .studentID(note.getStudent().getStudentId())
-                            .timetableEntry(TimetableEntryDTO.builder()
-                                    .timetableID(note.getTimetable().getTimetableId())
-                                    .courseID(note.getTimetable().getCourse().getCourseId())
-                                    .classID(student.getStudentClass().getClassId())
-                                    .startTime(note.getTimetable().getStartTime().toString())
-                                    .endTime(note.getTimetable().getEndTime().toString())
-                                    .classroom(note.getTimetable().getClassroomNumber())
-                                    .teacherName(note.getTimetable().getCourse().getTeacher().getFirstName() + " " + note.getTimetable().getCourse().getTeacher().getLastName())
-                                    .build())
+                                    .course(CourseDTO.builder()
+                                            .courseID(note.getCourse().getCourseId())
+                                            .courseName(note.getCourse().getCourseName())
+                                            .tutor(TeacherDTO.builder()
+                                                    .teacherID(note.getCourse().getTeacher().getTeacherId())
+                                                    .firstName(note.getCourse().getTeacher().getFirstName())
+                                                    .lastName(note.getCourse().getTeacher().getLastName())
+                                                    .build())
+                                            .build())
                             .build()))
                     .build();
         }catch (ParseException ex){
@@ -111,7 +116,7 @@ public class NotesService {
             Note savedNote = noteRepository.save(Note.builder()
                     .noteId(note.getNoteId())
                     .student(student)
-                    .timetable(note.getTimetable())
+                            .course(note.getCourse())
                     .description(request.getDescription())
                     .dateTime(dateFormat.parse(request.getDate()))
                     .build());
@@ -125,14 +130,14 @@ public class NotesService {
                             .description(savedNote.getDescription())
                             .date(dateFormat.format(savedNote.getDateTime()))
                             .studentID(note.getStudent().getStudentId())
-                            .timetableEntry(TimetableEntryDTO.builder()
-                                    .timetableID(savedNote.getTimetable().getTimetableId())
-                                    .courseID(savedNote.getTimetable().getCourse().getCourseId())
-                                    .classID(student.getStudentClass().getClassId())
-                                    .startTime(savedNote.getTimetable().getStartTime().toString())
-                                    .endTime(savedNote.getTimetable().getEndTime().toString())
-                                    .classroom(savedNote.getTimetable().getClassroomNumber())
-                                    .teacherName(savedNote.getTimetable().getCourse().getTeacher().getFirstName() + " " + savedNote.getTimetable().getCourse().getTeacher().getLastName())
+                            .course(CourseDTO.builder()
+                                    .courseID(savedNote.getCourse().getCourseId())
+                                    .courseName(savedNote.getCourse().getCourseName())
+                                    .tutor(TeacherDTO.builder()
+                                            .teacherID(savedNote.getCourse().getTeacher().getTeacherId())
+                                            .firstName(savedNote.getCourse().getTeacher().getFirstName())
+                                            .lastName(savedNote.getCourse().getTeacher().getLastName())
+                                            .build())
                                     .build())
                             .build())
                     .build();

@@ -92,6 +92,7 @@ public class GradesService {
                     .status("Success")
                     .message(String.format("Successfully created new grade with id - %d", savedGrade.getGradeId()))
                     .grades(grades)
+                    .gradeID(savedGrade.getGradeId())
                     .build();
 
         } catch (ParseException ex){

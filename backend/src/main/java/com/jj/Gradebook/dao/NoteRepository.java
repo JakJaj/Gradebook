@@ -10,7 +10,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     void deleteAllByStudent_StudentClass_ClassId(Long classID);
 
     void deleteNotesByStudent_StudentId(Long studentID);
-    void deleteAllByTimetable_Course_Teacher_TeacherId(Long teacherID);
+    void deleteAllByCourse_Teacher_TeacherId(Long teacherID);
 
     List<Note> findNotesByStudent_StudentClass_ClassId(Long classID);
 }

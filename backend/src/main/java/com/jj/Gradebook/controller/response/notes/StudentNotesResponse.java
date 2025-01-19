@@ -17,4 +17,5 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentNotesResponse extends BaseResponse {
     private List<NoteDTO> notes;
+    private Long noteID;
 }

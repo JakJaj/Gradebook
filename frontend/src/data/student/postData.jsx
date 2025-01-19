@@ -78,3 +78,96 @@ export const createStudent = async (studentData) => {
         throw error;
     }
 };
+
+
+
+
+export const postGrade = async (gradeData, studentID) => {
+    const token = Cookies.get('jwtToken');
+
+    console.log(gradeData);
+
+    const payload = {
+        courseID : gradeData.courseID,
+        mark : gradeData.mark,
+        description: gradeData.description,
+        magnitude: gradeData.magnitude,
+        date: gradeData.date,
+    };
+
+    try {
+        const response = await fetch(`${url}/students/${studentID}/grades`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to post grade');
+        }
+
+        const data = await response.json();
+        return data.gradeID;
+
+    } catch (error) {
+        console.error('Error posting grade:', error);
+        throw error;
+    }
+}
+
+export const postAttendance = async (attendanceData, studentID) => {
+    const token = Cookies.get('jwtToken');
+    console.log(attendanceData);
+
+    try {
+        const response = await fetch(`${url}/students/${studentID}/attendances`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(attendanceData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to post attendance');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data.attendanceID;
+
+    } catch (error) {
+        console.error('Error posting attendance:', error);
+        throw error;
+    }
+}
+
+export const postNote = async (noteData, studentID) => {
+    const token = Cookies.get('jwtToken');
+    console.log(noteData);
+    try {
+        const response = await fetch(`${url}/students/${studentID}/notes`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(noteData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to post note');
+        }
+
+        const data = await response.json();
+        return data.noteID;
+
+    } catch (error) {
+        console.error('Error posting note:', error);
+        throw error;
+    }
+}

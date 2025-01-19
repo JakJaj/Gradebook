@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-function AttendanceModal({ isOpen, onClose, onSave }) {
+function AttendanceModal({ isOpen, onClose, onSave, oldAttendance }) {
     const [attendance, setAttendance] = useState('');
     const [date, setDate] = useState('');
 
+    useEffect(() => {
+        setAttendance(oldAttendance.status);
+        setDate(moment(oldAttendance.date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+    }, [oldAttendance]);
+
     const handleSave = () => {
         if (attendance.trim()) {
-            onSave({ date, status: attendance });
+            onSave({ date, attendance });
             setAttendance('');
             setDate(moment().format('YYYY-MM-DD'));
         }

@@ -8,7 +8,7 @@ import lombok.Data;
 public class AttendanceDTO {
     private Long attendanceID;
     private String status;
-    private TimetableEntryDTO timetable;
+    private CourseDTO course;
     private Long studentID;
     private String date;
 }

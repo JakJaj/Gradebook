@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-function AttendanceModal({ isOpen, onClose, onSave }) {
-    const [attendance, setAttendance] = useState('');
+function NoteModal({ isOpen, onClose, onSave, oldNote }) {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
 
+
+    useEffect(() => {
+        setTitle(oldNote.title);
+        setDescription(oldNote.description);
+        setDate(moment(oldNote.date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+    }, [oldNote]);
+
     const handleSave = () => {
-        if (attendance.trim()) {
-            onSave({ date, status: attendance });
-            setAttendance('');
+        if (title.trim() && description.trim()) {
+            onSave({ title, description, date });
+            setTitle('');
+            setDescription('');
             setDate(moment().format('YYYY-MM-DD'));
         }
     };
+
     const handleSelectToday = () => {
         setDate(moment().format('YYYY-MM-DD'));
     };
@@ -21,17 +31,21 @@ function AttendanceModal({ isOpen, onClose, onSave }) {
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
-                <h3 className="text-xl font-semibold mb-4">Add Attendance</h3>
-                <select
-                    value={attendance}
-                    onChange={(e) => setAttendance(e.target.value)}
+                <h3 className="text-xl font-semibold mb-4">Add Note</h3>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Title"
                     className="w-full p-2 border border-gray-300 rounded mb-4"
-                >
-                    <option value="" disabled>Select Attendance</option>
-                    <option value="Present">Present</option>
-                    <option value="Late">Late</option>
-                    <option value="Absent">Absent</option>
-                </select>
+                />
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Description"
+                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                    rows="4"
+                />
                 <div className="flex items-center mb-4">
                     <input
                         type="date"
@@ -56,4 +70,4 @@ function AttendanceModal({ isOpen, onClose, onSave }) {
     );
 }
 
-export default AttendanceModal;
+export default NoteModal;

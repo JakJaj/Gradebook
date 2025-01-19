@@ -11,5 +11,5 @@ public class NoteDTO {
     private String description;
     private String date;
     private Long studentID;
-    private TimetableEntryDTO timetableEntry;
+    private CourseDTO course;
 }

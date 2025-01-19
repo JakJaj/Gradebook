@@ -20,11 +20,12 @@ const getColorForGrade = (mark) => {
 };
 
 const GradeBox = ({ grade, onEdit, onDelete }) => {
+
     const gradeColor = getColorForGrade(grade.mark);
 
     return (
         <div className="relative group">
-            <div className={`grade-box p-2 rounded-md ${gradeColor}`}>
+            <div className={`grade-box p-2 m-1 rounded-md ${gradeColor}`}>
                 <p>{grade.mark}</p>
             </div>
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white text-black text-sm p-4 rounded-md shadow-lg w-64">

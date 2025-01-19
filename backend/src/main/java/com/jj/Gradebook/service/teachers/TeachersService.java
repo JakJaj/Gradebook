@@ -124,8 +124,8 @@ public class TeachersService {
 
         classRepository.saveAll(classes);
         gradeRepository.deleteGradesByCourse_Teacher_TeacherId(teacherID);
-        attendanceRepository.deleteAllByTimetable_Course_Teacher_TeacherId(teacherID);
-        noteRepository.deleteAllByTimetable_Course_Teacher_TeacherId(teacherID);
+        attendanceRepository.deleteAllByCourse_Teacher_TeacherId(teacherID);
+        noteRepository.deleteAllByCourse_Teacher_TeacherId(teacherID);
         timetableRepository.deleteAllByCourse_Teacher_TeacherId(teacherID);
 
 
