@@ -12,7 +12,7 @@ function AttendanceModal({ isOpen, onClose, onSave, oldAttendance }) {
 
     const handleSave = () => {
         if (attendance.trim()) {
-            onSave({ date, attendance });
+            onSave({ date, status:attendance });
             setAttendance('');
             setDate(moment().format('YYYY-MM-DD'));
         }

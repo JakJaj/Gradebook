@@ -42,3 +42,75 @@ export const updateStudent = async (studentData) => {
         throw error;
     }
 }
+
+export const putGrade = async (gradeData, studentID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/students/${studentID}/grades`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(gradeData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update grade');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error updating grade:', error);
+        throw error;
+    }
+}
+
+export const putAttendance = async (attendanceData, studentID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/students/${studentID}/attendances`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(attendanceData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update attendance');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error updating attendance:', error);
+        throw error;
+    }
+}
+
+export const putNote = async (noteData, studentID) => {
+    const token = Cookies.get('jwtToken');
+
+    try {
+        const response = await fetch(`${url}/students/${studentID}/notes`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(noteData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update note');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error updating note:', error);
+        throw error;
+    }
+}
