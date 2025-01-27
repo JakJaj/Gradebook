@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import AnnouncementModal from '../teacher/popup/AnnouncementModal';
-import Announcement from '../../components/Announcement';
+import AnnouncementTeacher from '../../components/Announcement';
 import { fetchCourses } from '../../data/course/getData';
 import { fetchTimetableTeacher } from '../../data/timetable/getData';
 import { fetchTeacher } from '../../data/teacher/getData';
@@ -267,7 +267,7 @@ return (
                         New Announcement
                     </button>
                     {currentAnnouncements.map((announcement, index) => (
-                        <Announcement
+                        <AnnouncementTeacher
                             key={index}
                             announcement={announcement}
                             onDelete={handleDeleteAnnouncement}
