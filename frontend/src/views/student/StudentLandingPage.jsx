@@ -10,6 +10,7 @@ import { fetchStudent } from '../../data/student/getData';
 import { fetchUserDetails } from '../../data/user/getUser';
 import { fetchClasses } from '../../data/class/getData';
 import { fetchAnnouncements } from '../../data/announcement/getData';
+import { useNavigate } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
@@ -23,6 +24,7 @@ function StudentLandingPage() {
     const [user, setUser] = useState(null);
     const [classes, setClasses] = useState([]);
     const announcementsPerPage = 5;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getUser = async () => {
@@ -54,7 +56,8 @@ function StudentLandingPage() {
 
     useEffect(() => {
         if (!student) return;
-
+        console.log('student', student);
+        
         const getCourses = async () => {
             try {
                 const courses = await fetchCourses(); setCourses(courses); setCoursesFetched(true); } catch (error) { console.error('Error fetching courses in ClassManagementPage:', error); } }; getCourses(); }, [student]);
@@ -90,7 +93,7 @@ function StudentLandingPage() {
     
         const getTimetable = async () => {
             try {
-                const timetable = await fetchClassTimetable(student.classID); //WSTAW CLASS ID
+                const timetable = await fetchClassTimetable(student.classID);
                 const timetableToEvents = [];
     
                 Object.keys(timetable).forEach(day => {
@@ -175,11 +178,23 @@ return (
     <div>
         <TopBar title="Student Dashboard" />
 
-        <div className="flex justify-around mt-6">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded">Grades</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded">Attendance</button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded">Notes</button>
-        </div>
+        {student ? (
+            <div className="flex justify-center mt-6">
+                
+                <button onClick={() => navigate(`/student/${student.id}/grades`, { state: { studentData: student } })} className="bg-blue-500 text-white px-4 py-2 mx-3 rounded hover:bg-blue-700">
+                    Grades
+                </button>
+                <button onClick={() => navigate(`/student/${student.id}/attendance`, { state: { studentData: student } })} className="bg-blue-500 text-white px-4 py-2 mx-3 rounded hover:bg-blue-700">
+                    Attendance
+                </button>
+                <button onClick={() => navigate(`/student/${student.id}/notes`, { state: { studentData: student } })} className="bg-blue-500 text-white px-4 py-2 mx-3 rounded hover:bg-blue-700">
+                    Notes
+                </button>
+                
+            </div>
+        ) : (
+            <div>Loading...</div>
+        )}
         <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4">Your Schedule</h3>

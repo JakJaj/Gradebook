@@ -11,6 +11,9 @@ import CourseManagementPage from "./views/admin/CourseManagementPage.jsx";
 import ClassManagementPage from "./views/admin/ClassManagementPage.jsx";
 import TimetableScheduler from "./components/TimetableScheduler.jsx";
 import TeacherClassPage from "./views/teacher/TeacherClassPage.jsx";
+import StudentGradesPage from "./views/student/StudentGradesPage.jsx";
+import StudentAttendancePage from "./views/student/StudentAttendancePage.jsx";
+import StudentNotesPage from "./views/student/StudentNotesPage.jsx";
 
 const routes = [
     {
@@ -55,6 +58,18 @@ const routes = [
         element: <StudentLandingPage />,
     },
     {
+        path : '/student/:studentId/grades',
+        element: <StudentGradesPage />,
+    },
+    {
+        path : '/student/:studentId/attendance',
+        element: <StudentAttendancePage />,
+    },
+    {
+        path : '/student/:studentId/notes',
+        element: <StudentNotesPage />,
+    },
+    {
         path : '/parent/dashboard',
         element: <ParentLandingPage />,
     },
@@ -65,6 +80,10 @@ const routes = [
     {
         path : '/teacher/class/:classId',
         element: <TeacherClassPage />,
+    },
+    {
+        path : '*',
+        element: <ErrorPage />,
     }
 ]
 
