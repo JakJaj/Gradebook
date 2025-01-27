@@ -4,6 +4,7 @@ import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
+import com.jj.Gradebook.controller.response.classes.ClassCoursesResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
@@ -47,6 +48,7 @@ public class ClassController {
     public ResponseEntity<ClassAttendanceResponse> getAttendanceOfClass(@PathVariable Long classID){
         return ResponseEntity.ok(attendancesService.getAttendanceOfClass(classID));
     }
+
 
     @PostMapping()
     public ResponseEntity<ClassResponse> createNewClass(@RequestBody CreateClassRequest request){

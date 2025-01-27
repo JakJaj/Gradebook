@@ -3,19 +3,15 @@ package com.jj.Gradebook.service.classes;
 import com.jj.Gradebook.controller.request.classes.CreateClassRequest;
 import com.jj.Gradebook.controller.request.classes.UpdateClassDetailsRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
+import com.jj.Gradebook.controller.response.classes.ClassCoursesResponse;
 import com.jj.Gradebook.controller.response.classes.ClassResponse;
 import com.jj.Gradebook.controller.response.classes.ClassesResponse;
 import com.jj.Gradebook.controller.response.classes.TimetableResponse;
 import com.jj.Gradebook.controller.response.students.StudentsResponse;
 import com.jj.Gradebook.dao.*;
-import com.jj.Gradebook.dto.ClassDTO;
-import com.jj.Gradebook.dto.StudentDTO;
-import com.jj.Gradebook.dto.TeacherDTO;
-import com.jj.Gradebook.dto.TimetableEntryDTO;
+import com.jj.Gradebook.dto.*;
+import com.jj.Gradebook.entity.*;
 import com.jj.Gradebook.entity.Class;
-import com.jj.Gradebook.entity.Student;
-import com.jj.Gradebook.entity.Teacher;
-import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +34,7 @@ public class ClassesService {
     private final TeacherRepository teacherRepository;
     private final AttendanceRepository attendanceRepository;
     private final NoteRepository noteRepository;
+    private final CoursesRepository coursesRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -254,4 +251,5 @@ public class ClassesService {
                         .build())
                 .build();
     }
+
 }

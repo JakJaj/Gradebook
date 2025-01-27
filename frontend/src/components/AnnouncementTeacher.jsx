@@ -9,6 +9,9 @@ const Announcement = ({ announcement, onDelete }) => {
                 <div>
                     <span>{new Date(announcement.date).toLocaleDateString()}</span>
                 </div>
+                <button onClick={() => onDelete(announcement)} className="text-red-500 font-bold">
+                    X
+                </button>
             </div>
         </div>
     );
