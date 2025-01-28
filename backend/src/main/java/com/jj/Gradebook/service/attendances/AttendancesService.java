@@ -77,7 +77,8 @@ public class AttendancesService {
         List<Attendance> attendanceList = attendanceRepository.findAttendancesByStudent_StudentId(studentID);
 
         for (Attendance attendance: attendanceList){
-            studentsAttendance.get(attendance.getCourse().getCourseName()).add(
+            if(studentsAttendance.get(attendance.getCourse().getCourseName()) != null)
+                studentsAttendance.get(attendance.getCourse().getCourseName()).add(
                     AttendanceDTO.builder()
                             .attendanceID(attendance.getAttendanceId())
                             .status(attendance.getStatus())
