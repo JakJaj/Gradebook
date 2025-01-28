@@ -84,6 +84,7 @@ function LandingPage() {
                         </button>
                     </div>
                 </form>
+                <p className="text-xs text-gray-500 mt-4">Use the credentials provided by the teacher.</p>
             </div>
         </div>
     );
