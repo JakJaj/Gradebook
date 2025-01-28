@@ -168,7 +168,7 @@ export const fetchAttendanceByCourseID = async (courseID, classID) => {
         }
 
         const result = await response.json();
-        console.log(result);
+        
         const attendanceByStudent = {};
         for (const studentID in result.studentsAttendance) {
             attendanceByStudent[studentID] = result.studentsAttendance[studentID].map(attendance => ({
@@ -206,7 +206,6 @@ export const fetchNotesByCourseID = async (courseID, classID) => {
 
         const result = await response.json();
 
-        console.log(result);
         const notesByStudent = {};
         for (const studentID in result.studentsNotes) {
             notesByStudent[studentID] = result.studentsNotes[studentID].map(note => ({

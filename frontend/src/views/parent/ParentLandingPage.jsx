@@ -70,7 +70,6 @@ const ParentLandingPage = () => {
         navigate(`/student/${child.id}`, { state: { childData: child } });
     };
 
-    console.log(children)
     return (
         <div>
             <TopBar title="Parent Dashboard" />
@@ -83,21 +82,27 @@ const ParentLandingPage = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                        {children.map((child) => {
+                    <div className={`grid gap-6 justify-items-center ${
+                        children.length === 1 ? 'grid-cols-1' :
+                        children.length === 2 ? 'grid-cols-2' :
+                        children.length === 3 ? 'grid-cols-3' :
+                        'grid-cols-3'
+                    }`}>
+                        {children.map((child, index) => {
                             const childClass = classes.find((classItem) => classItem.id === child.class);
                             return (
-                                <ChildInfoBox
-                                    key={child.id}
-                                    child={{
-                                        id: child.id,
-                                        name: child.name,
-                                        className: childClass ? childClass.name : 'Unknown',
-                                        classID: child.class,
-                                        birthDate: child.birthDate,
-                                    }}
-                                    onSelect={handleSelectChild}
-                                />
+                                <div key={child.id} className={`${children.length === 4 && index === 3 ? 'col-span-3' : ''}`}>
+                                    <ChildInfoBox
+                                        child={{
+                                            id: child.id,
+                                            name: child.name,
+                                            className: childClass ? childClass.name : 'Unknown',
+                                            classID: child.class,
+                                            birthDate: child.birthDate,
+                                        }}
+                                        onSelect={handleSelectChild}
+                                    />
+                                </div>
                             );
                         })}
                     </div>

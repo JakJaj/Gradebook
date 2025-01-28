@@ -56,7 +56,6 @@ function StudentLandingPage() {
 
     useEffect(() => {
         if (!student) return;
-        console.log('student', student);
         
         const getCourses = async () => {
             try {
@@ -79,7 +78,8 @@ function StudentLandingPage() {
         const getAnnouncements = async () => {
             try {
                 const announcements = await fetchAnnouncements();
-                const sortedAnnouncements = announcements.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const validAnnouncements = announcements.filter(announcement => moment(announcement.date, 'DD-MM-YYYY', true).isValid());
+                const sortedAnnouncements = validAnnouncements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
                 setAnnouncements(sortedAnnouncements);
             } catch (error) {
                 console.error('Error fetching announcements in TeacherLandingPage:', error);
@@ -143,9 +143,11 @@ function StudentLandingPage() {
     }, [coursesFetched, student, classes, courses]);
     
 
+    const sortedAnnouncements = announcements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
+        
     const indexOfLastAnnouncement = currentPage * announcementsPerPage;
     const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
-    const currentAnnouncements = announcements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+    const currentAnnouncements = sortedAnnouncements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 

@@ -15,7 +15,6 @@ function StudentAttendancePage() {
         const fetchAttendance = async () => {
             try {
                 const response = await fetchStudentAttendance(student.id);
-                console.log('Fetched attendance response:', response);
 
                 const groupedAttendance = [];
                 for (const subject in response) {
@@ -32,7 +31,6 @@ function StudentAttendancePage() {
                     }
                 }
 
-                console.log('Grouped attendance:', groupedAttendance);
                 setAttendance(groupedAttendance);
             } catch (error) {
                 console.error('Error fetching attendance:', error);

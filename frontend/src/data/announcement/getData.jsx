@@ -17,8 +17,6 @@ export const fetchAnnouncements = async () => {
 
         const result = await response.json();
 
-        console.log('result', result);
-
         if (response.ok) {
             
             return result.announcements.map((announcement) => ({

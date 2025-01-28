@@ -62,7 +62,7 @@ function EditCourseModal({ isOpen, onClose, onSave, course, teachers }) {
         >
             <div
                 className="bg-white p-6 rounded shadow-lg w-3/5"
-                onClick={(e) => e.stopPropagation()} // Prevent closing the modal when clicking inside the content
+                onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-2xl mb-4">Edit Course</h2>
                 <form onSubmit={handleSubmit}>

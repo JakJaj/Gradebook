@@ -44,7 +44,7 @@ function StudentManagementPage() {
             handleSave(newStudent);
             setIsAddModalOpen(false);
 
-            setNotificationMessage('Student created successfully! Generated password: ' + newStudent.password); // add created student password
+            setNotificationMessage('Student created successfully! Generated password: ' + newStudent.password); 
             setShowNotification(true);
         } catch (error) {
             console.error('Error creating student:', error);
@@ -73,8 +73,6 @@ function StudentManagementPage() {
         
         
         if (success) {
-            console.log(classes)
-            console.log(studentDetails)
             setData((prevData) =>
                 prevData.map((student) =>
                     student.id === studentToEdit

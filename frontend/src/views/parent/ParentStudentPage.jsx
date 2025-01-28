@@ -6,13 +6,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Announcement from '../../components/Announcement';
 import { fetchCourses } from '../../data/course/getData';
 import { fetchClassTimetable } from '../../data/timetable/getData';
-import { fetchStudent } from '../../data/student/getData';
-import { fetchUserDetails } from '../../data/user/getUser';
 import { fetchClasses } from '../../data/class/getData';
 import { fetchAnnouncements } from '../../data/announcement/getData';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function TeacherStudentPage() {
+function ParentStudentPage() {
     const [events, setEvents] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +27,6 @@ function TeacherStudentPage() {
 
     useEffect(() => {
         if (!student) return;
-        console.log('student', student);
         
         const getCourses = async () => {
             try {
@@ -52,7 +49,8 @@ function TeacherStudentPage() {
         const getAnnouncements = async () => {
             try {
                 const announcements = await fetchAnnouncements();
-                const sortedAnnouncements = announcements.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const validAnnouncements = announcements.filter(announcement => moment(announcement.date, 'DD-MM-YYYY', true).isValid());
+                const sortedAnnouncements = validAnnouncements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
                 setAnnouncements(sortedAnnouncements);
             } catch (error) {
                 console.error('Error fetching announcements in TeacherLandingPage:', error);
@@ -116,10 +114,12 @@ function TeacherStudentPage() {
     }, [coursesFetched, student, classes, courses]);
     
 
+    const sortedAnnouncements = announcements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
+            
     const indexOfLastAnnouncement = currentPage * announcementsPerPage;
     const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
-    const currentAnnouncements = announcements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
-
+    const currentAnnouncements = sortedAnnouncements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+    
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const minTime = new Date();
@@ -227,4 +227,4 @@ return (
     );
 }
 
-export default TeacherStudentPage;
+export default ParentStudentPage;

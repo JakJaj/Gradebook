@@ -16,7 +16,6 @@ const StudentNotesPage = () => {
         const fetchNotes = async () => {
             try {
                 const response = await fetchStudentNotes(student.id);
-                console.log('Fetched notes response:', response);
                 setNotes(response);
             } catch (error) {
                 console.error('Error fetching notes:', error);

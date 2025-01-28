@@ -18,8 +18,6 @@ export const postAnnouncements = async (announcementData) => {
 
         const result = await response.json();
 
-        console.log('result', result);
-
         if (response.ok) {
             
             return {
