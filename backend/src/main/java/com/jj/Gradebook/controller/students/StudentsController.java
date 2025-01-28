@@ -9,6 +9,7 @@ import com.jj.Gradebook.controller.request.notes.UpdateNoteDetailsRequest;
 import com.jj.Gradebook.controller.request.students.UpdateStudentDetailsRequest;
 import com.jj.Gradebook.controller.response.BaseResponse;
 import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
+import com.jj.Gradebook.controller.response.attendance.StudentAttendanceListResponse;
 import com.jj.Gradebook.controller.response.grades.GradeResponse;
 import com.jj.Gradebook.controller.response.notes.NoteResponse;
 import com.jj.Gradebook.controller.response.notes.StudentNotesResponse;
@@ -57,7 +58,7 @@ public class StudentsController {
     }
 
     @GetMapping("/{studentID}/attendances")
-    public ResponseEntity<StudentAttendancesResponse> getStudentsAttendances(@PathVariable Long studentID){
+    public ResponseEntity<StudentAttendanceListResponse> getStudentsAttendances(@PathVariable Long studentID){
         return ResponseEntity.ok(attendancesService.getStudentsAttendances(studentID));
     }
 
@@ -112,7 +113,7 @@ public class StudentsController {
     }
 
     @DeleteMapping("/{studentID}/attendances/{attendanceID}")
-    public ResponseEntity<StudentAttendancesResponse> deleteAttendance(@PathVariable Long studentID, @PathVariable Long attendanceID){
+    public ResponseEntity<StudentAttendanceListResponse> deleteAttendance(@PathVariable Long studentID, @PathVariable Long attendanceID){
         return ResponseEntity.ok(attendancesService.deleteAttendance(studentID, attendanceID));
     }
 

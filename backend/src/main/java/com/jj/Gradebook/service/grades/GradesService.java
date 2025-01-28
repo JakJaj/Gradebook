@@ -7,10 +7,12 @@ import com.jj.Gradebook.controller.response.students.StudentGradesResponse;
 import com.jj.Gradebook.dao.CoursesRepository;
 import com.jj.Gradebook.dao.GradeRepository;
 import com.jj.Gradebook.dao.StudentRepository;
+import com.jj.Gradebook.dao.TimetableRepository;
 import com.jj.Gradebook.dto.GradeDTO;
 import com.jj.Gradebook.entity.Course;
 import com.jj.Gradebook.entity.Grade;
 import com.jj.Gradebook.entity.Student;
+import com.jj.Gradebook.entity.Timetable;
 import com.jj.Gradebook.exceptions.DateFormatException;
 import com.jj.Gradebook.exceptions.NoSuchEntityException;
 import jakarta.transaction.Transactional;
@@ -28,28 +30,32 @@ public class GradesService {
     private final GradeRepository gradeRepository;
     private final StudentRepository studentRepository;
     private final CoursesRepository coursesRepository;
+    private final TimetableRepository timetableRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     public StudentGradesResponse getAllStudentsGrades(Long studentID) {
 
         Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
         List<Grade> grades = gradeRepository.findGradesByStudent_StudentId(studentID);
+        List<Course> coursesOfStudent = timetableRepository.findTimetablesByClas_ClassId(student.getStudentClass().getClassId()).stream().map(Timetable::getCourse).distinct().toList();
 
         HashMap<String, List<GradeDTO>> studentsGrades = new HashMap<>();
 
-        for (Grade grade: grades){
-            if (!studentsGrades.containsKey(grade.getCourse().getCourseName())){
-                studentsGrades.put(grade.getCourse().getCourseId() + " - " + grade.getCourse().getCourseName(), new ArrayList<>());
-            }
+        for (Course course : coursesOfStudent){
+            studentsGrades.put(course.getCourseName(), new ArrayList<>());
+        }
 
-            studentsGrades.get(grade.getCourse().getCourseId() + " - " + grade.getCourse().getCourseName()).add(GradeDTO.builder()
-                    .gradeID(grade.getGradeId())
-                    .studentID(student.getStudentId())
-                    .mark(grade.getMark())
-                    .magnitude(grade.getMagnitude())
-                    .description(grade.getDescription())
-                    .date(dateFormat.format(grade.getDate()))
-                    .build());
+
+        for (Grade grade: grades){
+                studentsGrades.get(grade.getCourse().getCourseName()).add(GradeDTO.builder()
+                        .gradeID(grade.getGradeId())
+                        .studentID(student.getStudentId())
+                        .mark(grade.getMark())
+                        .magnitude(grade.getMagnitude())
+                        .description(grade.getDescription())
+                        .date(dateFormat.format(grade.getDate()))
+                        .build());
+
         }
 
         return StudentGradesResponse.builder()
