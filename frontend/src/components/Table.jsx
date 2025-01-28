@@ -68,7 +68,7 @@ function Table({ columns, data }) {
                     {table.getRowModel().rows.map(row => (
                         <tr key={row.id} className="hover:bg-gray-100">
                             {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className="p-2 border-b">
+                                <td key={cell.id} className="p-2 border-b text-center">
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </td>
                             ))}

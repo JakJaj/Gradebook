@@ -4,12 +4,10 @@ import com.jj.Gradebook.controller.request.attendances.CreateAttendanceRequest;
 import com.jj.Gradebook.controller.request.attendances.UpdateAttendanceDetailsRequest;
 import com.jj.Gradebook.controller.response.attendance.AttendanceResponse;
 import com.jj.Gradebook.controller.response.attendance.ClassAttendanceResponse;
+import com.jj.Gradebook.controller.response.attendance.StudentAttendanceListResponse;
 import com.jj.Gradebook.controller.response.students.StudentAttendancesResponse;
 import com.jj.Gradebook.dao.*;
-import com.jj.Gradebook.dto.AttendanceDTO;
-import com.jj.Gradebook.dto.CourseDTO;
-import com.jj.Gradebook.dto.TeacherDTO;
-import com.jj.Gradebook.dto.TimetableEntryDTO;
+import com.jj.Gradebook.dto.*;
 import com.jj.Gradebook.entity.*;
 import com.jj.Gradebook.entity.Class;
 import com.jj.Gradebook.exceptions.DateFormatException;
@@ -32,6 +30,7 @@ public class AttendancesService {
     private final ClassRepository classRepository;
     private final StudentRepository studentRepository;
     private final CoursesRepository coursesRepository;
+    private final TimetableRepository timetableRepository;
 
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -66,33 +65,41 @@ public class AttendancesService {
                 .build();
     }
 
-    public StudentAttendancesResponse getStudentsAttendances(Long studentID) {
+    public StudentAttendanceListResponse getStudentsAttendances(Long studentID) {
         Student student = studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
+        List<Course> coursesOfStudent = timetableRepository.findTimetablesByClas_ClassId(student.getStudentClass().getClassId()).stream().map(Timetable::getCourse).distinct().toList();
+
+        HashMap<String, List<AttendanceDTO>> studentsAttendance = new HashMap<>();
+
+        for (Course course : coursesOfStudent){
+            studentsAttendance.put(course.getCourseName(), new ArrayList<>());
+        }
         List<Attendance> attendanceList = attendanceRepository.findAttendancesByStudent_StudentId(studentID);
 
-        List<AttendanceDTO> attendanceDTOList = attendanceList.stream()
-                .map(attendance -> AttendanceDTO.builder()
-                        .attendanceID(attendance.getAttendanceId())
-                        .status(attendance.getStatus())
-                        .course(CourseDTO.builder()
-                                .courseID(attendance.getCourse().getCourseId())
-                                .courseName(attendance.getCourse().getCourseName())
-                                .tutor(TeacherDTO.builder()
-                                        .teacherID(attendance.getCourse().getTeacher().getTeacherId())
-                                        .firstName(attendance.getCourse().getTeacher().getFirstName())
-                                        .lastName(attendance.getCourse().getTeacher().getLastName())
-                                        .build())
-                                .build())
+        for (Attendance attendance: attendanceList){
+            studentsAttendance.get(attendance.getCourse().getCourseName()).add(
+                    AttendanceDTO.builder()
+                            .attendanceID(attendance.getAttendanceId())
+                            .status(attendance.getStatus())
+                            .course(CourseDTO.builder()
+                                    .courseID(attendance.getCourse().getCourseId())
+                                    .courseName(attendance.getCourse().getCourseName())
+                                    .tutor(TeacherDTO.builder()
+                                            .teacherID(attendance.getCourse().getTeacher().getTeacherId())
+                                            .firstName(attendance.getCourse().getTeacher().getFirstName())
+                                            .lastName(attendance.getCourse().getTeacher().getLastName())
+                                            .build())
+                                    .build())
+                            .studentID(attendance.getStudent().getStudentId())
+                            .date(dateFormat.format(attendance.getDateTime()))
+                            .build()
+            );
+        }
 
-                        .studentID(studentID)
-                        .date(dateFormat.format(attendance.getDateTime()))
-                        .build())
-                .toList();
-
-        return StudentAttendancesResponse.builder()
+        return StudentAttendanceListResponse.builder()
                 .status("Success")
                 .message(String.format("Successfully returning attendance of student with id - %d", studentID))
-                .attendances(attendanceDTOList)
+                .attendances(studentsAttendance)
                 .build();
     }
 
@@ -175,7 +182,7 @@ public class AttendancesService {
     }
 
     @Transactional
-    public StudentAttendancesResponse deleteAttendance(Long studentID, Long attendanceID) {
+    public StudentAttendanceListResponse deleteAttendance(Long studentID, Long attendanceID) {
         studentRepository.findById(studentID).orElseThrow(() -> new NoSuchEntityException(String.format("No student with id - %d", studentID)));
         Attendance attendance = attendanceRepository.findById(attendanceID).orElseThrow(() -> new NoSuchEntityException(String.format("No attendance with id - %d", attendanceID)));
         if (!attendance.getStudent().getStudentId().equals(studentID)) throw new NoSuchEntityException("Selected attendance isn't a attendance of picked student");

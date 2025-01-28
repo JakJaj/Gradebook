@@ -104,3 +104,80 @@ export const fetchStudent = async (studentID) => {
         return [];
     }
 };
+
+export const fetchStudentGrades = async (studentID) => {
+    try {
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/grades`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch student grades");
+        }
+        const text = await response.text();
+        if (!text) {
+            return [];
+        }
+        const result = JSON.parse(text);
+        
+        return result.grades;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
+
+
+export const fetchStudentAttendance = async (studentID) => {
+    try {
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/attendances`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch student attendance");
+        }
+        const text = await response.text();
+        if (!text) {
+            return [];
+        }
+        const result = JSON.parse(text);
+        return result.attendances;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
+
+export const fetchStudentNotes = async (studentID) => {
+    try {
+        const token = Cookies.get('jwtToken');
+        const response = await fetch(`${url}/students/${studentID}/notes`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch student notes");
+        }
+        const text = await response.text();
+        if (!text) {
+            return [];
+        }
+        const result = JSON.parse(text);
+        return result.notes;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
