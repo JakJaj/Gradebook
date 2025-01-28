@@ -15,7 +15,7 @@ function NoteModal({ isOpen, onClose, onSave, oldNote }) {
 
     const handleSave = () => {
         if (title.trim() && description.trim()) {
-            onSave({ title, description, date });
+            onSave({ title, description, date:moment(date).format('DD-MM-YYYY') });
             setTitle('');
             setDescription('');
             setDate(moment().format('YYYY-MM-DD'));
