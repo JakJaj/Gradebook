@@ -73,7 +73,13 @@ function StudentAttendancePage() {
                 >
                     Go Back
                 </button>
-                <StudentTable columns={columns} data={attendance} />
+                {attendance.length === 0 ? (
+                    <div className="bg-white p-4 rounded-lg shadow-md">
+                        <p className="text-center text-xl">No attendance records available.</p>
+                    </div>
+                ) : (
+                    <StudentTable columns={columns} data={attendance} />
+                )}
             </div>
         </div>
     );
