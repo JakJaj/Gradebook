@@ -17,8 +17,6 @@ export const deleteAnnouncement = async (announcementID) => {
 
         const result = await response.json();
 
-        console.log('result', result);
-
         if (response.ok) {
             
             return true;

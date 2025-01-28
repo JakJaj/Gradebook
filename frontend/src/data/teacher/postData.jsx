@@ -17,7 +17,6 @@ export const createTeacher = async (teacherData) => {
             body: JSON.stringify(teacherData),
         });
 
-        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

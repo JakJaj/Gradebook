@@ -47,7 +47,6 @@ function EditParentStudentsModal({ isOpen, onClose, parent }) {
             ));
         };
 
-        // Reset state when modal is opened
         setAllStudents([]);
         setAssociatedStudents([]);
         setOriginalAssociatedStudents([]);
@@ -81,13 +80,9 @@ function EditParentStudentsModal({ isOpen, onClose, parent }) {
                 !originalAssociatedStudents.some(student => student.id === studentId)
             );
     
-            // Filter out students who were not originally associated from the studentsToRemove list
             const filteredStudentsToRemove = studentsToRemove.filter(studentId => 
                 originalAssociatedStudents.some(student => student.id === studentId)
             );
-
-            console.log('filteredStudentsToAdd:', filteredStudentsToAdd);
-            console.log('filteredStudentsToRemove:', filteredStudentsToRemove);
 
 
             if (filteredStudentsToAdd.length !== 0){

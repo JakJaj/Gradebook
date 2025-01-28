@@ -87,12 +87,21 @@ function TeacherManagementPage() {
         const success = await updateTeacher(requestBody);
 
         if (success) {
-
             setData((prevData) =>
                 prevData.map((teacher) =>
                     teacher.id === teacherToEdit.id
-                        ? { ...teacher, ...success }
-                        : teacher
+            ? {
+                ...teacher,
+                id: success.teacherID,
+                firstName: success.firstName,
+                lastName: success.lastName,
+                name: `${success.firstName} ${success.lastName}`,
+                dateOfBirth: success.dateOfBirth,
+                dateOfEmployment: success.dateOfEmployment,
+                email: success.email,
+                pesel: success.pesel
+            }
+            : teacher
                 )
             );
             setIsEditModalOpen(false);

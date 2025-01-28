@@ -16,7 +16,6 @@ function EditClassModal({ isOpen, onClose, onSave, theClass, teachers }) {
             if (theClass && theClass.id) {
                 const classDetails = await fetchClass(theClass.id);
 
-                console.log(classDetails)
                 setClassData({
                     id: classDetails.id,
                     name: classDetails.name,
@@ -68,7 +67,7 @@ function EditClassModal({ isOpen, onClose, onSave, theClass, teachers }) {
         >
             <div
                 className="bg-white p-6 rounded shadow-lg w-3/5"
-                onClick={(e) => e.stopPropagation()} // Prevent closing the modal when clicking inside the content
+                onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-2xl mb-4">Add Class</h2>
                 <form onSubmit={handleSubmit}>

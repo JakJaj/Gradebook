@@ -63,13 +63,12 @@ function ClassManagementPage() {
         const requestBody = { 
             className : newClass.name,
             startYear : newClass.startYear,
-            teacherID : Number(newClass.tutorID) //TODO: UWAZAJ NA TO
+            teacherID : Number(newClass.tutorID)
         };
 
         try {
             const response = await createClass(requestBody); 
-            
-            console.log(response)
+
             const createdClass = await fetchClass(response.theClass.classID);
 
 
@@ -93,7 +92,7 @@ function ClassManagementPage() {
 
     const handleUpdate = async (updatedClass) => {
 
-        console.log(updatedClass)
+
 
         const requestBody = {  
             theClass : {
@@ -107,7 +106,7 @@ function ClassManagementPage() {
         const success = await updateClass(requestBody); 
 
         if (success) {
-            console.log(success)
+
 
             setData((prevData) =>
                 prevData.map((theClass) =>

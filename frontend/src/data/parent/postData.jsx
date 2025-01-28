@@ -17,7 +17,6 @@ export const createParent = async (parentData) => {
             body: JSON.stringify(parentData),
         });
 
-        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -48,7 +47,6 @@ export const addStudentToParent = async (parentId, studentsList) => {
             body: JSON.stringify(requestBody),
         });
 
-        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

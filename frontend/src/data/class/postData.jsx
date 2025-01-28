@@ -6,7 +6,6 @@ const url = API_URL;
 export const createClass = async (classData) => {
     const token = Cookies.get('jwtToken');
     
-    console.log(classData)
     try {
         const response = await fetch(`${url}/classes`, {
             method: 'POST',
@@ -17,7 +16,6 @@ export const createClass = async (classData) => {
             body: JSON.stringify(classData),
         });
 
-        console.log(response)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

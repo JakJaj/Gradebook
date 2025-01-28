@@ -15,7 +15,6 @@ function StudentAttendancePage() {
         const fetchAttendance = async () => {
             try {
                 const response = await fetchStudentAttendance(student.id);
-                console.log('Fetched attendance response:', response);
 
                 const groupedAttendance = [];
                 for (const subject in response) {
@@ -32,7 +31,6 @@ function StudentAttendancePage() {
                     }
                 }
 
-                console.log('Grouped attendance:', groupedAttendance);
                 setAttendance(groupedAttendance);
             } catch (error) {
                 console.error('Error fetching attendance:', error);
@@ -73,7 +71,13 @@ function StudentAttendancePage() {
                 >
                     Go Back
                 </button>
-                <StudentTable columns={columns} data={attendance} />
+                {attendance.length === 0 ? (
+                    <div className="bg-white p-4 rounded-lg shadow-md">
+                        <p className="text-center text-xl">No attendance records available.</p>
+                    </div>
+                ) : (
+                    <StudentTable columns={columns} data={attendance} />
+                )}
             </div>
         </div>
     );

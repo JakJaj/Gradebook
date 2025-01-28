@@ -1,5 +1,5 @@
 import React from 'react';
-
+import moment from 'moment';
 const Announcement = ({ announcement, onDelete }) => {
     return (
         <div className="bg-white p-4 rounded-lg shadow-md mb-4">
@@ -7,7 +7,7 @@ const Announcement = ({ announcement, onDelete }) => {
             <p className="text-gray-700">{announcement.content}</p>
             <div className="flex justify-between items-center text-sm text-gray-500">
                 <div>
-                    <span>{new Date(announcement.date).toLocaleDateString()}</span>
+                    <span>{moment(announcement.date, 'DD-MM-YYYY').format('DD-MM-YYYY')}</span>
                 </div>
             </div>
         </div>

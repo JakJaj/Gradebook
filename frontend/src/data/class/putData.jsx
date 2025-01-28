@@ -6,7 +6,6 @@ const url = API_URL;
 export const updateClass = async (classData) => {
     const token = Cookies.get('jwtToken');
 
-    console.log(classData)
     try {
         const response = await fetch(`${url}/classes`, {
             method: 'PUT',

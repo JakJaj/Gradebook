@@ -15,7 +15,6 @@ function StudentGradesPage() {
         const fetchGrades = async () => {
             try {
                 const response = await fetchStudentGrades(student.id);
-                console.log('Fetched grades response:', response);
 
                 const groupedGrades = [];
                 for (const subject in response) {
@@ -32,7 +31,6 @@ function StudentGradesPage() {
                     }
                 }
 
-                console.log('Grouped grades:', groupedGrades);
                 setGrades(groupedGrades);
             } catch (error) {
                 console.error('Error fetching grades:', error);

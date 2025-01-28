@@ -6,53 +6,24 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Announcement from '../../components/Announcement';
 import { fetchCourses } from '../../data/course/getData';
 import { fetchClassTimetable } from '../../data/timetable/getData';
-import { fetchStudent } from '../../data/student/getData';
-import { fetchUserDetails } from '../../data/user/getUser';
 import { fetchClasses } from '../../data/class/getData';
 import { fetchAnnouncements } from '../../data/announcement/getData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const localizer = momentLocalizer(moment);
-
-function StudentLandingPage() {
+function ParentStudentPage() {
     const [events, setEvents] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [courses, setCourses] = useState([]);
     const [coursesFetched, setCoursesFetched] = useState(false); 
-    const [student, setStudent] = useState(null);
     const [user, setUser] = useState(null);
     const [classes, setClasses] = useState([]);
     const announcementsPerPage = 5;
+    const location = useLocation();
     const navigate = useNavigate();
+    const student = location.state.childData;
+    const localizer = momentLocalizer(moment);
 
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const user = await fetchUserDetails();
-                setUser(user);
-            } catch (error) {
-                console.error('Error fetching user in StudentLandingPage:', error);
-            }
-        };
-        getUser();
-    }, []);
-
-    useEffect(() => {
-        if (!user) return;
-
-        const getStudentData = async () => {
-            try {
-                
-                const studentData = await fetchStudent(user.subClassID);
-                
-                setStudent(studentData);
-            } catch (error) {
-                console.error('Error fetching student data in StudentLandingPage:', error);
-            }
-        };
-        getStudentData();
-    }, [user]);
 
     useEffect(() => {
         if (!student) return;
@@ -144,11 +115,11 @@ function StudentLandingPage() {
     
 
     const sortedAnnouncements = announcements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
-        
+            
     const indexOfLastAnnouncement = currentPage * announcementsPerPage;
     const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
     const currentAnnouncements = sortedAnnouncements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
-
+    
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const minTime = new Date();
@@ -256,4 +227,4 @@ return (
     );
 }
 
-export default StudentLandingPage;
+export default ParentStudentPage;

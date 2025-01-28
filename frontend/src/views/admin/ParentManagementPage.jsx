@@ -131,7 +131,6 @@ function ParentManagementPage() {
                     <div>
                         <button
                             onClick={() => {
-                                console.log('Manage students for parent:', row.original.id); // Make a propper parent-student relation popup / page
                                 setParentToEdit(row.original);
                                 setIsEditParentStudentsModalOpen(true);
                             }}

@@ -148,7 +148,6 @@ const TimetableScheduler = () => {
             }));
 
             const response = await createTimetable(timetableList);
-            console.log(response);
             navigate('/admin/classManagement', { state: { message: 'Timetable saved successfully!' } });
         } catch (error) {
             console.error('Error creating timetable:', error);

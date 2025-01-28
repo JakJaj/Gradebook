@@ -136,7 +136,6 @@ function TeacherClassPage() {
     };
 
     const handleDeleteGrade = async (grade) => {
-        console.log("Delete grade", grade);
         setDeleteItemId(grade.id);
         setSelectedStudent(students.find(student => student.id === grade.studentID));
         setDeleteItemType('grade');
@@ -150,7 +149,6 @@ function TeacherClassPage() {
     };
 
     const handleDeleteAttendance = async (attendance) => {
-        console.log("Delete attendance", attendance);
         setDeleteItemId(attendance.id);
         setSelectedStudent(students.find(student => student.id === attendance.studentID));
         setDeleteItemType('attendance');
@@ -164,7 +162,6 @@ function TeacherClassPage() {
     };
 
     const handleDeleteNote = async (note) => {
-        console.log("Delete note", note);
         setDeleteItemId(note.id);
         setSelectedStudent(students.find(student => student.id === note.studentID));
         setDeleteItemType('note');

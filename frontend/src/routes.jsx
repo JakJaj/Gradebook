@@ -14,7 +14,7 @@ import TeacherClassPage from "./views/teacher/TeacherClassPage.jsx";
 import StudentGradesPage from "./views/student/StudentGradesPage.jsx";
 import StudentAttendancePage from "./views/student/StudentAttendancePage.jsx";
 import StudentNotesPage from "./views/student/StudentNotesPage.jsx";
-
+import ParentStudentPage from "./views/parent/ParentStudentPage.jsx";
 const routes = [
     {
         path : '/',
@@ -68,6 +68,10 @@ const routes = [
     {
         path : '/student/:studentId/notes',
         element: <StudentNotesPage />,
+    },
+    {
+        path : '/student/:studentId',
+        element: <ParentStudentPage />,
     },
     {
         path : '/parent/dashboard',

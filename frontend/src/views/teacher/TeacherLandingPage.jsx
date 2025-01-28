@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import AnnouncementModal from '../teacher/popup/AnnouncementModal';
-import AnnouncementTeacher from '../../components/Announcement';
+import AnnouncementTeacher from '../../components/AnnouncementTeacher';
 import { fetchCourses } from '../../data/course/getData';
 import { fetchTimetableTeacher } from '../../data/timetable/getData';
 import { fetchTeacher } from '../../data/teacher/getData';
@@ -82,7 +82,8 @@ function TeacherLandingPage() {
         const getAnnouncements = async () => {
             try {
                 const announcements = await fetchAnnouncements();
-                const sortedAnnouncements = announcements.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const validAnnouncements = announcements.filter(announcement => moment(announcement.date, 'DD-MM-YYYY', true).isValid());
+                const sortedAnnouncements = validAnnouncements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
                 setAnnouncements(sortedAnnouncements);
             } catch (error) {
                 console.error('Error fetching announcements in TeacherLandingPage:', error);
@@ -166,7 +167,8 @@ function TeacherLandingPage() {
             }
 
             const updatedAnnouncements = [...announcements, returnedAnnouncement];
-            const sortedAnnouncements = updatedAnnouncements.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const validAnnouncements = updatedAnnouncements.filter(announcement => moment(announcement.date, 'DD-MM-YYYY', true).isValid());
+            const sortedAnnouncements = validAnnouncements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
             setAnnouncements(sortedAnnouncements);
 
         } catch (error) {
@@ -175,23 +177,25 @@ function TeacherLandingPage() {
     };
 
     const handleDeleteAnnouncement = async (announcementToDelete) => {
-        console.log(announcementToDelete);
 
         try{
             const response = await deleteAnnouncement(announcementToDelete.announcementID);
             if(!response) return;
 
             const updatedAnnouncements = announcements.filter(announcement => announcement !== announcementToDelete);
-            const sortedAnnouncements = updatedAnnouncements.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const validAnnouncements = updatedAnnouncements.filter(announcement => moment(announcement.date, 'DD-MM-YYYY', true).isValid());
+            const sortedAnnouncements = validAnnouncements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
             setAnnouncements(sortedAnnouncements);
         }catch(error){
             consol.error("Error while deleting announcements");
         }
     };
 
+    const sortedAnnouncements = announcements.sort((a, b) => moment(b.date, 'DD-MM-YYYY') - moment(a.date, 'DD-MM-YYYY'));
+
     const indexOfLastAnnouncement = currentPage * announcementsPerPage;
     const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
-    const currentAnnouncements = announcements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+    const currentAnnouncements = sortedAnnouncements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -221,7 +225,6 @@ function TeacherLandingPage() {
     );
 
     const handleSelectEvent = (event) => {
-        console.log("Class data to display: ", event);
         navigate(`/teacher/class/${event.classId}`, { state: { classData: event } });
     };
 

@@ -12,7 +12,7 @@ const GradeModal = ({ isOpen, onClose, onSave }) => {
                 mark : grade,
                 description : description,
                 magnitude : magnitude,
-                date : date,
+                date : moment(date).format('DD-MM-YYYY'),
             });
             setGrade('');
             setMagnitude('');
