@@ -1,5 +1,6 @@
 package com.jj.Gradebook.controller.request.classes;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
