@@ -1,3 +1,4 @@
+import React from 'react';
 import ErrorPage from "./views/base/ErrorPage.jsx";
 import LandingPage from "./views/base/LandingPage.jsx";
 import AdminDashboard from "./views/admin/AdminDashboard.jsx";
@@ -15,81 +16,87 @@ import StudentGradesPage from "./views/student/StudentGradesPage.jsx";
 import StudentAttendancePage from "./views/student/StudentAttendancePage.jsx";
 import StudentNotesPage from "./views/student/StudentNotesPage.jsx";
 import ParentStudentPage from "./views/parent/ParentStudentPage.jsx";
-const routes = [
-    {
-        path : '/',
-        element: <LandingPage />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path : '/error',
-        element: <ErrorPage />,
-    },
-    {
-        path : '/admin/dashboard',
-        element: <AdminDashboard />,
-    },
-    {
-        path : "/admin/studentManagement",
-        element: <StudentManagement />,
-    },
-    {
-        path : "/admin/teacherManagement",
-        element: <TeacherManagementPage />,
-    },
-    {
-        path : "/admin/parentManagement",
-        element: <ParentManagementPage />,
-    },
-    {
-        path : '/admin/courseManagement',
-        element: <CourseManagementPage />,
-    },
-    {
-        path : '/admin/classManagement',
-        element: <ClassManagementPage />,
-    },
-    {
-        path : '/admin/classManagement/timetalbe/:classId',
-        element : <TimetableScheduler />,
-    },
-    {
-        path : '/student/dashboard',
-        element: <StudentLandingPage />,
-    },
-    {
-        path : '/student/:studentId/grades',
-        element: <StudentGradesPage />,
-    },
-    {
-        path : '/student/:studentId/attendance',
-        element: <StudentAttendancePage />,
-    },
-    {
-        path : '/student/:studentId/notes',
-        element: <StudentNotesPage />,
-    },
-    {
-        path : '/student/:studentId',
-        element: <ParentStudentPage />,
-    },
-    {
-        path : '/parent/dashboard',
-        element: <ParentLandingPage />,
-    },
-    {
-        path : '/teacher/dashboard',
-        element: <TeacherLandingPage />,
-    },
-    {
-        path : '/teacher/class/:classId',
-        element: <TeacherClassPage />,
-    },
-    {
-        path : '*',
-        element: <ErrorPage />,
-    }
-]
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
+const Routes = ({ userRole }) => {
 
-export default routes;
+    const routes = [
+        {
+            path : '/',
+            element: <LandingPage />,
+            errorElement: <ErrorPage />,
+        },
+        {
+            path : '/error',
+            element: <ErrorPage />,
+        },
+        {
+            path : '/admin/dashboard',
+            element: <ProtectedRoute element={<AdminDashboard />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : "/admin/studentManagement",
+            element: <ProtectedRoute element={<StudentManagement />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : "/admin/teacherManagement",
+            element: <ProtectedRoute element={<TeacherManagementPage />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : "/admin/parentManagement",
+            element: <ProtectedRoute element={<ParentManagementPage />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : '/admin/courseManagement',
+            element: <ProtectedRoute element={<CourseManagementPage />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : '/admin/classManagement',
+            element: <ProtectedRoute element={<ClassManagementPage />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : '/admin/classManagement/timetalbe/:classId',
+            element : <ProtectedRoute element={<TimetableScheduler />} allowedRoles={['ADMIN']} userRole={userRole} />,
+        },
+        {
+            path : '/student/dashboard',
+            element: <ProtectedRoute element={<StudentLandingPage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+        },
+        {
+            path : '/student/:studentId/grades',
+            element: <ProtectedRoute element={<StudentGradesPage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+        },
+        {
+            path : '/student/:studentId/attendance',
+            element: <ProtectedRoute element={<StudentAttendancePage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+        },
+        {
+            path : '/student/:studentId/notes',
+            element: <ProtectedRoute element={<StudentNotesPage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+        },
+        {
+            path : '/student/:studentId',
+            element: <ProtectedRoute element={<ParentStudentPage />} allowedRoles={['PARENT']} userRole={userRole} />,
+        },
+        {
+            path : '/parent/dashboard',
+            element: <ProtectedRoute element={<ParentLandingPage />} allowedRoles={['PARENT']} userRole={userRole} />,
+        },
+        {
+            path : '/teacher/dashboard',
+            element: <ProtectedRoute element={<TeacherLandingPage />} allowedRoles={['TEACHER']} userRole={userRole} />,
+        },
+        {
+            path : '/teacher/class/:classId',
+            element: <ProtectedRoute element={<TeacherClassPage />} allowedRoles={['TEACHER']} userRole={userRole} />,
+        },
+        {
+            path : '*',
+            element: <ErrorPage />,
+        }
+    ];
+
+    return routes;
+};
+
+export default Routes;
