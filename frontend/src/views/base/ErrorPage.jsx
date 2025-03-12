@@ -1,28 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchUserDetails } from '../../data/user/getUser';
+import { useUserRole } from '../../UserContext';
 import './errorPage.css';
 
 function ErrorPage() {
-    const [data, setData] = useState({});
+    const { userRole } = useUserRole();
     const [path, setPath] = useState('');
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const userDetails = await fetchUserDetails();
-                setData(userDetails);
-            } catch (error) {
-                console.error('Error fetching user details in ErrorPage:', error);
-            }
-        };
-
-        getData();
-    }, []);
-
-    useEffect(() => {
-        if (data.role) {
-            switch (data.role) {
+        if (userRole) {
+            switch (userRole) {
                 case 'ADMIN':
                     setPath('/admin/dashboard');
                     break;
@@ -36,12 +23,12 @@ function ErrorPage() {
                     setPath('/teacher/dashboard');
                     break;
                 default:
-                    console.error('Unknown user role:', data.role);
+                    console.error('Unknown user role:', userRole);
                     setPath('/');
                     break;
             }
         }
-    }, [data]);
+    }, [userRole]);
 
     return (
         <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>

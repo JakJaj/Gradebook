@@ -52,5 +52,4 @@ public class Student {
     @OneToMany(mappedBy="student")
     @EqualsAndHashCode.Exclude
     private Set<StudentParent> studentParents;
-
 }

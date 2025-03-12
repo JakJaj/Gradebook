@@ -47,6 +47,7 @@ function TopBar({ title }) {
 
     const handleLogout = () => {
         Cookies.remove('jwtToken');
+        localStorage.removeItem('userRole');
     };
 
     return (

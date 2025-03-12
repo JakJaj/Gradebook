@@ -1,8 +1,12 @@
 import React from 'react';
 import Box from '../../components/Box';
 import TopBar from '../../components/TopBar';
+import { useUserRole } from '../../UserContext';
 
 function AdminDashboard() {
+    
+    const { userRole } = useUserRole();
+
     return (
         <div>
             <TopBar title="Admin Dashboard" />
