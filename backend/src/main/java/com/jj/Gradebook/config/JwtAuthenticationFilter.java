@@ -33,7 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
 
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+        String originHeader = request.getHeader("Origin");
+        if ("http://18.199.175.240".equals(originHeader) || "http://localhost:5173".equals(originHeader)) {
+            response.setHeader("Access-Control-Allow-Origin", originHeader);
+        }
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");

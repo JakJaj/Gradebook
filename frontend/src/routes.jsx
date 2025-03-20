@@ -64,15 +64,15 @@ const Routes = ({ userRole }) => {
         },
         {
             path : '/student/:studentId/grades',
-            element: <ProtectedRoute element={<StudentGradesPage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+            element: <ProtectedRoute element={<StudentGradesPage />} allowedRoles={['STUDENT', 'PARENT']} userRole={userRole} />,
         },
         {
             path : '/student/:studentId/attendance',
-            element: <ProtectedRoute element={<StudentAttendancePage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+            element: <ProtectedRoute element={<StudentAttendancePage />} allowedRoles={['STUDENT', 'PARENT']} userRole={userRole} />,
         },
         {
             path : '/student/:studentId/notes',
-            element: <ProtectedRoute element={<StudentNotesPage />} allowedRoles={['STUDENT']} userRole={userRole} />,
+            element: <ProtectedRoute element={<StudentNotesPage />} allowedRoles={['STUDENT', 'PARENT']} userRole={userRole} />,
         },
         {
             path : '/student/:studentId',
